@@ -1,0 +1,225 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Quicksand&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap");
+html,
+body {
+  /*
+    font-family: 'Open Sans', sans-serif !important;
+    font-family: 'Quicksand', sans-serif !important;
+    */
+  font-family: 'Oxygen', sans-serif !important;
+}
+
+h1 {
+  margin-bottom: 1em;
+}
+
+h2 {
+  margin-bottom: 2rem;
+}
+
+h3 {
+  margin-bottom: 1rem;
+}
+
+.title-muted {
+  opacity: 0.7;
+  font-size: .9rem;
+}
+
+.dashboard-btn {
+  border-radius: 1rem;
+  padding: 1rem !important;
+  -webkit-box-shadow: 0 0 4px rgba(71, 71, 71, 0.55);
+          box-shadow: 0 0 4px rgba(71, 71, 71, 0.55);
+  -webkit-transition: all .1s linear;
+  transition: all .1s linear;
+  width: 90%;
+  margin-bottom: 1rem;
+}
+
+.dashboard-btn:hover {
+  -webkit-transform: perspective(200px) translateZ(1.5px);
+          transform: perspective(200px) translateZ(1.5px);
+  background-color: #31363a;
+  -webkit-box-shadow: 0 0 8px rgba(71, 71, 71, 0.75);
+          box-shadow: 0 0 8px rgba(71, 71, 71, 0.75);
+}
+
+#page_wrapper {
+  /* border-right: 0.5px solid #DCDCDC;
+    border-left: 0.5px solid #DCDCDC;
+    border-bottom: 0.5px solid #DCDCDC;
+    background-color: white !important;*/
+  padding-top: 4rem;
+  padding-bottom: 2rem;
+  width: 80%;
+  margin: auto;
+  margin-top: 1rem;
+}
+
+.form-error {
+  border: 1.5px solid #be0000 !important;
+  background-color: rgba(190, 79, 79, 0.35) !important;
+}
+
+.footer p {
+  color: white;
+}
+
+.navbar-user {
+  color: white;
+}
+
+.user-link {
+  color: white;
+  display: inline;
+  padding: 0 0 0 2px !important;
+}
+
+.user-link:hover {
+  color: #DCDCDC;
+}
+
+.dashboard-icon {
+  color: #bababa;
+}
+
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.inline-icon {
+  font-size: 1.2rem;
+  margin-right: .5rem;
+}
+
+.shadow-sm-c {
+  -webkit-box-shadow: 0 0 0.7rem rgba(0, 0, 0, 0.65) !important;
+          box-shadow: 0 0 0.7rem rgba(0, 0, 0, 0.65) !important;
+}
+
+.small-button {
+  padding: 0rem 1rem;
+}
+
+.no-border {
+  border: none;
+}
+
+.no-border .card-body {
+  margin-top: -0.5rem;
+  padding: 0;
+}
+
+.passed {
+  color: #006e09;
+  font-size: 1.2rem;
+}
+
+.failed {
+  color: #be0000;
+  font-size: 1.2rem;
+}
+
+.correct {
+  color: #006e09 !important;
+  text-shadow: 0 0 1px #006e09;
+}
+
+.incorrect {
+  color: #be0000 !important;
+  text-shadow: 0 0 1px #be0000;
+  opacity: 0.5;
+}
+
+button:disabled:hover,
+button[disabled] {
+  cursor: not-allowed;
+}
+
+.btn-outline-success {
+  color: #006e09;
+  border-color: #006e09;
+}
+
+.btn-outline-success:hover {
+  background-color: #006e09;
+  border-color: #006e09;
+}
+
+.btn-outline-danger {
+  color: #be0000;
+  border-color: #be0000;
+}
+
+.btn-outline-danger:hover {
+  background-color: #be0000;
+  border-color: #be0000;
+}
+
+.btn-danger {
+  background-color: #be0000;
+  border-color: #be0000;
+}
+
+.btn-primary {
+  background-color: #005fec;
+  border-color: #005fec;
+}
+
+.btn-outline-primary {
+  color: #005fec;
+  border-color: #005fec;
+}
+
+.btn-outline-primary:hover {
+  background-color: #005fec;
+  border-color: #005fec;
+}
+
+/*-----------------------*/
+/* Vue animation classes */
+/*-----------------------*/
+.slide-fade-enter-active {
+  -webkit-transition: all .2s linear;
+  transition: all .2s linear;
+  -webkit-transition-delay: .3s;
+          transition-delay: .3s;
+}
+
+.slide-fade-leave-active {
+  -webkit-transition: all .2s linear;
+  transition: all .2s linear;
+}
+
+.slide-fade-enter {
+  -webkit-transform: translateX(-200px);
+          transform: translateX(-200px);
+  opacity: 0;
+}
+
+.slide-fade-enter-to {
+  -webkit-transform: translateX(0);
+          transform: translateX(0);
+  opacity: 1;
+}
+
+.slide-fade-leave-to {
+  -webkit-transform: translateX(200px);
+          transform: translateX(200px);
+  opacity: 0;
+}
+
+.overlay-text-leave-active,
+.overlay-text-enter-active {
+  -webkit-transition: all .4s ease;
+  transition: all .4s ease;
+}
+
+.overlay-text-leave-to,
+.overlay-text-enter {
+  opacity: 0;
+}
+/*# sourceMappingURL=style.css.map */

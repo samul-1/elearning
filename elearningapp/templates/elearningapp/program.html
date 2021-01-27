@@ -1,0 +1,25 @@
+{% extends 'elearningapp/base.html' %}
+{% block content %}
+
+
+{% block head_css_page %}
+<style>
+    .prism-editor-wrapper .prism-editor__editor, .prism-editor-wrapper .prism-editor__textarea {
+        color: white !important;
+    }
+</style>
+{% endblock head_css_page %}
+
+{% load render_bundle from webpack_loader %}
+<div id="app">
+    <program-exercise
+        :public-test-cases="{{ public_test_cases }}"
+        :exercise-id="{{ exercise.pk }}"
+        :text="'{{ exercise.text }}'"
+    >
+    </program-exercise>
+</div>
+{% render_bundle 'chunk-vendors' %}
+{% render_bundle 'vue_app_program_exercise' %}
+
+{% endblock content %}

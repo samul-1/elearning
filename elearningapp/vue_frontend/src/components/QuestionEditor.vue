@@ -1,0 +1,270 @@
+<template>
+  <div class="grid question-editor-grid">
+    <div class="grid-col">
+      <div>
+        <h3>Testo della domanda</h3>
+        <vue-editor
+          :id="'questionText'"
+          :editorToolbar="customToolbar"
+          class="big-editor"
+          v-model="questionTextData"
+        ></vue-editor>
+      </div>
+      <div v-if="categories.length > 0">
+        <h3>Categoria</h3>
+        <select v-model="category">
+          <option disabled value="">Scegli la categoria</option>
+
+          <option
+            v-for="(category, index) in categories"
+            :key="index"
+            :value="Object.keys(category)[0]"
+          >
+            {{ category[Object.keys(category)[0]] }}
+          </option>
+        </select>
+      </div>
+      <div>
+        <h3>Risposte</h3>
+        <div
+          style="margin-bottom: 0.5rem"
+          class="grid two-to-one-col-fr rem-1-gap"
+          v-for="(answer, index) in answersData"
+          :key="index"
+        >
+          <div>
+            <vue-editor
+              :id="'answer_' + index"
+              :editorToolbar="customToolbar"
+              class="answer-editor"
+              v-model="answersData[index]"
+            ></vue-editor>
+          </div>
+          <div style="align-self: center">
+            <b-button
+              style="align-self: center"
+              :disabled="answersData.length <= 2"
+              variant="danger"
+              @click="
+                if (correctAnswerIndexData == index) correctAnswerIndexData = 0;
+                answersData.splice(index, 1);
+              "
+              >Rimuovi</b-button
+            >
+            <div class="radio-option">
+              <b-form-radio
+                v-model="correctAnswerIndexData"
+                :name="'index'"
+                :value="index"
+                >Risposta corretta</b-form-radio
+              >
+            </div>
+          </div>
+        </div>
+
+        <b-button
+          class="w-100"
+          variant="outline-primary"
+          @click="answersData.push('')"
+        >
+          <b-icon
+            icon="plus-circle"
+            class="inline-icon"
+            style="margin-bottom: 2px"
+          ></b-icon>
+          Aggiungi risposta</b-button
+        >
+      </div>
+      <div>
+        <h3>Soluzione</h3>
+        <vue-editor
+          class="big-editor"
+          :id="'solutionText'"
+          :editorToolbar="customToolbar"
+          v-model="solutionData"
+        ></vue-editor>
+      </div>
+    </div>
+    <div class="grid-col preview-col">
+      <div class="preview">
+        <h3>Anteprima</h3>
+        <QuestionPreview
+          :text="questionTextWithoutParagraphTag"
+          :answers="answerTextsWithoutParagraphTag"
+          :correctAnswerIndex="correctAnswerIndexData"
+          :solution="solutionData"
+        ></QuestionPreview>
+        <b-button
+          class="w-100 mt-4"
+          variant="outline-success"
+          @click="$emit('save', serializedQuestionData)"
+          :disabled="invalidForm"
+        >
+          <b-icon
+            icon="check2-circle"
+            class="inline-icon"
+            style="margin-bottom: 2px"
+          ></b-icon>
+          Salva domanda</b-button
+        >
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { VueEditor } from "vue2-editor";
+import QuestionPreview from "./QuestionPreview.vue";
+
+export default {
+  name: "QuestionEditor",
+  components: {
+    VueEditor,
+    QuestionPreview,
+  },
+  props: {
+    courseId: Number,
+    questionId: {
+      type: Number,
+      default: -1,
+    },
+    questionText: {
+      type: String,
+      default: "",
+    },
+    answers: {
+      type: Array,
+      default: () => ["", ""],
+    },
+    correctAnswerIndex: {
+      type: Number,
+      default: 0,
+    },
+    solution: {
+      type: String,
+      default: "",
+    },
+    categories: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  mounted() {
+    // set data values to match props (can't modify props directly)
+    this.questionTextData = this.questionText;
+    this.answersData = this.answers;
+    this.correctAnswerIndexData = this.correctAnswerIndex;
+    this.solutionData = this.solution;
+  },
+  watch: {},
+  data: () => {
+    return {
+      questionTextData: "",
+      solutionData: "",
+      answersData: [],
+      previewElements: [],
+      category: "",
+      correctAnswerIndexData: -1,
+      customToolbar: [
+        ["bold", "italic", "underline"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["image"],
+      ],
+    };
+  },
+  methods: {
+    // resets the editor to initial state
+    cleanup() {
+      this.questionTextData = this.solutionData = this.category = "";
+      this.answersData = ["", ""];
+      this.correctAnswerIndexData = 0;
+    },
+  },
+  computed: {
+    questionTextWithoutParagraphTag() {
+      return this.questionTextData.replaceAll(/<[/]?p>/gi, "");
+    },
+    answerTextsWithoutParagraphTag() {
+      return this.answersData.map((a) => a.replaceAll(/<[/]?p>/gi, ""));
+    },
+    solutionTextWithoutParagraphTag() {
+      return this.solutionData.replaceAll(/<[/]?p>/gi, "");
+    },
+    serializedQuestionData() {
+      return {
+        text: this.questionTextWithoutParagraphTag,
+        solution_text: this.solutionTextWithoutParagraphTag,
+        category: this.category,
+        answers: this.answerTextsWithoutParagraphTag,
+        correct_answer_index: this.correctAnswerIndexData + 1,
+        course: this.courseId,
+      };
+    },
+    invalidForm() {
+      return (
+        !this.questionTextData.length ||
+        this.answersData.some((a) => !a.length) ||
+        (this.categories.length && !this.category.length)
+      );
+    },
+  },
+};
+</script>
+
+<style>
+.transparent-card {
+  background-color: transparent !important;
+}
+
+.list-wrapper {
+  padding-bottom: 10px;
+}
+
+.quillWrapper,
+.ql-editor {
+  width: 100%;
+  max-width: 38vw;
+}
+
+.answer-editor .quillWrapper,
+.answer-editor .ql-editor {
+  height: 100px !important;
+  min-height: 100px !important;
+  max-width: 30vw;
+}
+
+.big-editor .quillWrapper,
+.big-editor .ql-editor {
+  height: 150px !important;
+  min-height: 150px !important;
+}
+
+.two-to-one-col-fr {
+  height: 150px;
+}
+
+.radio-option {
+  margin-top: 0.5rem;
+}
+
+/* 
+  TODO fix sticky positioning that needs separate top values for each element in the div,
+  TODO the whole div should be sticky and elements inside it should move together as a unit 
+ */
+.preview h3,
+.preview div,
+.preview button {
+  position: sticky;
+  top: 12%;
+}
+
+.preview div {
+  top: 20%;
+  max-width: 45vw;
+  word-break: break-all;
+}
+
+.preview button {
+  top: 52%;
+}
+</style>

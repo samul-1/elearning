@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django-webpack-loader = "*"
+django = "<3.2"
+mysqlclient = "*"
+naked = "*"
+js2py = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"

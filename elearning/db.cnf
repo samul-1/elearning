@@ -1,0 +1,5 @@
+[mysql]
+database = 'elearning'
+user = 'samuele'
+password = '4JHycb79'
+default-character-set = 'utf8'

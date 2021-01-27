@@ -1,0 +1,46 @@
+{% extends 'elearningapp/base.html' %}
+{% block head_css_page %}
+    <style>
+        /* button {
+            width: -webkit-fill-available;
+            padding: 8px !important;
+            margin-bottom: 15px;
+        }
+
+        .stats {
+            background-color: #f8f8ff;
+            border: 1px solid #cecdcd;
+            margin-bottom: 15px;
+            border-radius: 2px;
+            padding-top: 5px;
+        }
+
+        .stats p {
+            margin-bottom: 5px;
+        } */
+
+        #course_title {
+            text-align: center;
+        }
+    </style>
+{% endblock head_css_page %}
+    {% block usernavbar %}
+        <a class="nav-link user-link" href="/profile/{{ global_user_data.id}}">{{ global_user_data.name }}</a>
+    {% endblock usernavbar %}
+{% block content %}
+    {% load render_bundle from webpack_loader %}
+    <div id="app">
+        <course-dashboard
+        :course-name="'{{ course_data.name }}'"
+        :course-id="{{ course_data.id }}"
+        :user-average-score=" {{ course_specific_user_data.average_score }}"
+        :user-last-score="{{ course_specific_user_data.last_score }}"
+        :user-id="{{ global_user_data.id }}"
+        :last-scores="{{ course_specific_user_data.last_scores }}"
+        ></course-dashboard>
+    </div>
+    
+    {% render_bundle 'chunk-vendors' %}
+    {% render_bundle 'vue_app_course_dashboard' %}
+
+{% endblock content %}

@@ -1,0 +1,24 @@
+{% extends 'elearningapp/base.html' %}
+    {% block header_title %} eLearning <span class="title-muted">Control Panel</span>{% endblock header_title %}
+    {% block usernavbar %}
+        <a class="nav-link user-link" href="/profile/{{ global_user_data.id}}">{{ global_user_data.name }}</a>
+    {% endblock usernavbar %}
+{% block content %}
+    {% load render_bundle from webpack_loader %}
+    <h1>Aggiungi una domanda</h1>
+    <div id="app">
+        <create-question
+        :course-id="{{ course_id }}"
+        :categories="{{ categories }}"
+        ></create-question>
+    </div>
+    
+    {% render_bundle 'chunk-vendors' %}
+    {% render_bundle 'vue_app_create_question' %}
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript"
+        src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+{% endblock content %}

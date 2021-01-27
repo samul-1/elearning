@@ -1,0 +1,46 @@
+{% extends 'elearningapp/base.html' %}
+{% block head_css_page %}
+    <style>
+        /* button {
+            width: -webkit-fill-available;
+            padding: 8px !important;
+            margin-bottom: 15px;
+        }
+
+        .stats {
+            background-color: #f8f8ff;
+            border: 1px solid #cecdcd;
+            margin-bottom: 15px;
+            border-radius: 2px;
+            padding-top: 5px;
+        }
+
+        .stats p {
+            margin-bottom: 5px;
+        } */
+
+        #course_title {
+            text-align: center;
+        }
+    </style>
+{% endblock head_css_page %}
+    {% block header_title %} eLearning <span class="title-muted">Control Panel</span>{% endblock header_title %}
+    {% block usernavbar %}
+        <a class="nav-link user-link" href="/profile/{{ global_user_data.id}}">{{ global_user_data.name }}</a>
+    {% endblock usernavbar %}
+{% block content %}
+    {% load render_bundle from webpack_loader %}
+    <div id="app">
+        <course-cp
+        :course-name="'{{ course.name }}'"
+        :course-id="{{ course.id }}"
+        :average-score=" {{ average_score }}"
+        :number-of-subscribers="{{ number_of_subscribers }}"
+        :number-of-tests-taken="{{ number_of_tests_taken }}"
+        ></course-cp>
+    </div>
+    
+    {% render_bundle 'chunk-vendors' %}
+    {% render_bundle 'vue_app_course_cp' %}
+
+{% endblock content %}

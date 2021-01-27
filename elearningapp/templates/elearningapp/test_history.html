@@ -1,0 +1,20 @@
+{% extends 'elearningapp/base.html' %}
+{% block content %}
+    {% load render_bundle from webpack_loader %}
+    <h2>Cronologia dei test</h2>
+    <!-- <p>Le domande presenti in questa pagina non ricompariranno nei prossimi test che effettuerai.</p> -->
+    <div id="app">
+        <test-history :tests="{{ tests }}" :max-score="{{ maxScore }}"></test-history>
+    </div>
+    {% render_bundle 'chunk-vendors' %}
+    {% render_bundle 'vue_app_test_history' %}
+{% endblock content %}
+
+{% block footer_javascript_section %}
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript"
+        src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+{% endblock footer_javascript_section %}

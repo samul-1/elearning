@@ -1,0 +1,47 @@
+.grid {
+  display: -ms-grid;
+  display: grid;
+}
+
+.two-col-grid {
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+}
+
+.dashboard-grid {
+  -webkit-column-gap: 5rem;
+          column-gap: 5rem;
+}
+
+.list-grid {
+  -ms-grid-rows: 1fr;
+      grid-template-rows: 1fr;
+  justify-items: center;
+}
+
+.two-to-one-col-fr {
+  -ms-grid-columns: 2fr 1fr;
+      grid-template-columns: 2fr 1fr;
+}
+
+.question-editor-grid {
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+  -webkit-column-gap: 5rem;
+          column-gap: 5rem;
+}
+
+.rem-1-gap {
+  -webkit-column-gap: 1rem;
+          column-gap: 1rem;
+  row-gap: 1rem;
+}
+
+.grid-col {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr;
+      grid-template-columns: 1fr;
+  row-gap: 1.5rem;
+}
+/*# sourceMappingURL=grid-layouts.css.map */

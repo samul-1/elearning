@@ -1,0 +1,18 @@
+{% extends 'elearningapp/base.html' %}
+{% block content %}
+    {% load render_bundle from webpack_loader %}
+    <div id="app">
+        <question-history :questions="{{ questions }}" :user-id="{{ user_id }}" :course-id="{{ course_id }}"></question-history>
+    </div>
+    {% render_bundle 'chunk-vendors' %}
+    {% render_bundle 'vue_app_question_history' %}
+{% endblock content %}
+
+{% block footer_javascript_section %}
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript"
+        src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+{% endblock footer_javascript_section %}

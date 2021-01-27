@@ -1,0 +1,23 @@
+{% extends 'elearningapp/base.html' %}
+{% block usernavbar %}
+    <a class="nav-link user-link" href="/profile/{{ global_user_data.id}}">{{ global_user_data.name }}</a>
+{% endblock usernavbar %}
+{% block content %}
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript"
+    src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+        {% load dict_key %}
+        <h1>Creazione nuovo corso</h1>
+        {% load render_bundle from webpack_loader %}
+        <div id="app">
+            <course-setup></course-setup>
+        </div>
+        {% render_bundle 'chunk-vendors' %}
+        {% render_bundle 'vue_app_course_setup' %}
+{% endblock content %}
+{% block footer_javascript_section %}
+
+{% endblock footer_javascript_section %}

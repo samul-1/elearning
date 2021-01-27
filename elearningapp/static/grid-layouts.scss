@@ -1,0 +1,37 @@
+.grid {
+    display: grid;
+}
+
+.two-col-grid {
+    grid-template-columns: 1fr 1fr;
+}
+
+.dashboard-grid {
+    // justify-items: center;
+    column-gap: 5rem;
+}
+
+.list-grid {
+    grid-template-rows: 1fr;
+    justify-items: center;
+}
+
+.two-to-one-col-fr {
+    grid-template-columns: 2fr 1fr;
+}
+
+.question-editor-grid {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 5rem;
+}
+
+.rem-1-gap {
+    column-gap: 1rem;
+    row-gap: 1rem;
+}
+
+.grid-col {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 1.5rem;
+}
