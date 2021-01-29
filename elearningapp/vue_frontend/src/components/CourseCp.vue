@@ -13,7 +13,7 @@
             Aggiungi domande
           </button></a
         ><br />
-        <a :href="'/edit_questions/' + userId + '/' + courseId"
+        <a :href="'/edit_question/' + courseId"
           ><button
             style="margin-bottom: 0 !important"
             class="btn btn-dark dashboard-btn"
@@ -43,7 +43,7 @@
 
 <script>
 export default {
-  name: "CourseDashboard",
+  name: "CourseCp",
   components: {},
   props: {
     courseName: String,

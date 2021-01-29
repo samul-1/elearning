@@ -8,15 +8,15 @@
       v-for="(answer, index) in answers"
       :key="index"
       :class="{
-        correct: index == correctAnswerIndex && correctShown,
-        incorrect: index != correctAnswerIndex && correctShown,
+        correct: index + 1 == correctAnswerIndex && correctShown,
+        incorrect: index + 1 != correctAnswerIndex && correctShown,
       }"
     >
-      <strong>{{ index }}.</strong>&nbsp;
+      <strong>{{ index + 1 }}.</strong>&nbsp;
       <!--{{ answer }}-->
       <vue-mathjax :formula="answer" :safe="false"></vue-mathjax>
 
-      <span class="comment" v-if="index == givenAnswer"
+      <span class="comment" v-if="index + 1 == givenAnswer"
         ><em :class="{ 'text-muted': !correctShown }"
           >(La tua risposta)</em
         ></span
@@ -45,7 +45,7 @@
       >
       <br />
       <b-collapse :id="'collapse-' + questionId" class="mt-2">
-        {{ solution }}
+        <vue-mathjax :formula="solution" :safe="false"></vue-mathjax>
       </b-collapse>
     </p>
   </div>
@@ -62,7 +62,7 @@ export default {
   props: {
     text: String,
     solution: String,
-    answers: Object,
+    answers: Array,
     correctAnswerIndex: Number,
     givenAnswer: Number,
     questionId: [String, Number],
@@ -103,13 +103,6 @@ a {
 }
 
 .question-box {
-  /* -webkit-box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.75);
-  -moz-box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.75);
-  box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.75);
-  border: 1px solid grey;
-  border-radius: 3px;
-  overflow-x: auto;
-  background-color: #f2f2f2; */
   border: none;
   margin: 2rem;
   border-radius: 0.8rem;

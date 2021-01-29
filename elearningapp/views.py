@@ -55,6 +55,51 @@ def course_cp(request, course_id):
     )
 
 
+# if accessed via GET, gets the first 5 questions for the course and render template containing the EditQuestion component
+# if accessed via PUT, updates the question
+def edit_question(request, course_id):
+    if request.method == "PUT":
+        form_data = json.loads(request.body.decode("utf-8"))
+        question = get_object_or_404(Question, pk=form_data["questionId"])
+        form = QuestionForm(form_data, instance=question)
+
+        print(form_data)
+        if form.is_valid():
+            print("is valid")
+            updated_question = form.save()
+            print(updated_question)
+            return JsonResponse(updated_question.format_complete_question(), safe=False)
+        else:
+            print(form.errors)
+
+    course = get_object_or_404(Course, pk__exact=course_id)
+    categories = Category.objects.filter(course=course)
+    questions = course.get_complete_questions(5)
+
+    context = {
+        "course_id": course_id,
+        "categories": [{c.pk: c.name} for c in categories],
+        "questions": questions,
+    }
+
+    return render(
+        request,
+        "elearningapp/edit_question.html",
+        context,
+    )
+
+
+# accessed via GET by the client for infinite scrolling in the EditQuestion vue component
+def get_questions(request, course_id, amount, starting_from_pk):
+    course = get_object_or_404(Course, pk__exact=course_id)
+    questions = course.get_complete_questions(
+        int(amount), pk_greater_than=int(starting_from_pk)
+    )
+    return JsonResponse(questions, safe=False)
+
+
+# renders template containing CreateQuestion vue component when accessed via GET,
+# handles question creation using Question ModelForm when accessed via POST
 def add_question(request, course_id):
     course = get_object_or_404(Course, pk__exact=course_id)
     categories = Category.objects.filter(course=course)
@@ -73,12 +118,12 @@ def add_question(request, course_id):
             # add new question to db
             new_question = form.save()
 
-            ans_idx = 1
-            # create an Answer instance for each answer to this question
-            for answer in form_data["answers"]:
-                ans = Answer(question=new_question, text=answer, answer_index=ans_idx)
-                ans.save()
-                ans_idx += 1
+            # ans_idx = 1
+            # # create an Answer instance for each answer to this question
+            # for answer in form_data["answers"]:
+            #     ans = Answer(question=new_question, text=answer, answer_index=ans_idx)
+            #     ans.save()
+            #     ans_idx += 1
 
             return JsonResponse("ok", safe=False)
         else:
@@ -275,6 +320,7 @@ def check_answers(request):
         return
 
     answers = json.loads(request.body.decode("utf-8"))
+    print(answers)
     # TODO check validity of sent json object
     requesting_user = request.user
 

@@ -22,7 +22,7 @@
             :solution="item.solution"
             :correctAnswerIndex="item.correctAnswerIndex"
             :givenAnswer="item.yourAnswer"
-            :index="'list' + index + '-' + idx"
+            :questionId="'list' + index + '-' + idx"
           />
         </div>
       </b-card>
@@ -34,7 +34,7 @@
 import SeenQuestion from "./SeenQuestion.vue";
 
 export default {
-  name: "App",
+  name: "CollapsableQuestionList",
   components: {
     SeenQuestion,
   },

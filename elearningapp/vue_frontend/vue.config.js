@@ -26,6 +26,10 @@ const pages = {
         entry: './src/createquestion.js',
         chunks: ['chunk-vendors']
     },
+    'vue_app_edit_question': {
+        entry: './src/editquestion.js',
+        chunks: ['chunk-vendors']
+    },
     'vue_app_program_exercise': {
         entry: './src/programexercise.js',
         chunks: ['chunk-vendors']

@@ -1,5 +1,10 @@
 <template>
   <div class="">
+    <b-spinner
+      style="position: fixed; top: 50%; left: 50%; color: black"
+      v-if="loading"
+      label="Loading..."
+    ></b-spinner>
     <question-editor
       :course-id="courseId"
       :categories="categories"
@@ -35,6 +40,7 @@ export default {
   props: {
     courseId: Number,
     categories: Array,
+    apiUrl: String,
   },
   mounted() {
     axios.defaults.xsrfCookieName = "csrftoken";
@@ -43,15 +49,18 @@ export default {
   data: () => {
     return {
       success: false,
+      loading: false,
     };
   },
   methods: {
-    // TODO send info to server
+    // send the server a request to create a new question
     saveQuestionToDatabase(postData) {
       console.log(postData);
+      this.loading = true;
       axios
         .post(
-          "http://127.0.0.1:8000/add_question/" + this.courseId + "/",
+          // "http://127.0.0.1:8000/add_question/" + this.courseId + "/",
+          this.apiUrl,
           postData
         )
         .then((response) => {
@@ -59,7 +68,7 @@ export default {
           if (response.status == 200) {
             this.showConfirmationAndCleanup();
           }
-          // this.loading = false;
+          this.loading = false;
         })
         .catch((error) => {
           // alert(error);
@@ -68,7 +77,10 @@ export default {
     },
 
     showConfirmationAndCleanup() {
+      // call QuestionEditor method to reset the fields
       this.$refs.editor.cleanup();
+
+      // show success message and hide it programmatically
       this.success = true;
       setTimeout(() => {
         this.success = false;
@@ -78,16 +90,3 @@ export default {
   computed: {},
 };
 </script>
-
-<style>
-.overlay-card {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  box-shadow: 0 0 15px gray;
-  border: none !important;
-  border-radius: 0.3rem !important;
-}
-</style>

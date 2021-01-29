@@ -10,6 +10,7 @@
         <create-question
         :course-id="{{ course_id }}"
         :categories="{{ categories }}"
+        :api-url="'{% url "add_question" course_id=course_id %}'"
         ></create-question>
     </div>
     

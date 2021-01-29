@@ -1,0 +1,25 @@
+{% extends 'elearningapp/base.html' %}
+{% block content %}
+{% load render_bundle from webpack_loader %}
+<h1>Modifica domande</h1>
+<div id="app">
+    <edit-question
+    :questions="{{ questions }}"
+    :course-id="{{ course_id }}"
+    :categories="{{ categories }}"
+    :edit-question-api-url="'{% url 'edit_question' course_id=course_id %}'"
+    ></edit-question>
+</div>
+
+{% render_bundle 'chunk-vendors' %}
+{% render_bundle 'vue_app_edit_question' %}
+{% endblock content %}
+
+{% block footer_javascript_section %}
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript"
+        src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+{% endblock footer_javascript_section %}

@@ -69,7 +69,7 @@ import SeenQuestion from "./SeenQuestion.vue";
 import axios from "axios";
 
 export default {
-  name: "App",
+  name: "QuestionHistory",
   components: {
     SeenQuestion,
   },

@@ -19,8 +19,10 @@
     "vue": "^2.6.11",
     "vue-axios": "^3.2.0",
     "vue-chartjs": "^3.5.1",
+    "vue-infinite-scroll": "^2.0.2",
     "vue-mathjax": "0.0.11",
     "vue-prism-editor": "^1.2.2",
+    "vue-scrollto": "^2.20.0",
     "vue-trend-chart": "^0.15.3",
     "vue2-editor": "^2.10.2"
   },

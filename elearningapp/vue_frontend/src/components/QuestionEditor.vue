@@ -12,7 +12,7 @@
       </div>
       <div v-if="categories.length > 0">
         <h3>Categoria</h3>
-        <select v-model="category">
+        <select v-model="categoryData">
           <option disabled value="">Scegli la categoria</option>
 
           <option
@@ -46,7 +46,8 @@
               :disabled="answersData.length <= 2"
               variant="danger"
               @click="
-                if (correctAnswerIndexData == index) correctAnswerIndexData = 0;
+                if (correctAnswerIndexData + 1 == index)
+                  correctAnswerIndexData = 0;
                 answersData.splice(index, 1);
               "
               >Rimuovi</b-button
@@ -54,8 +55,8 @@
             <div class="radio-option">
               <b-form-radio
                 v-model="correctAnswerIndexData"
-                :name="'index'"
-                :value="index"
+                :name="String(index + 1)"
+                :value="index + 1"
                 >Risposta corretta</b-form-radio
               >
             </div>
@@ -85,6 +86,8 @@
         ></vue-editor>
       </div>
     </div>
+
+    <!-- real-time question preview -->
     <div class="grid-col preview-col">
       <div class="preview">
         <h3>Anteprima</h3>
@@ -145,8 +148,12 @@ export default {
       default: "",
     },
     categories: {
-      type: Array,
+      type: [Array, Number],
       default: () => [],
+    },
+    category: {
+      type: [String, Number],
+      default: "",
     },
   },
   mounted() {
@@ -155,6 +162,7 @@ export default {
     this.answersData = this.answers;
     this.correctAnswerIndexData = this.correctAnswerIndex;
     this.solutionData = this.solution;
+    this.categoryData = String(this.category);
   },
   watch: {},
   data: () => {
@@ -163,7 +171,7 @@ export default {
       solutionData: "",
       answersData: [],
       previewElements: [],
-      category: "",
+      categoryData: "",
       correctAnswerIndexData: -1,
       customToolbar: [
         ["bold", "italic", "underline"],
@@ -175,12 +183,13 @@ export default {
   methods: {
     // resets the editor to initial state
     cleanup() {
-      this.questionTextData = this.solutionData = this.category = "";
+      this.questionTextData = this.solutionData = this.categoryData = "";
       this.answersData = ["", ""];
       this.correctAnswerIndexData = 0;
     },
   },
   computed: {
+    // remove the automatically-generated (by vue-editor) <p> tags from the fields
     questionTextWithoutParagraphTag() {
       return this.questionTextData.replaceAll(/<[/]?p>/gi, "");
     },
@@ -190,21 +199,27 @@ export default {
     solutionTextWithoutParagraphTag() {
       return this.solutionData.replaceAll(/<[/]?p>/gi, "");
     },
+    // returns an object containing the question data for the parent to consume
     serializedQuestionData() {
-      return {
+      const obj = {
         text: this.questionTextWithoutParagraphTag,
         solution_text: this.solutionTextWithoutParagraphTag,
-        category: this.category,
+        category: this.categoryData,
         answers: this.answerTextsWithoutParagraphTag,
-        correct_answer_index: this.correctAnswerIndexData + 1,
+        correct_answer_index: this.correctAnswerIndexData,
         course: this.courseId,
       };
+      if (this.questionId != -1) {
+        obj.questionId = this.questionId;
+      }
+      return obj;
     },
+    // used to disable the save button when invalid information is supplied
     invalidForm() {
       return (
         !this.questionTextData.length ||
         this.answersData.some((a) => !a.length) ||
-        (this.categories.length && !this.category.length)
+        (this.categories.length && !this.categoryData.length)
       );
     },
   },
@@ -250,7 +265,7 @@ export default {
 /* 
   TODO fix sticky positioning that needs separate top values for each element in the div,
   TODO the whole div should be sticky and elements inside it should move together as a unit 
- */
+ 
 .preview h3,
 .preview div,
 .preview button {
@@ -266,5 +281,11 @@ export default {
 
 .preview button {
   top: 52%;
+}*/
+
+.preview-col {
+  position: sticky;
+  top: 12%;
+  height: min-content;
 }
 </style>

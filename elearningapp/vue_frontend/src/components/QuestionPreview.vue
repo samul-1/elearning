@@ -1,22 +1,13 @@
 <template>
-  <div class="question-box">
+  <div :class="{ 'question-box': styled }">
     <p><strong>Domanda</strong></p>
-    <!-- <p class="question-text" v-html="text"></p>-->
     <vue-mathjax :formula="text" :safe="false"></vue-mathjax>
 
-    <p
-      v-for="(answer, index) in answers"
-      :key="index"
-      :class="{
-        correct: index == correctAnswerIndex && correctShown,
-        incorrect: index != correctAnswerIndex && correctShown,
-      }"
-    >
-      <strong>{{ index + 1 }}.</strong>&nbsp;
-      <!--<span v-html="answer"></span>-->
+    <p v-for="(answer, index) in answers" :key="index">
+      <strong>{{ parseInt(index + 1) }}.</strong>&nbsp;
       <vue-mathjax :formula="answer" :safe="false"></vue-mathjax>
 
-      <span class="comment" v-if="index == correctAnswerIndex"
+      <span class="comment" v-if="index + 1 == correctAnswerIndex"
         ><em class="text-muted">(Risposta corretta)</em></span
       >
     </p>
@@ -39,13 +30,14 @@ export default {
     answers: Array,
     correctAnswerIndex: Number,
     questionId: [String, Number],
+    styled: {
+      type: Boolean,
+      default: true,
+    },
   },
   mounted() {},
   data: () => {
-    return {
-      correctShown: false,
-      solShown: false,
-    };
+    return {};
   },
   methods: {},
   computed: {},
@@ -73,17 +65,6 @@ a {
   border-radius: 0.8rem;
   padding: 1rem 2.5rem;
   box-shadow: 0px 0px 3px 0px rgba(19, 19, 19, 0.8);
-}
-
-.correct {
-  color: green !important;
-  text-shadow: 0 0 1.5px #228b22;
-}
-
-.incorrect {
-  color: red !important;
-  text-shadow: 0 0 1.5px #ff4500;
-  opacity: 0.5;
 }
 
 .comment {

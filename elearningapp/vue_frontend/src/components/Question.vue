@@ -6,8 +6,7 @@
           questionIndex != -1 ? " " + (questionIndex + 1) : ""
         }}.</strong
       >
-      <!--{{ text }}-->
-      <!--<span v-html="text"></span>-->
+
       <vue-mathjax :formula="text" :safe="false"></vue-mathjax>
     </p>
     <ol class="answer-list">
@@ -15,13 +14,11 @@
         <input
           type="radio"
           :value="index"
-          :id="index + questionIndex"
+          :id="index + '_' + questionIndex"
           v-model="chosenAnswer"
-          @change="$emit('answer', chosenAnswer)"
+          @change="$emit('answer', chosenAnswer + 1)"
         />
-        &nbsp;<label class="answer" :for="index + questionIndex">
-          <!--{{answer}}-->
-          <!--<span v-html="answer"></span>-->
+        &nbsp;<label class="answer" :for="index + '_' + questionIndex">
           <vue-mathjax :formula="answer" :safe="false"></vue-mathjax>
         </label>
       </li>
@@ -36,7 +33,7 @@ export default {
   name: "Question",
   props: {
     text: String,
-    answers: Object,
+    answers: Array,
     givenAnswer: Number,
     questionIndex: Number,
   },
@@ -49,7 +46,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 ul {
   list-style-type: none;

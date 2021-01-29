@@ -86,7 +86,7 @@
                     :solution="item.solution"
                     :correctAnswerIndex="item.correctAnswerIndex"
                     :givenAnswer="item.yourAnswer"
-                    :index="parseInt('1' + index)"
+                    :questionId="'1_' + index"
                   />
                 </div>
               </b-card>
@@ -116,7 +116,7 @@
                     :solution="item.solution"
                     :correctAnswerIndex="item.correctAnswerIndex"
                     :givenAnswer="item.yourAnswer"
-                    :index="parseInt('2' + index)"
+                    :questionId="'2_' + index"
                   />
                 </div>
               </b-card>
@@ -144,7 +144,7 @@
                     :solution="item.solution"
                     :correctAnswerIndex="item.correctAnswerIndex"
                     :givenAnswer="item.yourAnswer"
-                    :index="parseInt('3' + index)"
+                    :questionId="'3_' + index"
                   />
                 </div>
               </b-card>
@@ -196,6 +196,7 @@ export default {
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
   },
   computed: {
+    // TODO convert these to template syntax
     corrShownText() {
       return this.corrShown ? "Nascondi" : "Mostra";
     },
@@ -209,10 +210,13 @@ export default {
     },
   },
   methods: {
+    // called upon receiving answer event from a child Question component
     registerAnswer(answerIndex, questionIndex) {
+      // console.log("a: " + answerIndex + " q: " + questionIndex);
       this.answers[questionIndex] = answerIndex;
     },
 
+    // sends the answers to the server via POST and shows the outcome
     sendAnswers() {
       const postData = JSON.stringify(this.answers);
       console.log(postData);
@@ -222,9 +226,7 @@ export default {
         .then((response) => {
           this.outcomeObj = response.data;
           this.$root.$emit("bv::show::modal", "outcome-modal", "#sendAnswers");
-          // this.$nextTick(() => {
-          //   window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub]);
-          // });
+
           console.log(response);
           this.loading = false;
         })

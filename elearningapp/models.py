@@ -64,11 +64,26 @@ class Course(models.Model):
             "average_score": avg_score,
         }
 
+    # returns 'amount' questions, showing correct answer and solution too
+    # (meant for use inside of course control panel)
+    def get_complete_questions(self, amount, pk_greater_than=0):
+        # TODO add sorting
+        return list(
+            map(
+                lambda q: q.format_complete_question(),
+                Question.objects.filter(pk__gt=pk_greater_than, course=self).order_by(
+                    "pk"
+                )[:amount],
+            )
+        )
+
     def maximum_score(self):
         return self.points_for_correct_answer * self.number_of_questions_per_test
 
 
 class ProgramExercise(models.Model):
+    # TODO implement different types of program question (exact correspondence, function evaluation, ...)
+
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     text = models.TextField()
     is_visible = models.BooleanField(default=True)
@@ -102,8 +117,6 @@ class TestCase(models.Model):
             "output": self.expected_output,
         }
 
-    # TODO implement different types of program question (exact correspondence, function evaluation, ...)
-
 
 class Category(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -136,12 +149,13 @@ class Question(models.Model):
 
         # get all answers to that self
         answers = Answer.objects.filter(question=self)
-        i = 1
-        output["answers"] = {}  # index:text dictionary containing self's answer
-        for answer in answers:
-            output["answers"][i] = answer.text
-            # TODO REMOVE THIS AFTER DEBUG!!!
-            if self.correct_answer_index == i:
+        i = 0
+        # output["answers"] = {}  # index:text dictionary containing self's answer
+        output["answers"] = [a.text for a in list(answers)]
+        for answer in output["answers"]:
+            # output["answers"][i] = answer.text
+            # ! REMOVE THIS AFTER DEBUG!!!
+            if self.correct_answer_index == i + 1:
                 output["answers"][i] += " !"
             i += 1
         return output
@@ -152,6 +166,8 @@ class Question(models.Model):
         info = self.format_question_for_user()
         info["solution"] = self.solution_text
         info["correctAnswerIndex"] = self.correct_answer_index
+        info["questionId"] = self.pk
+        info["category"] = self.category.pk
         return info
 
 
