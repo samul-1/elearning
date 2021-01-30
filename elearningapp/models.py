@@ -66,14 +66,18 @@ class Course(models.Model):
 
     # returns 'amount' questions, showing correct answer and solution too
     # (meant for use inside of course control panel)
-    def get_complete_questions(self, amount, pk_greater_than=0):
+    def get_complete_questions(self, amount, pk_greater_than=0, category=None):
+        questions = Question.objects.filter(pk__gt=pk_greater_than, course=self)
+        if category is not None:
+            cat = Category.objects.get(pk=category)
+            questions = questions.filter(category=cat)
+
+        questions = questions.order_by("pk")[:amount]
         # TODO add sorting
         return list(
             map(
                 lambda q: q.format_complete_question(),
-                Question.objects.filter(pk__gt=pk_greater_than, course=self).order_by(
-                    "pk"
-                )[:amount],
+                questions,
             )
         )
 
@@ -152,12 +156,12 @@ class Question(models.Model):
         i = 0
         # output["answers"] = {}  # index:text dictionary containing self's answer
         output["answers"] = [a.text for a in list(answers)]
-        for answer in output["answers"]:
-            # output["answers"][i] = answer.text
-            # ! REMOVE THIS AFTER DEBUG!!!
-            if self.correct_answer_index == i + 1:
-                output["answers"][i] += " !"
-            i += 1
+        # for answer in output["answers"]:
+        #     # output["answers"][i] = answer.text
+        #     # ! REMOVE THIS AFTER DEBUG!!!
+        #     if self.correct_answer_index == i + 1:
+        #         output["answers"][i] += " !"
+        #     i += 1
         return output
 
     # returns a dict containing all the information about the question;

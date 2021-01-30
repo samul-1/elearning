@@ -2,7 +2,11 @@
   <div class="question-box col-10">
     <p class="question-text">
       <!--{{ text }}-->
-      <vue-mathjax :formula="text" :safe="false"></vue-mathjax>
+      <vue-mathjax
+        :formula="text"
+        :safe="false"
+        :options="mathjaxOptions"
+      ></vue-mathjax>
     </p>
     <p
       v-for="(answer, index) in answers"
@@ -14,7 +18,11 @@
     >
       <strong>{{ index + 1 }}.</strong>&nbsp;
       <!--{{ answer }}-->
-      <vue-mathjax :formula="answer" :safe="false"></vue-mathjax>
+      <vue-mathjax
+        :formula="answer"
+        :safe="false"
+        :options="mathjaxOptions"
+      ></vue-mathjax>
 
       <span class="comment" v-if="index + 1 == givenAnswer"
         ><em :class="{ 'text-muted': !correctShown }"
@@ -45,7 +53,11 @@
       >
       <br />
       <b-collapse :id="'collapse-' + questionId" class="mt-2">
-        <vue-mathjax :formula="solution" :safe="false"></vue-mathjax>
+        <vue-mathjax
+          :formula="solution"
+          :safe="false"
+          :options="mathjaxOptions"
+        ></vue-mathjax>
       </b-collapse>
     </p>
   </div>
@@ -71,6 +83,20 @@ export default {
     return {
       correctShown: false,
       solShown: false,
+      mathjaxOptions: {
+        tex2jax: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+          displayMath: [
+            ["$$", "$$"],
+            ["[", "]"],
+          ],
+          processEscapes: true,
+          processEnvironments: true,
+        },
+      },
     };
   },
   computed: {

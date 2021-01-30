@@ -8,7 +8,7 @@
     <div class="container-fluid h-100">
       <div style="float: right; position: sticky; top: 70px">
         <button class="btn btn-dark" ref="sendAnswers" @click="sendAnswers()">
-          <b-icon icon="check" class="inline-icon"></b-icon>
+          <font-awesome-icon class="mr-1" icon="check" />
           Invia risposte
         </button>
       </div>
@@ -167,6 +167,12 @@
 import Question from "./Question.vue";
 import SeenQuestion from "./SeenQuestion.vue";
 
+// Fontawesome
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faCheck);
+
 import axios from "axios";
 
 export default {
@@ -247,8 +253,8 @@ export default {
 .failed {
   color: red;
 }
-
+/* 
 .score {
   font-weight: bold;
-}
+} */
 </style>

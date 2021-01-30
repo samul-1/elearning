@@ -103,11 +103,8 @@
           @click="$emit('save', serializedQuestionData)"
           :disabled="invalidForm"
         >
-          <b-icon
-            icon="check2-circle"
-            class="inline-icon"
-            style="margin-bottom: 2px"
-          ></b-icon>
+          <font-awesome-icon class="mr-1" icon="check-circle" />
+
           Salva domanda</b-button
         >
       </div>
@@ -118,6 +115,10 @@
 <script>
 import { VueEditor } from "vue2-editor";
 import QuestionPreview from "./QuestionPreview.vue";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faCheckCircle);
 
 export default {
   name: "QuestionEditor",

@@ -3,7 +3,11 @@
     <div class="question-box" :class="{ 'preview-box': collapsed }">
       <!-- this shorter preview is shown when the question isn't expanded -->
       <div class="preview-text" :class="{ hidden: !collapsed }">
-        <vue-mathjax :formula="text" :safe="false"></vue-mathjax>
+        <vue-mathjax
+          :formula="text"
+          :safe="false"
+          :options="mathjaxOptions"
+        ></vue-mathjax>
         <p
           class="mt-3 answer-paragraph"
           v-for="(answer, index) in answers"
@@ -11,7 +15,11 @@
         >
           <strong>{{ parseInt(index + 1) }}.</strong>&nbsp;
           <!--<span v-html="answer"></span>-->
-          <vue-mathjax :formula="answer" :safe="false"></vue-mathjax>
+          <vue-mathjax
+            :formula="answer"
+            :safe="false"
+            :options="mathjaxOptions"
+          ></vue-mathjax>
 
           <span class="comment" v-if="index + 1 == correctAnswerIndex"
             ><em class="text-muted">(Risposta corretta)</em></span
@@ -38,17 +46,18 @@
           variant="outline-primary"
           @click="collapsed = !collapsed"
         >
-          <b-icon
-            class="mb-1"
-            :icon="collapsed ? 'file-plus' : 'file-minus'"
-          ></b-icon>
+          <font-awesome-icon
+            class="mr-1"
+            :icon="collapsed ? 'plus' : 'minus'"
+          />
+
           {{ collapsed ? "Mostra di più" : "Mostra di meno " }}
         </b-button>
         <b-button
           variant="outline-secondary"
           @click="$emit('editQuestion', questionId)"
         >
-          <b-icon class="inline-icon" icon="pencil-square"></b-icon>Modifica
+          <font-awesome-icon class="mr-1" icon="edit" />Modifica
         </b-button>
       </div>
     </div>
@@ -58,6 +67,16 @@
 <script>
 import QuestionPreview from "./QuestionPreview";
 import { VueMathjax } from "vue-mathjax";
+
+// Fontawesome
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faMinus } from "@fortawesome/free-solid-svg-icons";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faPlus);
+library.add(faMinus);
+library.add(faEdit);
 
 export default {
   name: "CollapsableQuestionPreview",
@@ -76,6 +95,20 @@ export default {
   data: () => {
     return {
       collapsed: true,
+      mathjaxOptions: {
+        tex2jax: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+          displayMath: [
+            ["$$", "$$"],
+            ["[", "]"],
+          ],
+          processEscapes: true,
+          processEnvironments: true,
+        },
+      },
     };
   },
   methods: {},
@@ -88,18 +121,6 @@ export default {
   height: 300px;
   background: linear-gradient(to top, rgb(228, 228, 228) 21%, white 10%);
 }
-
-/* {
-  display: grid;
-  grid-template-rows: repeat(4, 1fr);
-  align-items: center;
-  justify-items: center;
-  border: none;
-  border-radius: 0.8rem;
-  padding: 10px;
-  box-shadow: 0px 0px 3px 0px rgba(19, 19, 19, 0.8);
-  background: linear-gradient(to bottom, rgb(228, 228, 228) 21%, white 10%);
-}*/
 
 .preview-text {
   height: 200px;

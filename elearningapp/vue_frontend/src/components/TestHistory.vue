@@ -2,12 +2,14 @@
   <div>
     <div style="margin-top: 3rem" v-if="!tests.length">
       <b-card bg-variant="light" text-variant="black">
-        <b-card-text>
-          <b-icon
+        <b-card-text class="grid-card">
+          <font-awesome-icon
+            class="mr-1"
             icon="exclamation-circle"
-            style="width: 80px; height: auto; margin-right: 1rem"
-          ></b-icon>
-          Non hai ancora effettuato alcun test.
+            style="width: 80px; height: 80px"
+          />
+
+          <span>Non hai ancora visto alcuna domanda.</span>
         </b-card-text>
       </b-card>
     </div>
@@ -34,6 +36,12 @@
 
 <script>
 import TakenTest from "./TakenTest.vue";
+
+// Fontawesome
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faExclamationCircle);
 
 export default {
   name: "TestHistory",
@@ -66,6 +74,12 @@ export default {
 </script>
 
 <style scoped>
+.grid-card {
+  display: grid;
+  grid-template-columns: 110px auto;
+  align-items: center;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

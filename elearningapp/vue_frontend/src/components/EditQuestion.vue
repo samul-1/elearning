@@ -5,11 +5,29 @@
       v-if="loading"
       label="Loading..."
     ></b-spinner>
-    <div class="grid question-filter-grid">
-      <!-- // TODO implement question filtering  -->
-      <span>Filtra per:</span>
-      <span>Categoria</span>
-      <span>Autore</span>
+    <div>
+      <!--class="grid question-filter-grid"-->
+      <span class="mr-2">
+        <font-awesome-icon class="mr-1" icon="search" />
+
+        Filtra per:</span
+      >
+      <span v-if="this.categories.length">
+        <select v-model="filterByCategory">
+          <option disabled value="">Categoria</option>
+
+          <option
+            v-for="(category, index) in categories"
+            :key="index"
+            :value="Object.keys(category)[0]"
+          >
+            {{ category[Object.keys(category)[0]] }}
+          </option>
+        </select>
+        <!-- // TODO remove filter button  -->
+      </span>
+      <!-- // TODO more filtering options  -->
+      <!-- <span>Autore</span> -->
     </div>
     <div
       class="mt-4 grid edit-question-grid rem-1-gap"
@@ -61,6 +79,12 @@ import QuestionEditor from "./QuestionEditor.vue";
 import axios from "axios";
 import infiniteScroll from "vue-infinite-scroll";
 
+// Fontawesome
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faSearch);
+
 export default {
   name: "EditQuestion",
   components: {
@@ -69,6 +93,12 @@ export default {
   },
   directives: {
     infiniteScroll,
+  },
+  watch: {
+    filterByCategory() {
+      // get more questions of filtered category and overwrite the ones already in the state
+      this.loadMoreQuestions(true);
+    },
   },
   props: {
     questions: Array,
@@ -97,6 +127,7 @@ export default {
         cancelable: true,
         offset: -250,
       },
+      filterByCategory: "",
     };
   },
   methods: {
@@ -149,7 +180,12 @@ export default {
     },
 
     // ask server for more questions (used for infinite scroll)
-    loadMoreQuestions() {
+    // if a category is being filtered for, the server will only return questions belonging to that category
+    // if overwrite is true, the fetched questions will overwrite the contents of this.questionsData rather than extending it
+    loadMoreQuestions(overwrite = false) {
+      if (overwrite) {
+        this.questionsData = [];
+      }
       this.loading = true;
       axios
         .get(
@@ -157,7 +193,8 @@ export default {
             this.courseId +
             "/5/" +
             this.maxQuestionId +
-            "/"
+            "/" +
+            (this.filterByCategory.length ? this.filterByCategory + "/" : "")
         )
         // TODO pass this url as a prop
         .then((response) => {
@@ -175,6 +212,9 @@ export default {
     // returns the highest question id present: used to poll the server for subsequent questions
     // (which are retrieved sorted by id)
     maxQuestionId() {
+      if (!this.questionsData.length) {
+        return 0;
+      }
       return Math.max(...this.questionsData.map((q) => parseInt(q.questionId)));
     },
   },

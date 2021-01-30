@@ -18,6 +18,10 @@
         class="test-outcome-preview"
         :class="{ passed: this.passing, failed: !this.passing }"
       >
+        <font-awesome-icon
+          class="mr-1"
+          :icon="this.passing ? 'check' : 'times'"
+        />
         {{ outcome }}
       </span>
       <b-button
@@ -77,7 +81,12 @@
 </template>
 
 <script>
-//b import SeenQuestion from './SeenQuestion.vue'
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faCheck);
+library.add(faTimes);
+
 import CollapsableQuestionList from "./CollapsableQuestionList.vue";
 export default {
   components: { CollapsableQuestionList },
@@ -174,6 +183,10 @@ export default {
   margin: 10px;
   padding: 15px;
   /* background-color: #f2f2f2; */
+}
+
+.mb-2px {
+  margin-bottom: 2px;
 }
 
 .preview {

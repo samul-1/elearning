@@ -45,4 +45,9 @@ urlpatterns = [
         views.get_questions,
         name="get_questions",
     ),
+    re_path(
+        r"^get_questions/(?P<course_id>\d+)/(?P<amount>\d+)/(?P<starting_from_pk>\d+)/(?P<category>\d+)/$",
+        views.get_questions,
+        name="get_questions",
+    ),
 ]

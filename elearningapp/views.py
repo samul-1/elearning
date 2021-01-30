@@ -90,10 +90,10 @@ def edit_question(request, course_id):
 
 
 # accessed via GET by the client for infinite scrolling in the EditQuestion vue component
-def get_questions(request, course_id, amount, starting_from_pk):
+def get_questions(request, course_id, amount, starting_from_pk, category=None):
     course = get_object_or_404(Course, pk__exact=course_id)
     questions = course.get_complete_questions(
-        int(amount), pk_greater_than=int(starting_from_pk)
+        int(amount), pk_greater_than=int(starting_from_pk), category=category
     )
     return JsonResponse(questions, safe=False)
 

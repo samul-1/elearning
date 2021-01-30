@@ -12,18 +12,21 @@
         :disabled="!questions.length"
         variant="outline-danger"
       >
-        <b-icon icon="file-earmark-minus" class="inline-icon"></b-icon>
+        <font-awesome-icon class="mr-1" icon="trash-alt" />
+
         Cancella cronologia domande</b-button
       >
     </div>
-    <div style="margin-top: 3rem" v-if="!questions.length">
+    <div class="mt-3" v-if="!questions.length">
       <b-card bg-variant="light" text-variant="black">
-        <b-card-text>
-          <b-icon
+        <b-card-text class="grid-card">
+          <font-awesome-icon
+            class="mr-1"
             icon="exclamation-circle"
-            style="width: 80px; height: auto; margin-right: 1rem"
-          ></b-icon>
-          Non hai ancora visto alcuna domanda.
+            style="width: 80px; height: 80px"
+          />
+
+          <span>Non hai ancora visto alcuna domanda.</span>
         </b-card-text>
       </b-card>
     </div>
@@ -68,6 +71,16 @@
 import SeenQuestion from "./SeenQuestion.vue";
 import axios from "axios";
 
+// Fontawesome
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faTrashAlt,
+  faExclamationCircle,
+} from "@fortawesome/free-solid-svg-icons";
+
+library.add(faTrashAlt);
+library.add(faExclamationCircle);
+
 export default {
   name: "QuestionHistory",
   components: {
@@ -109,5 +122,10 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.grid-card {
+  display: grid;
+  grid-template-columns: 110px auto;
+  align-items: center;
+}
 </style>

@@ -6,10 +6,7 @@
       <div>
         <a :href="'/add_question/' + courseId"
           ><button class="btn btn-dark dashboard-btn">
-            <b-icon
-              icon="plus-circle"
-              class="inline-icon dashboard-icon"
-            ></b-icon>
+            <font-awesome-icon class="mr-1" icon="plus-circle" />
             Aggiungi domande
           </button></a
         ><br />
@@ -18,10 +15,7 @@
             style="margin-bottom: 0 !important"
             class="btn btn-dark dashboard-btn"
           >
-            <b-icon
-              icon="view-list"
-              class="inline-icon dashboard-icon"
-            ></b-icon>
+            <font-awesome-icon class="mr-1" icon="list" />
             Visualizza / modifica domande
           </button></a
         ><br />
@@ -42,6 +36,13 @@
 </template>
 
 <script>
+// Fontawesome
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faList, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faPlusCircle);
+library.add(faList);
+
 export default {
   name: "CourseCp",
   components: {},

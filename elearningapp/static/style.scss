@@ -251,6 +251,14 @@ button[disabled] {
     box-shadow: 0 0 15px gray;
     border: none !important;
     border-radius: 0.3rem !important;
+    width: 30%;
+}
+
+.question-filter-grid {
+    background: $secondary;
+    color: white;
+    border-radius: 3rem;
+    padding: .5rem 1.5rem;
 }
 
 

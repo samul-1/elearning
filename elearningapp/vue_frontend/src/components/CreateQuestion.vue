@@ -14,12 +14,12 @@
     <transition name="overlay-text">
       <div class="overlay-card" v-if="success">
         <b-card bg-variant="light" text-variant="black">
-          <b-card-text>
-            <b-icon
+          <b-card-text class="grid-card">
+            <font-awesome-icon
               class="correct"
-              icon="check"
-              style="width: 80px; height: auto; margin-right: 1rem"
-            ></b-icon>
+              icon="check-circle"
+              style="width: 80px; height: 80px"
+            />
             Domanda salvata con successo
           </b-card-text>
         </b-card>
@@ -90,3 +90,11 @@ export default {
   computed: {},
 };
 </script>
+
+<style scoped>
+.grid-card {
+  display: grid;
+  grid-template-columns: 110px auto;
+  align-items: center;
+}
+</style>

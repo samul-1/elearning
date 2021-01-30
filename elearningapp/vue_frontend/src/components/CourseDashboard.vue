@@ -22,22 +22,19 @@
       <div style="margin-top: 0rem">
         <a :href="'/test/' + courseId"
           ><button class="btn btn-dark dashboard-btn">
-            <b-icon icon="list-ol" class="inline-icon dashboard-icon"></b-icon>
+            <font-awesome-icon class="mr-1" icon="stream" />
             Simula un test
           </button></a
         ><br />
         <a :href="'/question_history/' + userId + '/' + courseId"
           ><button class="btn btn-dark dashboard-btn">
-            <b-icon
-              icon="bookmark-check"
-              class="inline-icon dashboard-icon"
-            ></b-icon>
+            <font-awesome-icon class="mr-1" icon="bookmark" />
             Lista domande già viste
           </button></a
         ><br />
         <a :href="'/test_history/' + userId + '/' + courseId"
           ><button class="btn btn-dark dashboard-btn">
-            <b-icon icon="bookmark" class="inline-icon dashboard-icon"></b-icon>
+            <font-awesome-icon class="mr-1" icon="history" />
             Cronologia test
           </button></a
         >
@@ -87,6 +84,16 @@
 </template>
 
 <script>
+// Fontawesome
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faStream } from "@fortawesome/free-solid-svg-icons";
+import { faHistory } from "@fortawesome/free-solid-svg-icons";
+import { faBookmark } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faStream);
+library.add(faHistory);
+library.add(faBookmark);
+
 export default {
   name: "CourseDashboard",
   components: {},

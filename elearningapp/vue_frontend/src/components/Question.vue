@@ -7,7 +7,11 @@
         }}.</strong
       >
 
-      <vue-mathjax :formula="text" :safe="false"></vue-mathjax>
+      <vue-mathjax
+        :formula="text"
+        :safe="false"
+        :options="mathjaxOptions"
+      ></vue-mathjax>
     </p>
     <ol class="answer-list">
       <li v-for="(answer, index) in answers" :key="index">
@@ -19,7 +23,11 @@
           @change="$emit('answer', chosenAnswer + 1)"
         />
         &nbsp;<label class="answer" :for="index + '_' + questionIndex">
-          <vue-mathjax :formula="answer" :safe="false"></vue-mathjax>
+          <vue-mathjax
+            :formula="answer"
+            :safe="false"
+            :options="mathjaxOptions"
+          ></vue-mathjax>
         </label>
       </li>
     </ol>
@@ -41,6 +49,20 @@ export default {
   data: () => {
     return {
       chosenAnswer: -1,
+      mathjaxOptions: {
+        tex2jax: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+          displayMath: [
+            ["$$", "$$"],
+            ["[", "]"],
+          ],
+          processEscapes: true,
+          processEnvironments: true,
+        },
+      },
     };
   },
 };

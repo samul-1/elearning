@@ -1,6 +1,7 @@
 import Vue from "vue/dist/vue.js"
 import EditQuestion from './components/EditQuestion.vue'
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 const VueScrollTo = require("vue-scrollto");
 
 
@@ -9,6 +10,7 @@ Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 Vue.use(VueScrollTo);
 
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false
 
