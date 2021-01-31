@@ -1,0 +1,83 @@
+@import "variables.scss";
+
+/* ------------------
+1.1 CreateQuestion
+------------------ */
+.grid-card {
+    display: grid;
+    grid-template-columns: 110px auto;
+    align-items: center;
+}
+
+/* ------------------
+1.2 EditQuestion
+------------------ */
+.distinct {
+    background-color: rgb(250, 250, 250) !important; //!
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: 0.8rem;
+}
+
+.successfully-edited:after {
+    position: absolute;
+    content: "Salvata!";
+    bottom: 2%;
+    right: 2%;
+    color: $green;
+    font-weight: bold;
+}
+
+.successfully-edited {
+    box-shadow: 0 0 10px $green;
+    border-radius: 0.8rem;
+    position: relative;
+}
+
+.edit-question-grid div {
+    transition: box-shadow 0.2s linear;
+}
+
+/* ------------------
+1.3 QuestionEditor
+------------------ */
+.transparent-card {
+    background-color: transparent !important;
+}
+
+.list-wrapper {
+    padding-bottom: 10px;
+}
+
+.quillWrapper,
+.ql-editor {
+    width: 100%;
+    max-width: 38vw;
+}
+
+.answer-editor .quillWrapper,
+.answer-editor .ql-editor {
+    height: 100px !important;
+    min-height: 100px !important;
+    max-width: 30vw;
+}
+
+.big-editor .quillWrapper,
+.big-editor .ql-editor {
+    height: 150px !important;
+    min-height: 150px !important;
+}
+
+.two-to-one-col-fr {
+    height: 150px;
+}
+
+.radio-option {
+    margin-top: 0.5rem;
+}
+
+
+.preview-col {
+    position: sticky;
+    top: 12%;
+    height: min-content;
+}

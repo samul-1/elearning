@@ -228,7 +228,9 @@ export default {
 </script>
 
 <style>
-.transparent-card {
+@import "../../../static/editor-styles.css";
+
+/* .transparent-card {
   background-color: transparent !important;
 }
 
@@ -282,11 +284,11 @@ export default {
 
 .preview button {
   top: 52%;
-}*/
+}
 
 .preview-col {
   position: sticky;
   top: 12%;
   height: min-content;
-}
+} */
 </style>

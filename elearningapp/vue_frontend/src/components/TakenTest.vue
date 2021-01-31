@@ -2,7 +2,7 @@
   <!-- :class="{ 'col-12': fullShown, 'col-3': !fullShown }" -->
   <div class="test-wrapper">
     <div
-      class="preview"
+      class="test-preview"
       :class="{
         'preview-passed': this.passing,
         'preview-failed': !this.passing,
@@ -168,12 +168,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400&display=swap");
+@import "../../../static/test-styles.css";
+/* @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@800&display=swap");
 
-* {
-  font-family: "Source Sans Pro", sans-serif;
+
 }
 .taken-test {
   box-shadow: 0px 0px 3px 0px rgba(19, 19, 19, 0.8);
@@ -182,14 +182,14 @@ export default {
   overflow-x: auto;
   margin: 10px;
   padding: 15px;
+  font-family: "Source Sans Pro", sans-serif;
   /* background-color: #f2f2f2; */
-}
 
-.mb-2px {
+/* .mb-2px {
   margin-bottom: 2px;
 }
 
-.preview {
+.test-preview {
   display: grid;
   grid-template-rows: repeat(4, 1fr);
   align-items: center;
@@ -199,7 +199,7 @@ export default {
   padding: 10px;
   box-shadow: 0px 0px 3px 0px rgba(19, 19, 19, 0.8);
   background: linear-gradient(to bottom, rgb(228, 228, 228) 21%, white 10%);
-}
+} */
 
 /* .preview-passed {
   background-color: rgba(55, 194, 0, 0.2);
@@ -207,7 +207,7 @@ export default {
 
 .preview-failed {
   background-color: rgba(255, 0, 0, 0.2);
-} */
+}
 
 .test-score-preview {
   font-size: 2rem;
@@ -222,5 +222,5 @@ export default {
   color: rgb(107, 107, 107);
   text-shadow: 0px 0px 1px rgb(94, 94, 94);
   align-self: flex-start;
-}
+} */
 </style>

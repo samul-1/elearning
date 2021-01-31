@@ -1,5 +1,5 @@
 <template>
-  <div class="question-box col-10">
+  <div class="seen-question-box col-10">
     <p class="question-text">
       <!--{{ text }}-->
       <vue-mathjax
@@ -113,22 +113,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+@import "../../../static/question-styles.css";
 
-.question-box {
+/* .seen-question-box {
   border: none;
   margin: 2rem;
   border-radius: 0.8rem;
@@ -138,5 +125,5 @@ a {
 
 .comment {
   margin-left: 50px;
-}
+} */
 </style>

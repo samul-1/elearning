@@ -92,9 +92,11 @@ export default {
 </script>
 
 <style scoped>
-.grid-card {
+@import "../../../static/editor-styles.css";
+
+/* .grid-card {
   display: grid;
   grid-template-columns: 110px auto;
   align-items: center;
-}
+} */
 </style>

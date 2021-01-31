@@ -512,7 +512,9 @@ export default {
 };
 </script>
 <style>
-.setupfield {
+@import "../../../static/dashboard-styles.css";
+
+/* .setupfield {
   margin-top: 10px;
   margin-bottom: 30px;
 }
@@ -573,5 +575,5 @@ ul {
   padding: 0;
   margin-left: 1rem;
   margin-top: -0.5rem;
-}
+} */
 </style>

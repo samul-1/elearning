@@ -9,12 +9,12 @@
             style="width: 80px; height: 80px"
           />
 
-          <span>Non hai ancora visto alcuna domanda.</span>
+          <span>Non hai ancora effettuato alcun test.</span>
         </b-card-text>
       </b-card>
     </div>
 
-    <div class="grid">
+    <div class="grid-test-history">
       <TakenTest
         v-for="(item, index) in tests"
         :key="index"
@@ -74,7 +74,7 @@ export default {
 </script>
 
 <style scoped>
-.grid-card {
+@import "../../../static/test-styles.css"; /* .grid-card {
   display: grid;
   grid-template-columns: 110px auto;
   align-items: center;
@@ -99,5 +99,5 @@ export default {
   .expanded-grid-column {
     grid-column: 1 / 1;
   }
-}
+} */
 </style>

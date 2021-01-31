@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="question-box" :class="{ 'preview-box': collapsed }">
+    <div class="question-preview-box" :class="{ 'preview-box': collapsed }">
       <!-- this shorter preview is shown when the question isn't expanded -->
       <div class="preview-text" :class="{ hidden: !collapsed }">
         <vue-mathjax
@@ -9,7 +9,7 @@
           :options="mathjaxOptions"
         ></vue-mathjax>
         <p
-          class="mt-3 answer-paragraph"
+          class="mt-3 answer-paragraph answer-paragraph-preview"
           v-for="(answer, index) in answers"
           :key="index"
         >
@@ -117,7 +117,9 @@ export default {
 </script>
 
 <style scoped>
-.preview-box {
+@import "../../../static/question-styles.css";
+
+/* .preview-box {
   height: 300px;
   background: linear-gradient(to top, rgb(228, 228, 228) 21%, white 10%);
 }
@@ -162,5 +164,5 @@ export default {
   position: absolute;
   top: 0;
   width: 100%;
-}
+} */
 </style>

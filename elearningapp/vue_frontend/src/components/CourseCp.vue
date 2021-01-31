@@ -62,7 +62,9 @@ export default {
 </script>
 
 <style scoped>
-.stats {
+@import "../../../static/dashboard-styles.css";
+
+/* .stats {
   border: 1px solid #dbdbdb;
   border-radius: 0.8rem;
   padding: 1rem;
@@ -75,5 +77,5 @@ export default {
 
 .grid div {
   align-self: center;
-}
+} */
 </style>

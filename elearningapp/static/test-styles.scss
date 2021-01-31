@@ -1,0 +1,65 @@
+@import "variables.scss";
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@800&display=swap");
+
+/*
+This file contains styling for all the vue components that contain tests
+*/
+
+/* ------------------
+Table of contents
+1. TakenTest
+/* ------------------
+
+/* ------------------
+1. TakenTest
+------------------ */
+.taken-test {
+    box-shadow: 0px 0px 3px 0px rgba(19, 19, 19, 0.8); //!
+    border: 0px solid grey; //!
+    border-radius: 0.8rem;
+    overflow-x: auto;
+    margin: 10px;
+    padding: 15px;
+    font-family: "Source Sans Pro", sans-serif;
+}
+
+
+
+.test-preview {
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
+    align-items: center;
+    justify-items: center;
+    border: none;
+    border-radius: 0.8rem;
+    padding: 10px;
+    box-shadow: 0px 0px 3px 0px rgba(19, 19, 19, 0.8); //!
+    background: linear-gradient(to bottom, rgb(228, 228, 228) 21%, white 10%); //!
+}
+
+.test-score-preview {
+    font-size: 2rem;
+    font-weight: thin;
+}
+
+.your-score-preview {
+    font-weight: bold;
+}
+
+.test-date-preview {
+    color: rgb(107, 107, 107); //!
+    text-shadow: 0px 0px 1px rgb(94, 94, 94); //!
+    align-self: flex-start;
+}
+
+.passed {
+    color: $green;
+    font-size: 1.2rem;
+}
+
+.failed {
+    color: $red;
+    font-size: 1.2rem;
+}

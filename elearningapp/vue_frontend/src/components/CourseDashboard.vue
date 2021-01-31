@@ -39,7 +39,7 @@
           </button></a
         >
       </div>
-      <div class="stats">
+      <div class="user-stats">
         <span class="h5">I tuoi ultimi punteggi</span>
         <span class="text-muted" style="margin-left: 0.5rem">
           Media: {{ userAverageScore }}</span
@@ -114,7 +114,9 @@ export default {
 </script>
 
 <style>
-.y-labels {
+@import "../../../static/dashboard-styles.css";
+
+/* .y-labels {
   font-size: 0.65rem;
 }
 .stroke {
@@ -132,5 +134,5 @@ export default {
 .point {
   fill: #61dafb;
   stroke: #61dafb;
-}
+} */
 </style>

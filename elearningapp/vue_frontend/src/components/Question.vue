@@ -69,7 +69,7 @@ export default {
 </script>
 
 <style scoped>
-ul {
+/* ul {
   list-style-type: none;
   padding: 0;
 }
@@ -108,5 +108,5 @@ a {
 
 .answer-list li {
   padding: 0.2rem 0;
-}
+} */
 </style>

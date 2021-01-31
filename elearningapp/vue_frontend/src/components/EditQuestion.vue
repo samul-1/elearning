@@ -222,7 +222,10 @@ export default {
 </script>
 
 <style>
-.distinct {
+@import "../../../static/editor-styles.css";
+@import "../../../static/question-styles.css";
+
+/* .distinct {
   background-color: rgb(250, 250, 250) !important;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   border-radius: 0.8rem;
@@ -244,5 +247,5 @@ export default {
 
 .edit-question-grid div {
   transition: box-shadow 0.2s linear;
-}
+} */
 </style>

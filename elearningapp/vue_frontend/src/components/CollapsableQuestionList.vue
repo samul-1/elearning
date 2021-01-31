@@ -59,11 +59,13 @@ export default {
 </script>
 
 <style>
-.transparent-card {
+@import "../../../static/question-styles.css";
+
+/* .transparent-card {
   background-color: transparent !important;
 }
 
 .list-wrapper {
   padding-bottom: 10px;
-}
+} */
 </style>

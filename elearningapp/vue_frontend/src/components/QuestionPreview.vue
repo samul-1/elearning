@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'question-box': styled }">
+  <div :class="{ 'question-preview-box': styled }">
     <p><strong>Domanda</strong></p>
     <vue-mathjax
       :formula="text"
@@ -7,7 +7,11 @@
       :options="mathjaxOptions"
     ></vue-mathjax>
 
-    <p class="answer-paragraph" v-for="(answer, index) in answers" :key="index">
+    <p
+      class="answer-paragraph answer-paragraph-full"
+      v-for="(answer, index) in answers"
+      :key="index"
+    >
       <strong>{{ parseInt(index + 1) }}.</strong>&nbsp;
       <vue-mathjax
         :formula="answer"
@@ -72,22 +76,9 @@ export default {
 </script>
 
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+@import "../../../static/question-styles.css";
 
-.question-box {
+/* .question-preview-box {
   border: none;
   border-radius: 0.8rem;
   padding: 1rem 2.5rem;
@@ -110,5 +101,5 @@ a {
   position: absolute;
   top: 0;
   width: 100%;
-}
+} */
 </style>

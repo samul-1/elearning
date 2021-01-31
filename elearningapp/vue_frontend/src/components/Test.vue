@@ -246,13 +246,15 @@ export default {
 </script>
 
 <style>
-.passed {
+@import "../../../static/test-styles.css";
+
+/* .passed {
   color: green;
 }
 
 .failed {
   color: red;
-}
+} */
 /* 
 .score {
   font-weight: bold;

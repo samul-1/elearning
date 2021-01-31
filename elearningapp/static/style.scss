@@ -1,7 +1,6 @@
 /* ------------------
 Table of contents
-0.1 imports
-0.2 variables
+0. imports
 1. global styles
 2. layout
 3. typography
@@ -11,24 +10,13 @@ Table of contents
 ------------------ */
 
 /* ------------------
-0.1 imports
+0. imports
 ------------------ */
+@import "variables.scss";
 @import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap');
-
-
-
-/* ------------------
-0.2 variables
------------------- */
-$red: rgb(190, 0, 0);
-$green: rgb(0, 110, 9);
-$primary: rgb(0, 95, 236);
-$secondary: rgb(75, 75, 75);
-$danger: rgba(190, 79, 79, 0.35);
-$darker: #31363a;
 
 
 
@@ -50,10 +38,6 @@ body {
 2. layout
 ------------------ */
 #page_wrapper {
-    /* border-right: 0.5px solid #DCDCDC;
-    border-left: 0.5px solid #DCDCDC;
-    border-bottom: 0.5px solid #DCDCDC;
-    background-color: white !important;*/
     padding-top: 4rem;
     padding-bottom: 2rem;
     width: 80%;
@@ -65,7 +49,7 @@ body {
     border: none;
     border-radius: 0.8rem;
     padding: 1rem 2.5rem;
-    box-shadow: 0px 0px 5px 0px rgba(49, 49, 49, 0.5);
+    box-shadow: 0px 0px 5px 0px rgba(49, 49, 49, 0.5); //!
 }
 
 
@@ -87,15 +71,15 @@ h2 {
     font-size: .9rem;
 }
 
-.passed {
-    color: $green;
-    font-size: 1.2rem;
-}
+// .passed {
+//     color: $green;
+//     font-size: 1.2rem;
+// }
 
-.failed {
-    color: $red;
-    font-size: 1.2rem;
-}
+// .failed {
+//     color: $red;
+//     font-size: 1.2rem;
+// }
 
 .correct {
     color: $green !important;
@@ -119,11 +103,11 @@ h2 {
 }
 
 .user-link:hover {
-    color: #DCDCDC;
+    color: #DCDCDC; //!
 }
 
 .dashboard-icon {
-    color: #bababa;
+    color: #bababa; //!
 }
 
 
@@ -198,7 +182,7 @@ button[disabled] {
 .dashboard-btn {
     border-radius: 1rem;
     padding: 1rem !important;
-    box-shadow: 0 0 4px rgba(71, 71, 71, 0.55);
+    box-shadow: 0 0 4px rgba(71, 71, 71, 0.55); //!
     transition: all .1s linear;
     width: 90%;
     margin-bottom: 1rem;
@@ -207,7 +191,7 @@ button[disabled] {
 .dashboard-btn:hover {
     transform: perspective(200px) translateZ(1.5px);
     background-color: $darker;
-    box-shadow: 0 0 8px rgba(71, 71, 71, 0.75);
+    box-shadow: 0 0 8px rgba(71, 71, 71, 0.75); //!
 }
 
 
@@ -221,7 +205,7 @@ button[disabled] {
 }
 
 .modal-backdrop {
-    background-color: rgba(0, 0, 0, .75);
+    background-color: rgba(0, 0, 0, .75); //!
 }
 
 .inline-icon {
@@ -230,7 +214,7 @@ button[disabled] {
 }
 
 .shadow-sm-c {
-    box-shadow: 0 0 0.7rem rgba(0, 0, 0, .65) !important;
+    box-shadow: 0 0 0.7rem rgba(0, 0, 0, .65) !important; //!
 }
 
 .no-border {
@@ -248,7 +232,7 @@ button[disabled] {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 2;
-    box-shadow: 0 0 15px gray;
+    box-shadow: 0 0 15px gray; //!
     border: none !important;
     border-radius: 0.3rem !important;
     width: 30%;
@@ -259,6 +243,14 @@ button[disabled] {
     color: white;
     border-radius: 3rem;
     padding: .5rem 1.5rem;
+}
+
+.transparent-card {
+    background-color: transparent !important;
+}
+
+.list-wrapper {
+    padding-bottom: 10px;
 }
 
 
