@@ -55,7 +55,7 @@ def course_cp(request, course_id):
     )
 
 
-# if accessed via GET, gets the first 5 questions for the course and render template containing the EditQuestion component
+# if accessed via GET, gets the first 5 questions for the course and renders template containing the EditQuestion component
 # if accessed via PUT, updates the question
 def edit_question(request, course_id):
     if request.method == "PUT":
@@ -148,6 +148,24 @@ def program_exercise(request, prog_id):
             "public_test_cases": list(exercise.get_public_test_cases()),
         },
     )
+
+
+def test_tex(request):
+    import os
+
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    print(dir_path)
+    res = subprocess.check_output(
+        [
+            "node",
+            "-r",
+            "esm",
+            "../elearning/elearningapp/tex-render/component/tex2svg",
+            "e^x",
+        ]
+    )
+    print(res)
+    return HttpResponse(res)
 
 
 def eval_progsol(request, prog_id):

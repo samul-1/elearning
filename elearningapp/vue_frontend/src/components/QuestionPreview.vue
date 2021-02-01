@@ -2,6 +2,7 @@
   <div :class="{ 'question-preview-box': styled }">
     <p><strong>Domanda</strong></p>
     <vue-mathjax
+      :id="'question-preview-' + questionId"
       :formula="text"
       :safe="false"
       :options="mathjaxOptions"
