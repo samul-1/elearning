@@ -150,22 +150,13 @@ def program_exercise(request, prog_id):
     )
 
 
-def test_tex(request):
-    import os
-
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    print(dir_path)
-    res = subprocess.check_output(
-        [
-            "node",
-            "-r",
-            "esm",
-            "../elearning/elearningapp/tex-render/component/tex2svg",
-            "e^x",
-        ]
-    )
-    print(res)
-    return HttpResponse(res)
+# def test_tex(request):
+#     questions = Question.objects.filter(pk__gt=53)
+#     for q in questions:
+#         q.save()
+#         for answer in Answer.objects.filter(question=q):
+#             answer.save()
+#     return HttpResponse(":)")
 
 
 def eval_progsol(request, prog_id):

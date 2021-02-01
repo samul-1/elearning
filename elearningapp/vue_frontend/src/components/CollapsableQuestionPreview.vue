@@ -3,11 +3,12 @@
     <div class="question-preview-box" :class="{ 'preview-box': collapsed }">
       <!-- this shorter preview is shown when the question isn't expanded -->
       <div class="preview-text" :class="{ hidden: !collapsed }">
-        <vue-mathjax
+        <!-- <vue-mathjax
           :formula="text"
           :safe="false"
           :options="mathjaxOptions"
-        ></vue-mathjax>
+        ></vue-mathjax> -->
+        <span v-html="text"></span>
         <p
           class="mt-3 answer-paragraph answer-paragraph-preview"
           v-for="(answer, index) in answers"
@@ -15,11 +16,12 @@
         >
           <strong>{{ parseInt(index + 1) }}.</strong>&nbsp;
           <!--<span v-html="answer"></span>-->
-          <vue-mathjax
+          <!-- <vue-mathjax
             :formula="answer"
             :safe="false"
             :options="mathjaxOptions"
-          ></vue-mathjax>
+          ></vue-mathjax> -->
+          <span v-html="answer"></span>
 
           <span class="comment" v-if="index + 1 == correctAnswerIndex"
             ><em class="text-muted">(Risposta corretta)</em></span
@@ -66,7 +68,7 @@
 
 <script>
 import QuestionPreview from "./QuestionPreview";
-import { VueMathjax } from "vue-mathjax";
+// import { VueMathjax } from "vue-mathjax";
 
 // Fontawesome
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -82,7 +84,7 @@ export default {
   name: "CollapsableQuestionPreview",
   components: {
     QuestionPreview,
-    "vue-mathjax": VueMathjax,
+    //"vue-mathjax": VueMathjax,
   },
   props: {
     text: String,

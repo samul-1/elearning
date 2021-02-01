@@ -50,5 +50,4 @@ urlpatterns = [
         views.get_questions,
         name="get_questions",
     ),
-    path("tex", views.test_tex, name="start_new_test"),
 ]
