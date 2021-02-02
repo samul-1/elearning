@@ -165,6 +165,7 @@
 
 <script>
 import Question from "./Question.vue";
+
 import SeenQuestion from "./SeenQuestion.vue";
 
 // Fontawesome
@@ -183,6 +184,7 @@ export default {
   },
   props: {
     questions: Array,
+    exerciseModality: String,
   },
   data: () => {
     return {
@@ -218,7 +220,6 @@ export default {
   methods: {
     // called upon receiving answer event from a child Question component
     registerAnswer(answerIndex, questionIndex) {
-      // console.log("a: " + answerIndex + " q: " + questionIndex);
       this.answers[questionIndex] = answerIndex;
     },
 

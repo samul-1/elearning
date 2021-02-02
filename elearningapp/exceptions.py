@@ -1,0 +1,2 @@
+class OutOfQuestionsException(Exception):
+    pass

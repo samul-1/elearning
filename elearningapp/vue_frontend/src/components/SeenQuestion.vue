@@ -2,15 +2,17 @@
   <div class="seen-question-box col-10">
     <p class="question-text">
       <!--{{ text }}-->
-      <vue-mathjax
+      <span v-html="text"></span>
+      <!-- <vue-mathjax
         :formula="text"
         :safe="false"
         :options="mathjaxOptions"
-      ></vue-mathjax>
+      ></vue-mathjax> -->
     </p>
     <p
       v-for="(answer, index) in answers"
       :key="index"
+      class="answer-p"
       :class="{
         correct: index + 1 == correctAnswerIndex && correctShown,
         incorrect: index + 1 != correctAnswerIndex && correctShown,
@@ -18,11 +20,13 @@
     >
       <strong>{{ index + 1 }}.</strong>&nbsp;
       <!--{{ answer }}-->
-      <vue-mathjax
+      <span v-html="answer"></span>
+
+      <!-- <vue-mathjax
         :formula="answer"
         :safe="false"
         :options="mathjaxOptions"
-      ></vue-mathjax>
+      ></vue-mathjax> -->
 
       <span class="comment" v-if="index + 1 == givenAnswer"
         ><em :class="{ 'text-muted': !correctShown }"
@@ -53,23 +57,24 @@
       >
       <br />
       <b-collapse :id="'collapse-' + questionId" class="mt-2">
-        <vue-mathjax
+        <!-- <vue-mathjax
           :formula="solution"
           :safe="false"
           :options="mathjaxOptions"
-        ></vue-mathjax>
+        ></vue-mathjax> -->
+        <span v-html="solution"></span>
       </b-collapse>
     </p>
   </div>
 </template>
 
 <script>
-import { VueMathjax } from "vue-mathjax";
+// import { VueMathjax } from "vue-mathjax";
 
 export default {
   name: "SeenQuestion",
   components: {
-    "vue-mathjax": VueMathjax,
+    // "vue-mathjax": VueMathjax,
   },
   props: {
     text: String,

@@ -7,25 +7,27 @@
     ></b-spinner>
     <div>
       <!--class="grid question-filter-grid"-->
-      <span class="mr-2">
-        <font-awesome-icon class="mr-1" icon="search" />
+      <p class="mt-4">
+        <span class="mr-2">
+          <font-awesome-icon class="mr-1" icon="search" />
 
-        Filtra per:</span
-      >
-      <span v-if="this.categories.length">
-        <select v-model="filterByCategory">
-          <option disabled value="">Categoria</option>
+          Filtra per:</span
+        >
+        <span v-if="this.categories.length">
+          <select v-model="filterByCategory">
+            <option disabled value="">Categoria</option>
 
-          <option
-            v-for="(category, index) in categories"
-            :key="index"
-            :value="Object.keys(category)[0]"
-          >
-            {{ category[Object.keys(category)[0]] }}
-          </option>
-        </select>
-        <!-- // TODO remove filter button  -->
-      </span>
+            <option
+              v-for="(category, index) in categories"
+              :key="index"
+              :value="Object.keys(category)[0]"
+            >
+              {{ category[Object.keys(category)[0]] }}
+            </option>
+          </select>
+          <!-- // TODO remove filter button  -->
+        </span>
+      </p>
       <!-- // TODO more filtering options  -->
       <!-- <span>Autore</span> -->
     </div>

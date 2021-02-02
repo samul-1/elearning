@@ -20,7 +20,7 @@
               placeholder="Inserisci il nome del corso"
             ></b-form-input>
           </div>
-          <div class="setupfield">
+          <!--<div class="setupfield">
             <h3>Che modalità di domande vuoi usare nei test?</h3>
             <b-form-group>
               <div class="radio-option">
@@ -58,7 +58,7 @@
                 </span>
               </div>
             </b-form-group>
-          </div>
+          </div>-->
         </div>
       </transition>
       <transition name="slide-fade">
@@ -390,32 +390,35 @@ export default {
   },
   data: () => {
     return {
-      currstep: 1,
-      loading: false,
-      questionmode: null,
-      minpoints: 0,
-      corrpoints: 1,
-      incorrpoints: -1,
-      unanspoints: 0,
-      coursename: null,
-      categorymode: null,
-      distributionmode: "B",
-      categories: [""],
-      distributionvalues: [],
-      questionspertestValue: 1,
-      // currstep: 5,
+      // currstep: 1,
       // loading: false,
-      // questionmode: "B",
-      // minpoints: 5,
+      // questionmode: null,
+      // minpoints: 0,
       // corrpoints: 1,
       // incorrpoints: -1,
       // unanspoints: 0,
-      // coursename: "Ricerca Operativa",
-      // categorymode: "A",
-      // distributionmode: "A",
-      // categories: ["Grafi", "Modelli", "PL"],
-      // distributionvalues: [2, 1, 4],
+      // coursename: null,
+      // categorymode: null,
+      // distributionmode: "B",
+      // categories: [""],
+      // distributionvalues: [],
       // questionspertestValue: 1,
+      currstep: 5,
+      loading: false,
+      minpoints: 5,
+      corrpoints: 1,
+      incorrpoints: -1,
+      unanspoints: 0,
+      coursename: "RO",
+      categorymode: "B",
+      distributionmode: "B",
+      categories: [
+        // "Intervalli di fiducia",
+        // "Verifica ipotesi",
+        // "Variabili aleatorie",
+      ],
+      distributionvalues: [2, 1, 4],
+      questionspertestValue: 10,
     };
   },
   mounted() {
@@ -437,20 +440,9 @@ export default {
       }
       return count;
     },
-    questionmodeAsString() {
-      return this.questionmode == "A"
-        ? "Domande singole"
-        : this.questionmode == "B"
-        ? "Domande raggruppate"
-        : "Piattaforma esercizi JavaScript";
-    },
     invalidData() {
       if (this.currstep == 1) {
-        return (
-          this.questionmode == null ||
-          this.coursename == null ||
-          !this.coursename.length
-        );
+        return this.coursename == null || !this.coursename.length;
       }
       if (this.currstep == 3) {
         return (
@@ -471,29 +463,27 @@ export default {
   methods: {
     constructDataObject() {
       let data = {
-        course_name: this.coursename,
-        question_mode: this.questionmode,
+        name: this.coursename,
+        minimum_passing_score: this.minpoints,
+        points_for_correct_answer: this.corrpoints,
+        points_for_wrong_answer: this.incorrpoints,
+        points_for_unanswered: this.unanspoints,
+        categories: [], // default value changed according to selected settings
+        category_distribution_values: [], // same for this
+        number_of_questions_per_test: this.questionsPerTest,
+        uses_category_distribution: this.distributionmode == "A",
       };
-      if (this.questionmode != "C") {
-        data["min_points"] = this.minpoints;
-        data["corr_points"] = this.corrpoints;
-        data["incorr_points"] = this.incorrpoints;
-        data["unans_points"] = this.unanspoints;
-        data["category_mode"] = this.categorymode;
-      }
       if (this.categorymode == "A") {
         data["categories"] = this.categories;
-        data["distribution_mode"] = this.distributionmode;
       }
       if (this.distributionmode == "A") {
-        data["distribution_values"] = this.distributionvalues;
-      } else if (this.questionmode != "C") {
-        data["questions_per_test"] = this.questionspertestValue;
+        data["category_distribution_values"] = this.distributionvalues;
       }
+
       return data;
     },
     sendCourseData() {
-      const postData = JSON.stringify(this.constructDataObject());
+      const postData = this.constructDataObject();
       console.log(postData);
       // this.loading = true;
       axios
@@ -513,67 +503,4 @@ export default {
 </script>
 <style>
 @import "../../../static/dashboard-styles.css";
-
-/* .setupfield {
-  margin-top: 10px;
-  margin-bottom: 30px;
-}
-.desc {
-  margin-left: 20px;
-  font-size: 0.9em;
-}
-.radio-option {
-  margin-bottom: 20px;
-}
-.category-input {
-  margin-bottom: 10px;
-}
-.form-control-inline {
-  display: inline-block;
-  width: min-content;
-  margin-left: 2rem;
-}
-.buttons-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  margin-top: 0.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid rgb(129, 129, 129);
-}
-#goback-button {
-  justify-self: flex-start;
-}
-#next-button {
-  justify-self: flex-end;
-}
-.summary {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  margin-top: 1.5rem;
-  padding: 0 2rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid rgb(129, 129, 129);
-}
-
-.summary div:nth-of-type(2) {
-  justify-self: end;
-}
-
-.summary strong {
-  font-size: 1.1rem;
-}
-
-.summary strong:nth-child(2) {
-  padding: 0rem 0.5rem;
-  background-color: rgb(80, 80, 80);
-  color: white;
-  border-radius: 0.2rem;
-  font-weight: 400;
-  font-size: 1rem;
-}
-ul {
-  padding: 0;
-  margin-left: 1rem;
-  margin-top: -0.5rem;
-} */
 </style>

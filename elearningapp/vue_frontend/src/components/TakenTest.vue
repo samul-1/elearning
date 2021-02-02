@@ -34,8 +34,9 @@
         >Mostra dettagli
       </b-button>
     </div>
+    <!-- // ! take care of lag when expanding test -->
     <div class="full taken-test" v-if="fullShown">
-      <div class="row">
+      <div class="row w-100">
         <div class="col-12 order-1 col-lg-4 order-lg-2 align-self-end">
           <p class="test-date">
             Test sostenuto in data {{ formattedTimestamp }}

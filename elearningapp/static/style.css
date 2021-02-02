@@ -71,7 +71,7 @@ h2 {
 .incorrect {
   color: #be0000 !important;
   text-shadow: 0 0 1px #be0000;
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .navbar-user {

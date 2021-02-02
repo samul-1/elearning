@@ -13,9 +13,6 @@ class TestCaseAdmin(admin.ModelAdmin):
 class CourseAdmin(admin.ModelAdmin):
     list_display = (
         "name",
-        "number_of_questions_per_test",
-        "setup_completed",
-        "exercise_modality",
         "pk",
     )
 
@@ -44,12 +41,16 @@ class ActiveTestAdmin(admin.ModelAdmin):
     list_display = ("user", "course", "timestamp")
 
 
-class ActiveQuestionAdmin(admin.ModelAdmin):
-    list_display = ("question", "test")
+# class ActiveQuestionAdmin(admin.ModelAdmin):
+#     list_display = ("question", "test")
 
 
 class TakenTestAdmin(admin.ModelAdmin):
     list_display = ("user", "course", "timestamp", "score")
+
+
+class AnswersInTakenTestAdmin(admin.ModelAdmin):
+    list_display = ("answer_index", "question", "test")
 
 
 class SeenQuestionAdmin(admin.ModelAdmin):
@@ -63,7 +64,8 @@ admin.site.register(Answer, AnswerAdmin)
 admin.site.register(GlobalProfile, GlobalProfileAdmin)
 admin.site.register(CourseSpecificProfile, CourseSpecificProfileAdmin)
 admin.site.register(ActiveTest, ActiveTestAdmin)
-admin.site.register(ActiveQuestion, ActiveQuestionAdmin)
+# admin.site.register(ActiveQuestion, ActiveQuestionAdmin)
+admin.site.register(AnswersInTakenTest, AnswersInTakenTestAdmin)
 admin.site.register(TakenTest, TakenTestAdmin)
 admin.site.register(SeenQuestion, SeenQuestionAdmin)
 admin.site.register(ProgramExercise, ProgramExerciseAdmin)

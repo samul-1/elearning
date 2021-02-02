@@ -7,7 +7,6 @@ from .models import (
     CourseSpecificProfile,
     GlobalProfile,
     ActiveTest,
-    ActiveQuestion,
     Answer,
     TakenTest,
     AnswersInTakenTest,
@@ -15,7 +14,7 @@ from .models import (
     ProgramExercise,
     TestCase,
 )
-from .forms import QuestionForm
+from .forms import QuestionForm, CourseForm
 from django.contrib.auth.models import User
 import random
 from django.db.models import Q
@@ -24,12 +23,21 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 import subprocess
+from .exceptions import OutOfQuestionsException
 
 
 def create_course(request):
     if request.method == "POST":
-        # TODO create model form for course
-        print(request.body)
+        form_data = json.loads(request.body.decode("utf-8"))
+        form = CourseForm(form_data)
+        print(form_data)
+        if form.is_valid():
+            new_course = form.save()
+        else:
+            print(form.errors)
+
+        return JsonResponse({"courseId": new_course.pk}, safe=False)
+
     return render(
         request,
         "elearningapp/createcourse.html",
@@ -207,55 +215,29 @@ def start_new_test(request, course_id):
     requesting_user = request.user  # User.objects.get(pk=user_id)
     course = Course.objects.get(pk=course_id)
 
-    if (
-        ActiveTest.objects.filter(Q(user=requesting_user) & Q(course=course)).count()
-        > 0
-    ):
+    if ActiveTest.objects.filter(user=requesting_user, course=course).count() > 0:
         # user has already an active test associated to them; return that one
         # instead of creating a new one
-        active_test = ActiveTest.objects.get(user=requesting_user)
+        active_test = ActiveTest.objects.get(user=requesting_user, course=course)
         return active_test
-
-    if not bool(course.category_distribution):
-        # if this course doesn't have any particular distribution of questions per category,
-        # generate random questions without looking at their category
-        chosen_questions = course.get_questions_for(
-            requesting_user, course.number_of_questions_per_test
-        )
-        if chosen_questions is None:
-            return None
-    else:
-        chosen_questions = []
-        # loop through the categories of the course, and for each one select as many random questions
-        # as specified in course settings
-        for category, amount in course.category_distribution.items():
-            questions_for_category = course.get_questions_for(
-                requesting_user, amount, category
-            )
-            if questions_for_category is None:
-                return None
-
-            # append randomly chosen questions for this category to the list of questions chosen for this test
-            chosen_questions.extend(list(questions_for_category))
-
-        random.shuffle(chosen_questions)
 
     # create a new test associated to requesting user in selected course
     new_test = ActiveTest(user=requesting_user, course=course)
     new_test.save()
-
-    # associate all randomly chosen questions to the newly generated test
-    for question in chosen_questions:
-        chosen_question = ActiveQuestion(test=new_test, question=question)
-        chosen_question.save()
+    try:
+        new_test.init_test()
+    except OutOfQuestionsException:  # delete the test that was attempted to be initialized and re-throw exception
+        new_test.delete()
+        raise OutOfQuestionsException
 
     return new_test
 
 
 # renders a test for the user
 def render_test(request, course_id):
-    current_test = start_new_test(request, course_id)
-    if current_test is None:
+    try:
+        current_test = start_new_test(request, course_id)
+    except OutOfQuestionsException:
         return HttpResponse("finito le domande!")
 
     # get user's global data
@@ -333,22 +315,24 @@ def check_answers(request):
     # TODO check validity of sent json object
     requesting_user = request.user
 
-    # TODO check course in addition to requesting user
+    # ! TODO check course in addition to requesting user
     current_test = ActiveTest.objects.get(user=requesting_user)
 
     outcome = current_test.evaluate_answers(answers)
-    # current_test.delete()
+    current_test.delete()
 
     return JsonResponse(outcome.serialize())
 
 
-# retrievs context for rendering the course dashboard
+# retrieves context for rendering the course dashboard
 @login_required
 def view_course(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
 
     try:
-        course_profile = CourseSpecificProfile.objects.get(user=request.user)
+        course_profile = CourseSpecificProfile.objects.get(
+            user=request.user, course__pk=course_id
+        )
     except CourseSpecificProfile.DoesNotExist:
         # TODO handle signing up to new course
         return HttpResponse("not registered")

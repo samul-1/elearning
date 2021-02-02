@@ -1,17 +1,18 @@
 <template>
   <div class="col-10 question-wrapper">
     <p class="question-text">
-      <strong
+      <strong class="question-label"
         >Domanda{{
           questionIndex != -1 ? " " + (questionIndex + 1) : ""
         }}.</strong
       >
 
-      <vue-mathjax
+      <!-- <vue-mathjax
         :formula="text"
         :safe="false"
         :options="mathjaxOptions"
-      ></vue-mathjax>
+      ></vue-mathjax> -->
+      <span v-html="text"></span>
     </p>
     <ol class="answer-list">
       <li v-for="(answer, index) in answers" :key="index">
@@ -23,11 +24,12 @@
           @change="$emit('answer', chosenAnswer + 1)"
         />
         &nbsp;<label class="answer" :for="index + '_' + questionIndex">
-          <vue-mathjax
+          <!-- <vue-mathjax
             :formula="answer"
             :safe="false"
             :options="mathjaxOptions"
-          ></vue-mathjax>
+          ></vue-mathjax> -->
+          <span v-html="answer"></span>
         </label>
       </li>
     </ol>
@@ -35,7 +37,7 @@
 </template>
 
 <script>
-import { VueMathjax } from "vue-mathjax";
+// import { VueMathjax } from "vue-mathjax";
 
 export default {
   name: "Question",
@@ -45,7 +47,9 @@ export default {
     givenAnswer: Number,
     questionIndex: Number,
   },
-  components: { "vue-mathjax": VueMathjax },
+  components: {
+    //"vue-mathjax": VueMathjax
+  },
   data: () => {
     return {
       chosenAnswer: -1,

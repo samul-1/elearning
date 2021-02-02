@@ -8,17 +8,8 @@ class ProgramForm(forms.Form):
     program = forms.CharField(label="", widget=forms.Textarea())
 
 
-# class QuestionForm(forms.Form):
-#     text = forms.CharField(max_length=500)
-#     course = forms.ModelMultipleChoiceField(queryset=Course.objects.all())
-#     category = forms.ModelMultipleChoiceField(queryset=Category.objects.all())
-#     correct_answer_index = forms.IntegerField()
-#     solution_text = forms.CharField(max_length=3000)
-#     answers = forms.JSONField()
-
-
 class QuestionForm(ModelForm):
-    answers = forms.CharField(max_length=3000)
+    answers = forms.CharField(max_length=10000)
 
     class Meta:
         model = Question
@@ -50,4 +41,34 @@ class QuestionForm(ModelForm):
                 question=instance, answer_index__gt=len(self["answers"].value())
             ):
                 answer.delete()
+        return instance
+
+
+class CourseForm(ModelForm):
+    categories = forms.CharField(max_length=10000, required=False)
+    category_distribution_values = forms.CharField(max_length=1000, required=False)
+
+    class Meta:
+        model = Course
+        fields = [
+            "name",
+            "uses_category_distribution",
+            "number_of_questions_per_test",
+            "points_for_correct_answer",
+            "points_for_wrong_answer",
+            "points_for_unanswered",
+            "minimum_passing_score",
+        ]
+
+    def save(self, force_insert=False, force_update=False):
+        instance = super(CourseForm, self).save(self)
+
+        # create categories for this course
+        for (idx, category) in enumerate(self["categories"].value()):
+            cat = Category(name=category, course=instance)
+            if self["category_distribution_values"].value():
+                # if the course has a category distribution, add the number of questions for this category
+                cat.quantity = self["category_distribution_values"].value()[idx]
+            cat.save()
+
         return instance

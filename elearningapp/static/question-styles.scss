@@ -77,6 +77,10 @@ Table of contents
 /* ------------------
 3. Question
 ------------------ */
+.question-label {
+    margin-right: .5rem;
+}
+
 .question-wrapper {
     padding: 2rem 0;
 }
@@ -118,4 +122,8 @@ Table of contents
     border-radius: 0.8rem;
     padding: 1rem 2.5rem;
     box-shadow: 0px 0px 3px 0px rgba(19, 19, 19, 0.8); //!
+}
+
+.answer-p {
+    transition: all .3s ease;
 }
