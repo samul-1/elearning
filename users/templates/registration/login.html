@@ -1,0 +1,47 @@
+{% extends 'user-base.html' %}
+
+{% block content %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+    {% else %}
+    <p>Please login to see this page.</p>
+    {% endif %}
+{% endif %}
+
+<div class="login-backdrop"></div>
+
+<div class="login-box mt-3">
+    <div class="mb-4"><h1 class="text-center">Login</h1></div>
+    <form class="login-form" method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <!--<p>{{ form.username.label_tag }}</p>-->
+            <p>{{ form.username }}</p>
+        </div>
+        <div class="form-group">
+            <!--<p>{{ form.password.label_tag }}</p>-->
+            <p>{{ form.password }}</p>
+        </div>
+        {% if form.errors %}
+            <p class="form-error-text">Username o password errati.</p>
+        {% endif %}
+        <div class="form-group login-button-container">
+            <input class="btn btn-primary" type="submit" value="Entra">
+        </div>
+        <div class="form-group">
+            <input type="hidden" name="next" value="{{ next }}">
+        </div>
+        <div class="password-forgotten-container mt-4 pt-4">
+            <p><a class="password-forgotten" href="{% url 'password_reset' %}">Hai dimenticato la password?</a></p>
+        </div>
+        </form>
+
+</div>
+
+{% endblock content %}
+{% block footer_javascript_section %}
+
+{% endblock footer_javascript_section %}

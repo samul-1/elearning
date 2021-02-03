@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ["127.0.0.1"]
 
 INSTALLED_APPS = [
     "elearningapp.apps.ElearningappConfig",
+    "users.apps.UsersConfig",
     "webpack_loader",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -154,3 +155,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = "/static/"
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "elearningapp/static/"),
+    os.path.join(BASE_DIR, "users/static/"),
+]
+
+LOGIN_URL = "/accounts/login/"
+LOGOUT_REDIRECT_URL = LOGIN_URL

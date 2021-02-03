@@ -4,8 +4,6 @@ from .models import (
     Question,
     Course,
     Category,
-    CourseSpecificProfile,
-    GlobalProfile,
     ActiveTest,
     Answer,
     TakenTest,
@@ -14,6 +12,7 @@ from .models import (
     ProgramExercise,
     TestCase,
 )
+from users.models import CourseSpecificProfile, GlobalProfile
 from .forms import QuestionForm, CourseForm
 from django.contrib.auth.models import User
 import random
@@ -24,6 +23,20 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 import subprocess
 from .exceptions import OutOfQuestionsException
+
+# user registration
+# ? handle this in a separate "user" app?
+# def register(response):
+#     if response.method == "POST":
+#         form = RegisterForm(response.POST)
+#         if form.is_valid():
+#             form.save()
+
+#             return redirect()
+#     else:
+#         form = RegisterForm()
+
+#     return render(response, "registration/register.html", {"form": form})
 
 
 def create_course(request):
@@ -103,6 +116,19 @@ def get_questions(request, course_id, amount, starting_from_pk, category=None):
     questions = course.get_complete_questions(
         int(amount), pk_greater_than=int(starting_from_pk), category=category
     )
+    return JsonResponse(questions, safe=False)
+
+
+# accessed via GET by the client for infinite scrolling in the QuestionHistory vue component
+def get_seen_questions(request, course_id, amount, starting_from_pk, category=None):
+    course = get_object_or_404(Course, pk__exact=course_id)
+    questions = course.get_seen_questions(
+        request.user,
+        int(amount),
+        pk_greater_than=int(starting_from_pk),
+        category=category,
+    )
+    print(questions)
     return JsonResponse(questions, safe=False)
 
 
@@ -208,49 +234,39 @@ def eval_progsol(request, prog_id):
     return JsonResponse(outcome)
 
 
-# generates a new test according to the course rules and associates it with requesting user if
-# such a test doesn't exist, and returns it; otherwise, returns the existing test
-@login_required
-def start_new_test(request, course_id):
+# renders a test for the user
+def render_test(request, course_id):
     requesting_user = request.user  # User.objects.get(pk=user_id)
     course = Course.objects.get(pk=course_id)
 
     if ActiveTest.objects.filter(user=requesting_user, course=course).count() > 0:
-        # user has already an active test associated to them; return that one
+        # user already has an active test associated to them; use that one
         # instead of creating a new one
-        active_test = ActiveTest.objects.get(user=requesting_user, course=course)
-        return active_test
-
-    # create a new test associated to requesting user in selected course
-    new_test = ActiveTest(user=requesting_user, course=course)
-    new_test.save()
-    try:
-        new_test.init_test()
-    except OutOfQuestionsException:  # delete the test that was attempted to be initialized and re-throw exception
-        new_test.delete()
-        raise OutOfQuestionsException
-
-    return new_test
-
-
-# renders a test for the user
-def render_test(request, course_id):
-    try:
-        current_test = start_new_test(request, course_id)
-    except OutOfQuestionsException:
-        return HttpResponse("finito le domande!")
+        current_test = ActiveTest.objects.get(user=requesting_user, course=course)
+    else:
+        # no active tests found for this user;
+        # create a new test associated to requesting user in selected course
+        try:
+            current_test = ActiveTest(user=requesting_user, course=course)
+            current_test.save()
+            current_test.init_test()
+        except OutOfQuestionsException:
+            # delete the test that was attempted to be initialized if exception occurs
+            current_test.delete()
+            # TODO show an actual page
+            return HttpResponse("finito le domande!")
 
     # get user's global data
     global_profile = GlobalProfile.objects.get(user=request.user)
     global_user_data = {
         "name": global_profile.first_name
-        if global_profile.first_name != ""
+        if global_profile.user.first_name != ""
         else global_profile.user.username,
         "id": global_profile.user.pk,
     }
 
     context = {
-        "questions": current_test.format_test_for_user,
+        "questions": current_test.format_test_for_user(),
         "global_user_data": global_user_data,
     }
 
@@ -263,9 +279,12 @@ def question_history(request, user_id, course_id):
         CourseSpecificProfile, user__pk__exact=user_id, course__pk__exact=course_id
     )
 
-    seen_questions = map(
-        lambda sq: sq.serialize(), list(user_profile.get_seen_questions())
-    )
+    course = Course.objects.get(pk=course_id)
+    seen_questions = course.get_seen_questions(user=request.user, amount=5)
+
+    # seen_questions = map(
+    #     lambda sq: sq.serialize(), list(user_profile.get_seen_questions())
+    # )
     return render(
         request,
         "elearningapp/question_history.html",
@@ -275,6 +294,7 @@ def question_history(request, user_id, course_id):
 
 # empties the list of seen question for given user and course
 def delete_question_history(request, user_id, course_id):
+    # TODO use request.user instead of user_id?
     user_profile = get_object_or_404(
         CourseSpecificProfile, user__pk__exact=user_id, course__pk__exact=course_id
     )
@@ -300,7 +320,6 @@ def test_history(request, user_id, course_id):
             "maxScore": Course.objects.get(pk=course_id).maximum_score(),
         },
     )
-    # return HttpResponse(taken_tests)
 
 
 # calls a method to evaluate the answers given, save the question and test outcome to user's history;
@@ -319,7 +338,7 @@ def check_answers(request):
     current_test = ActiveTest.objects.get(user=requesting_user)
 
     outcome = current_test.evaluate_answers(answers)
-    current_test.delete()
+    # current_test.delete()
 
     return JsonResponse(outcome.serialize())
 
@@ -328,36 +347,44 @@ def check_answers(request):
 @login_required
 def view_course(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
+    # get course's data
+    course_data = {
+        "name": course.name,
+        "id": course.pk,
+    }
+
+    # get user's global data
+    global_profile = GlobalProfile.objects.get(
+        user=request.user
+    )  # we can assume this exists because it's created at signup time and the view has @login_required
+    global_user_data = {
+        "name": global_profile.user.first_name
+        if global_profile.user.first_name != ""
+        else global_profile.user.username,
+        "id": global_profile.user.pk,
+    }
 
     try:
         course_profile = CourseSpecificProfile.objects.get(
             user=request.user, course__pk=course_id
         )
     except CourseSpecificProfile.DoesNotExist:
-        # TODO handle signing up to new course
-        return HttpResponse("not registered")
-
-    # get user's global data
-    global_profile = GlobalProfile.objects.get(user=request.user)
-    global_user_data = {
-        "name": global_profile.first_name
-        if global_profile.first_name != ""
-        else global_profile.user.username,
-        "id": global_profile.user.pk,
-    }
+        # user isn't signed up to this course, give them a chance to
+        return render(
+            request,
+            "course_register.html",
+            {
+                "global_user_data": global_user_data,
+                "course_data": course_data,
+            },
+        )
 
     # get user's course specific data
     course_specific_user_data = {
         "number_of_tests_taken": course_profile.number_of_tests_taken,
         "last_score": course_profile.last_score,
-        "average_score": course_profile.average_score,
+        "average_score": round(course_profile.get_average_score(), 1),
         "last_scores": course_profile.get_last_scores(5),
-    }
-
-    # get course's data
-    course_data = {
-        "name": course.name,
-        "id": course.pk,
     }
 
     return render(

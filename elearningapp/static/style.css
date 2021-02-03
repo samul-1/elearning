@@ -15,6 +15,7 @@ Table of contents
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Quicksand&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=PT+Serif+Caption&display=swap");
 /* ------------------
 1. global styles
 ------------------ */
@@ -63,6 +64,11 @@ h2 {
   font-size: .9rem;
 }
 
+.form-error-text,
+.errorlist {
+  color: #be0000 !important;
+}
+
 .correct {
   color: #006e09 !important;
   text-shadow: 0 0 1px #006e09;
@@ -98,6 +104,17 @@ h2 {
 button:disabled:hover,
 button[disabled] {
   cursor: not-allowed;
+}
+
+.btn-rounded {
+  border-radius: .5rem;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+}
+
+.btn-success {
+  background-color: #006e09;
+  border-color: #006e09;
 }
 
 .btn-outline-success {
@@ -187,7 +204,7 @@ button[disabled] {
 }
 
 .modal-backdrop {
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.75) !important;
 }
 
 .inline-icon {

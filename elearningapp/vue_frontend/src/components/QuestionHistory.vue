@@ -1,5 +1,10 @@
 <template>
   <div>
+    <b-spinner
+      style="position: fixed; top: 50%; left: 50%; color: black"
+      v-if="loading"
+      label="Loading..."
+    ></b-spinner>
     <h2>Domande già viste</h2>
 
     <div class="grid two-to-one-col-fr">
@@ -32,9 +37,9 @@
     </div>
 
     <div class="">
-      <div class="grid list-grid">
+      <div class="grid list-grid" v-infinite-scroll="loadMoreQuestions">
         <SeenQuestion
-          v-for="(item, index) in questions"
+          v-for="(item, index) in questionsData"
           :key="index"
           :text="item.question.text"
           :answers="item.question.answers"
@@ -58,7 +63,9 @@
 
       <template #modal-footer="{ cancel }">
         <!-- Button with custom close trigger value -->
-        <b-button variant="danger" @click="confirm">Conferma</b-button>
+        <b-button variant="danger" @click="confirmHistoryDeletion()"
+          >Conferma</b-button
+        >
 
         <b-button @click="cancel">Annulla</b-button>
       </template>
@@ -70,6 +77,7 @@
 <script>
 import SeenQuestion from "./SeenQuestion.vue";
 import axios from "axios";
+import infiniteScroll from "vue-infinite-scroll";
 
 // Fontawesome
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -86,12 +94,23 @@ export default {
   components: {
     SeenQuestion,
   },
+  directives: {
+    infiniteScroll,
+  },
   props: {
     questions: Array,
     userId: Number,
     courseId: Number,
   },
+  data: () => {
+    return {
+      questionsData: [],
+      loading: false,
+      filterByCategory: "",
+    };
+  },
   mounted() {
+    this.questionsData = this.questions;
     axios.defaults.xsrfCookieName = "csrftoken";
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
   },
@@ -99,7 +118,7 @@ export default {
     showConfirmationModal() {
       this.$root.$emit("bv::show::modal", "confirmation-modal");
     },
-    confirm() {
+    confirmHistoryDeletion() {
       this.questions = [];
       this.$root.$emit("bv::hide::modal", "confirmation-modal");
       axios
@@ -117,6 +136,41 @@ export default {
           alert(error);
           console.log(error);
         });
+    },
+    loadMoreQuestions(overwrite = false) {
+      if (overwrite) {
+        this.questionsData = [];
+      }
+      this.loading = true;
+      axios
+        .get(
+          "http://127.0.0.1:8000/get_seen_questions/" +
+            this.courseId +
+            "/5/" +
+            this.maxQuestionId +
+            "/" +
+            (this.filterByCategory.length ? this.filterByCategory + "/" : "")
+        )
+        // TODO pass this url as a prop
+        .then((response) => {
+          this.loading = false;
+          console.log(response.data);
+          this.questionsData.push(...response.data);
+        })
+        .catch((error) => {
+          // alert(error);
+          console.log(error);
+        });
+    },
+  },
+  computed: {
+    // returns the highest question id present: used to poll the server for subsequent questions
+    // (which are retrieved sorted by id)
+    maxQuestionId() {
+      if (!this.questionsData.length) {
+        return 0;
+      }
+      return Math.max(...this.questionsData.map((q) => parseInt(q.questionId)));
     },
   },
 };

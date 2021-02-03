@@ -1,0 +1,16 @@
+{% extends 'user-base.html' %}
+
+{% block title %}Registrati al corso{% endblock %}
+
+{% block content %}
+<div class="login-backdrop"></div>
+
+<div class="login-box login-box-lg mt-3 py-5">
+    <div class="mb-4"><h2 class="text-center">Non sei iscritto al corso <strong>{{ course_data.name }}</strong>.</h2></div>
+    
+    <div class="text-center mt-5">
+        <a href="{% url 'course_signup' course_id=course_data.id %}"><button class="btn btn-primary">Iscriviti al corso</button></a>
+    </div>
+
+</div>
+{% endblock %}

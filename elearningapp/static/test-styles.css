@@ -16,7 +16,7 @@ Table of contents
   -webkit-box-shadow: 0px 0px 3px 0px rgba(19, 19, 19, 0.8);
           box-shadow: 0px 0px 3px 0px rgba(19, 19, 19, 0.8);
   border: 0px solid grey;
-  border-radius: 0.8rem;
+  border-radius: 1rem;
   overflow-x: auto;
   margin: 0;
   padding: 15px;
@@ -33,7 +33,7 @@ Table of contents
           align-items: center;
   justify-items: center;
   border: none;
-  border-radius: 0.8rem;
+  border-radius: 1rem;
   padding: 10px;
   -webkit-box-shadow: 0px 0px 3px 0px rgba(19, 19, 19, 0.8);
           box-shadow: 0px 0px 3px 0px rgba(19, 19, 19, 0.8);

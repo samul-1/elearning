@@ -58,7 +58,8 @@
             horizontalLines: false,
           }"
           :labels="{
-            yLabels: 10,
+            // count unique values
+            yLabels: parseInt(new Set(lastScores).size), //lastScores.length,
             yLabelsTextFormatter: (val) => Math.round(val),
           }"
           :interactive="false"
@@ -115,24 +116,4 @@ export default {
 
 <style>
 @import "../../../static/dashboard-styles.css";
-
-/* .y-labels {
-  font-size: 0.65rem;
-}
-.stroke {
-  stroke: #61dafb;
-}
-.fill {
-  fill: url(#gradient);
-}
-.stats {
-  border: 1px solid #dbdbdb;
-  border-radius: 0.8rem;
-  padding: 1rem;
-  text-align: center;
-}
-.point {
-  fill: #61dafb;
-  stroke: #61dafb;
-} */
 </style>

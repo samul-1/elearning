@@ -1,0 +1,202 @@
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.login-backdrop {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  background: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.login-form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.login-box {
+  padding: 2rem 5rem;
+  border: none;
+  -webkit-box-shadow: 0 10px 20px #4b4b4b;
+          box-shadow: 0 10px 20px #4b4b4b;
+  border-radius: 1.5rem;
+  margin: 0 auto;
+  width: 50%;
+  height: 30%;
+  background: white;
+}
+
+.login-box-lg {
+  width: 80%;
+}
+
+.form-group,
+.password-forgotten-container {
+  width: 100%;
+}
+
+.login-button-container {
+  width: 60% !important;
+}
+
+.login-form input[type=text],
+.login-form input[type=password] {
+  padding: 1rem;
+  border-radius: .5rem;
+  border: none;
+  background: #e8f0fe !important;
+  width: 100%;
+}
+
+.login-form input[type=submit] {
+  width: 100%;
+}
+
+.password-forgotten-container {
+  position: relative;
+  text-align: center;
+}
+
+.password-forgotten-container:before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: "";
+  width: 100%;
+  border-top: 1px solid #a5a5a5;
+}
+
+.profile-grid {
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+  -webkit-column-gap: 5rem;
+          column-gap: 5rem;
+}
+
+.profile-header {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 2;
+  grid-column: 1 / span 2;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+  padding-bottom: .5rem;
+  position: relative;
+  -webkit-column-gap: 5rem;
+          column-gap: 5rem;
+  font-family: "PT Serif Caption", serif;
+  font-weight: 800;
+}
+
+.profile-header:after {
+  content: "";
+  border-top: 1px solid lightgray;
+  -webkit-box-shadow: 0 0 5px #e8f0fe;
+          box-shadow: 0 0 5px #e8f0fe;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.profile-attribute-list {
+  list-style: none;
+}
+
+.profile-attribute-list li {
+  margin-bottom: 1rem;
+}
+
+.profile-attribute-list .list-item-title {
+  font-weight: bold;
+  margin-right: .5rem;
+}
+
+.progress-border {
+  height: 22px;
+  width: 50%;
+  border: 1px solid #a5a5a5;
+  position: relative;
+  border-radius: .2rem;
+}
+
+.progress-amount {
+  background: #006e09;
+  height: 20px;
+}
+
+.course-item-flexbox,
+.flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.course-item-flexbox div:first-of-type {
+  width: 60%;
+}
+
+.course-item-flexbox div:nth-of-type(2) {
+  width: 40%;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.average-text {
+  position: absolute;
+  top: 0;
+  font-size: .8rem;
+  padding: 2px;
+  text-align: center;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.displayed-input {
+  width: 50%;
+  padding: 2px;
+}
+
+.locked {
+  position: relative;
+}
+
+.locked:after {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  opacity: .6;
+  content: "\f023";
+  position: absolute;
+  right: 6px;
+  top: -2px;
+}
+
+.password-change-form {
+  width: 100%;
+}
+
+.password-change-form input[type=password] {
+  width: 100%;
+  padding: .25rem;
+}
+/*# sourceMappingURL=auth-styles.css.map */

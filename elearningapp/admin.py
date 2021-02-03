@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import *
+from users.models import *
 
 
 class ProgramExerciseAdmin(admin.ModelAdmin):
@@ -30,19 +31,15 @@ class AnswerAdmin(admin.ModelAdmin):
 
 
 class GlobalProfileAdmin(admin.ModelAdmin):
-    list_display = ("user", "first_name")
+    list_display = ("user",)
 
 
 class CourseSpecificProfileAdmin(admin.ModelAdmin):
-    list_display = ("user", "course", "admin_of", "collaborator_of")
+    list_display = ("user", "course")
 
 
 class ActiveTestAdmin(admin.ModelAdmin):
     list_display = ("user", "course", "timestamp")
-
-
-# class ActiveQuestionAdmin(admin.ModelAdmin):
-#     list_display = ("question", "test")
 
 
 class TakenTestAdmin(admin.ModelAdmin):
@@ -54,7 +51,7 @@ class AnswersInTakenTestAdmin(admin.ModelAdmin):
 
 
 class SeenQuestionAdmin(admin.ModelAdmin):
-    list_display = ("question", "timestamp", "answer_index", "user")
+    list_display = ("pk", "question", "timestamp", "answer_index", "user")
 
 
 admin.site.register(Course, CourseAdmin)

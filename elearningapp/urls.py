@@ -3,9 +3,6 @@ from django.urls import path, include, re_path
 from . import views
 
 urlpatterns = [
-    # path('', views.index, name='index'),
-    path("test", views.start_new_test, name="start_new_test"),
-    # path('import', views.importQ),
     re_path(r"^test/(?P<course_id>\d+)/$", views.render_test, name="render_test"),
     re_path(r"^course/(?P<course_id>\d+)/$", views.view_course, name="view_course"),
     re_path(
@@ -44,6 +41,11 @@ urlpatterns = [
         r"^get_questions/(?P<course_id>\d+)/(?P<amount>\d+)/(?P<starting_from_pk>\d+)/$",
         views.get_questions,
         name="get_questions",
+    ),
+    re_path(
+        r"^get_seen_questions/(?P<course_id>\d+)/(?P<amount>\d+)/(?P<starting_from_pk>\d+)/$",
+        views.get_seen_questions,
+        name="get_seen_questions",
     ),
     re_path(
         r"^get_questions/(?P<course_id>\d+)/(?P<amount>\d+)/(?P<starting_from_pk>\d+)/(?P<category>\d+)/$",

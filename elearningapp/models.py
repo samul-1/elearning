@@ -7,6 +7,8 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from .exceptions import OutOfQuestionsException
 
+from django.apps import apps
+
 
 class Course(models.Model):
     name = models.CharField(max_length=100)
@@ -44,7 +46,9 @@ class Course(models.Model):
         return random_questions
 
     def get_aggregated_info(self):
-        subscribers = CourseSpecificProfile.objects.filter(course=self)
+        subscribers = apps.get_model(
+            app_name="users", model_name="CourseSpecificProfile"
+        ).objects.filter(course=self)
         taken_tests = TakenTest.objects.filter(course=self)
 
         avg_score = (
@@ -60,7 +64,7 @@ class Course(models.Model):
     # returns 'amount' questions, showing correct answer and solution too
     # (meant for use inside of course control panel)
     def get_complete_questions(self, amount, pk_greater_than=0, category=None):
-        questions = Question.objects.filter(pk__gt=pk_greater_than, course=self)
+        questions = self.question_set.filter(pk__gt=pk_greater_than)
         if category is not None:
             cat = Category.objects.get(pk=category)
             questions = questions.filter(category=cat)
@@ -70,6 +74,22 @@ class Course(models.Model):
         return list(
             map(
                 lambda q: q.format_complete_question(),
+                questions,
+            )
+        )
+
+    # TODO move this to CourseSpecificProfile
+    def get_seen_questions(self, user, amount, pk_greater_than=0, category=None):
+        questions = user.seenquestion_set.filter(pk__gt=pk_greater_than)
+        if category is not None:
+            cat = Category.objects.get(pk=category)
+            questions = questions.filter(category=cat)
+
+        questions = questions.order_by("pk")[:amount]
+        # TODO add sorting
+        return list(
+            map(
+                lambda q: q.serialize(),
                 questions,
             )
         )
@@ -85,7 +105,7 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
     # how many questions from this category need to appear in each test of this course
     # (used only if the course has 'category distribution' enabled)
-    quantity = models.IntegerField(default=None, null=True)
+    quantity = models.PositiveIntegerField(default=None, null=True)
 
     def __str__(self):
         return self.name
@@ -102,22 +122,21 @@ class Question(models.Model):
     text = models.TextField(
         default=""
     )  # contains the actual test that was input upon creating the question
-    correct_answer_index = models.IntegerField()
+    correct_answer_index = models.PositiveIntegerField()
     solution_text_rendered = models.TextField()
     solution_text = models.TextField(default="")
     # hint_text = models.CharField(max_length=1000, null=True)
     added_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    #! edits_history = models.JSONField(null=True, blank=True)
-    #! number_of_appearences = models.IntegerField(default=0)
-    #! number_of_selections_per_answer = models.JSONField(null=True, blank=True)
+    number_of_appearances = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.text
 
     # when model is saved, process the question text to render TeX as svg
-    def save(self, *args, **kwargs):
-        self.rendered_text = tex_to_svg(self.text)
-        self.solution_text_rendered = tex_to_svg(self.solution_text)
+    def save(self, re_render_text=True, *args, **kwargs):
+        if re_render_text:
+            self.rendered_text = tex_to_svg(self.text)
+            self.solution_text_rendered = tex_to_svg(self.solution_text)
 
         return super(Question, self).save(*args, **kwargs)
 
@@ -132,13 +151,13 @@ class Question(models.Model):
         output["answers"] = [a.rendered_text for a in list(answers)]
 
         # output["answers"] = {}  # index:text dictionary containing self's answer
-        # i = 0
-        # for answer in output["answers"]:
-        #     # output["answers"][i] = answer.text
-        #     # ! REMOVE THIS AFTER DEBUG!!!
-        #     if self.correct_answer_index == i + 1:
-        #         output["answers"][i] += " !"
-        #     i += 1
+        i = 0
+        for answer in output["answers"]:
+            # output["answers"][i] = answer.text
+            # ! REMOVE THIS AFTER DEBUG!!!
+            if self.correct_answer_index == i + 1:
+                output["answers"][i] += " !"
+            i += 1
         return output
 
     # returns a dict containing all the information about the question;
@@ -163,78 +182,18 @@ class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)  # many to one
     rendered_text = models.TextField()
     text = models.TextField(default="")
-    answer_index = models.IntegerField()
+    answer_index = models.PositiveIntegerField()
+    selections = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.text
 
     # when model is saved, process the question text to render TeX as svg
-    def save(self, *args, **kwargs):
-        self.rendered_text = tex_to_svg(self.text)
+    def save(self, re_render_text=True, *args, **kwargs):
+        if re_render_text:
+            self.rendered_text = tex_to_svg(self.text)
 
         return super(Answer, self).save(*args, **kwargs)
-
-
-"""
-Profiles
-"""
-
-
-class GlobalProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=50, blank=True)
-    last_name = models.CharField(max_length=50, blank=True)
-    email_address = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.first_name
-
-
-class CourseSpecificProfile(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    last_score = models.IntegerField(default=0)
-    number_of_tests_taken = models.IntegerField(default=0)
-    highest_score = models.IntegerField(default=0)
-    lowest_score = models.IntegerField(default=0)
-    average_score = models.IntegerField(default=0)
-    collaborator_of = models.ForeignKey(
-        Course,
-        on_delete=models.SET_NULL,
-        null=True,
-        default=None,
-        related_name="collaborator_of",
-    )
-    admin_of = models.ForeignKey(
-        Course,
-        on_delete=models.SET_NULL,
-        null=True,
-        default=None,
-        related_name="admin_of",
-    )
-
-    def __str__(self):
-        return str(self.user) + " " + str(self.course)
-
-    def get_seen_questions(self):
-        return SeenQuestion.objects.filter(
-            user=self.user, question__course__exact=self.course
-        )
-
-    def get_taken_tests(self):
-        return TakenTest.objects.filter(
-            user=self.user, course__exact=self.course
-        ).order_by("-timestamp")
-
-    def get_last_scores(self, n=10):
-        return list(
-            map(
-                lambda t: t.score,
-                TakenTest.objects.filter(
-                    user=self.user, course__exact=self.course
-                ).order_by("-timestamp")[0:n],
-            )
-        )[::-1]
 
 
 """
@@ -249,7 +208,7 @@ class TakenTest(models.Model):
     )  # many to one
     timestamp = models.DateTimeField(auto_now=True)
     score = models.FloatField()
-    passing = models.IntegerField(default=0)
+    passing = models.IntegerField(default=0)  # boolean?
 
     # returns a json representation of self that the client can consume
     def serialize(self):
@@ -297,6 +256,7 @@ class SeenQuestion(models.Model):
 
     def serialize(self):
         return {
+            "questionId": self.pk,
             "question": self.question.format_complete_question(),
             "givenAnswer": self.answer_index,
         }
@@ -357,12 +317,28 @@ class ActiveTest(models.Model):
         taken_test = TakenTest(user=self.user, course=self.course, score=0)
         taken_test.save()
 
+        # update the number of tests taken by the user
+        user_profile = self.user.coursespecificprofile_set.get(course=self.course)
+        user_profile.number_of_tests_taken += 1
+        user_profile.save()
+
         questions = self.questions.all()
         score = 0
 
         for question, answer in zip(
             questions, map(lambda a: answers[a], answers)
         ):  # map {index:answer} to answer
+
+            # increment number of appearances of this question
+            question.number_of_appearances = 1
+            question.save(re_render_text=False)
+            # increment number of selections for this answer
+            if answer != -1:
+                given_answer = question.answer_set.get(answer_index=answer)
+                print(given_answer)
+                given_answer.selections += 1
+                given_answer.save(re_render_text=False)
+
             # record given answer for history
             ans = AnswersInTakenTest(
                 answer_index=answer, question=question, test=taken_test
@@ -389,6 +365,8 @@ class ActiveTest(models.Model):
 
         taken_test.score = score
         taken_test.save()
+        user_profile.last_score = score
+        user_profile.save()
 
         return taken_test
 
@@ -404,7 +382,7 @@ class ProgramExercise(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     text = models.TextField()
     is_visible = models.BooleanField(default=True)
-    minimum_passing_testcase_perc = models.IntegerField(default=100)
+    minimum_passing_testcase_perc = models.PositiveIntegerField(default=100)
 
     def __str__(self):
         return self.text

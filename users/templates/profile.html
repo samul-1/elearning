@@ -1,0 +1,77 @@
+{% extends 'user-base.html' %}
+{% block content %}
+{% load render_bundle from webpack_loader %}
+
+<div class="grid profile-grid">
+    <h1>Il tuo profilo</h1>
+    <div class="profile-header mt-3 mb-5">
+        <div>I tuoi corsi</div>
+        <div>Le tue informazioni</div>
+    </div>
+    <div class="profile-col">
+        <ul class="profile-attribute-list">
+            {% for course in courses %}
+            <li>
+                <div class="course-item-flexbox">
+                    <div class="mr-5">
+                        <span class="list-item-title">{{ course.course_name }}</span>
+                        <a href="{% url 'view_course' course_id=course.course_id%}"><button class="btn-sm btn-rounded btn-primary">Vai al corso</button></a>
+                    </div>
+                    <div class="mr-3 flex">
+                        <span class="text-muted mr-2">Media</span>
+                        <div class="inline-block progress-border">
+                            <div class="progress-amount" style="width: {{ course.average_score_perc }}%"></div>
+                            <span class="average-text">
+                                {{course.average_score }} / {{ course.course_max_score }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {% empty %}
+            <p class="text-muted">Non sei iscritto ad alcun corso. Chiedi al tuo insegnante il link per il corso a cui vuoi iscriverti.</p>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+    <div class="profile-col">
+        <ul class="profile-attribute-list">
+            <li><span class="list-item-title">Username</span><span class="locked"><input class="displayed-input" type="text" disabled value="{{ global_profile }}" /></span></li>
+            <li><span class="list-item-title">Email</span><span class="locked"><input class="displayed-input" type="text" disabled value="{{ global_profile.user.email }}" /></span></li>
+        </ul>
+        <form class="password-change-form mt-4" method="post" action="{% url 'password_change' %}">
+            {% csrf_token %}
+            <!--{{ password_change_form }}-->
+            <fieldset>
+                <legend>Cambia password</legend>
+                <div class="form-group">
+                    <!--<p>{{ password_change_form.username.label_tag }}</p>-->
+                    <span>Password attuale</span>
+                    <p>{{ password_change_form.old_password }}</p>
+                </div>
+                <div class="form-group">
+                    <!--<p>{{ password_change_form.password.label_tag }}</p>-->
+                    <span>Nuova password</span>
+                    <p>{{ password_change_form.new_password1 }}</p>
+                </div>
+                <div class="form-group">
+                    <!--<p>{{ password_change_form.password.label_tag }}</p>-->
+                    <span>Conferma nuova password</span>
+                    <p>{{ password_change_form.new_password2 }}</p>
+                </div>
+                <div class="form-group login-button-container">
+                    <input class="btn btn-primary" type="submit" value="Cambia password">
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+{% render_bundle 'chunk-vendors' %}
+{% render_bundle 'vue_app_edit_question' %}
+{% endblock content %}
+
+{% block footer_javascript_section %}
+
+{% endblock footer_javascript_section %}
