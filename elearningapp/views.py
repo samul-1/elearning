@@ -39,6 +39,7 @@ from .exceptions import OutOfQuestionsException
 #     return render(response, "registration/register.html", {"form": form})
 
 
+@login_required
 def create_course(request):
     if request.method == "POST":
         form_data = json.loads(request.body.decode("utf-8"))
@@ -58,15 +59,18 @@ def create_course(request):
 
 
 # course control panel
+@login_required
 def course_cp(request, course_id):
     course = get_object_or_404(Course, pk__exact=course_id)
     aggregated_info = course.get_aggregated_info()
 
     context = {
         "course": course,
+        "last_actions": course.get_last_actions(5),
         "number_of_subscribers": aggregated_info["number_of_subscribers"],
         "number_of_tests_taken": aggregated_info["number_of_tests_taken"],
         "average_score": aggregated_info["average_score"],
+        "hardest_questions": course.get_hardest_questions(3),
     }
 
     return render(
@@ -78,11 +82,12 @@ def course_cp(request, course_id):
 
 # if accessed via GET, gets the first 5 questions for the course and renders template containing the EditQuestion component
 # if accessed via PUT, updates the question
-def edit_question(request, course_id):
+@login_required
+def edit_question(request, course_id, question_id=None):
     if request.method == "PUT":
         form_data = json.loads(request.body.decode("utf-8"))
         question = get_object_or_404(Question, pk=form_data["questionId"])
-        form = QuestionForm(form_data, instance=question)
+        form = QuestionForm(form_data, user=request.user, action="E", instance=question)
 
         print(form_data)
         if form.is_valid():
@@ -103,6 +108,9 @@ def edit_question(request, course_id):
         "questions": questions,
     }
 
+    if question_id is not None:
+        context["editing_id"] = question_id
+
     return render(
         request,
         "elearningapp/edit_question.html",
@@ -111,6 +119,7 @@ def edit_question(request, course_id):
 
 
 # accessed via GET by the client for infinite scrolling in the EditQuestion vue component
+@login_required
 def get_questions(request, course_id, amount, starting_from_pk, category=None):
     course = get_object_or_404(Course, pk__exact=course_id)
     questions = course.get_complete_questions(
@@ -120,6 +129,7 @@ def get_questions(request, course_id, amount, starting_from_pk, category=None):
 
 
 # accessed via GET by the client for infinite scrolling in the QuestionHistory vue component
+@login_required
 def get_seen_questions(request, course_id, amount, starting_from_pk, category=None):
     course = get_object_or_404(Course, pk__exact=course_id)
     questions = course.get_seen_questions(
@@ -134,6 +144,7 @@ def get_seen_questions(request, course_id, amount, starting_from_pk, category=No
 
 # renders template containing CreateQuestion vue component when accessed via GET,
 # handles question creation using Question ModelForm when accessed via POST
+@login_required
 def add_question(request, course_id):
     course = get_object_or_404(Course, pk__exact=course_id)
     categories = Category.objects.filter(course=course)
@@ -144,7 +155,7 @@ def add_question(request, course_id):
     }
     if request.method == "POST":
         form_data = json.loads(request.body.decode("utf-8"))
-        form = QuestionForm(form_data)
+        form = QuestionForm(form_data, user=request.user, action="C")
 
         print(form_data)
         if form.is_valid():
@@ -171,6 +182,7 @@ def add_question(request, course_id):
     )
 
 
+@login_required
 def program_exercise(request, prog_id):
     exercise = get_object_or_404(ProgramExercise, pk__exact=prog_id)
 
@@ -193,6 +205,7 @@ def program_exercise(request, prog_id):
 #     return HttpResponse(":)")
 
 
+@login_required
 def eval_progsol(request, prog_id):
     exercise = get_object_or_404(ProgramExercise, pk__exact=prog_id)
     count = 0  # number of passed test cases
@@ -235,6 +248,7 @@ def eval_progsol(request, prog_id):
 
 
 # renders a test for the user
+@login_required
 def render_test(request, course_id):
     requesting_user = request.user  # User.objects.get(pk=user_id)
     course = Course.objects.get(pk=course_id)
@@ -274,9 +288,10 @@ def render_test(request, course_id):
 
 
 # returns the list of questions that the user has seen in past tests
-def question_history(request, user_id, course_id):
+@login_required
+def question_history(request, course_id):
     user_profile = get_object_or_404(
-        CourseSpecificProfile, user__pk__exact=user_id, course__pk__exact=course_id
+        CourseSpecificProfile, user__exact=request.user, course__pk__exact=course_id
     )
 
     course = Course.objects.get(pk=course_id)
@@ -288,15 +303,19 @@ def question_history(request, user_id, course_id):
     return render(
         request,
         "elearningapp/question_history.html",
-        {"questions": list(seen_questions), "user_id": user_id, "course_id": course_id},
+        {
+            "questions": list(seen_questions),
+            "user_id": request.user.pk,
+            "course_id": course_id,
+        },
     )
 
 
 # empties the list of seen question for given user and course
-def delete_question_history(request, user_id, course_id):
-    # TODO use request.user instead of user_id?
+@login_required
+def delete_question_history(request, course_id):
     user_profile = get_object_or_404(
-        CourseSpecificProfile, user__pk__exact=user_id, course__pk__exact=course_id
+        CourseSpecificProfile, user__exact=request.user, course__pk__exact=course_id
     )
 
     for question in user_profile.get_seen_questions():
@@ -306,9 +325,10 @@ def delete_question_history(request, user_id, course_id):
 
 
 # returns the list of tests that the user has taken in the past
-def test_history(request, user_id, course_id):
+@login_required
+def test_history(request, course_id):
     user_profile = get_object_or_404(
-        CourseSpecificProfile, user__pk__exact=user_id, course__pk__exact=course_id
+        CourseSpecificProfile, user__exact=request.user, course__pk__exact=course_id
     )
 
     taken_tests = map(lambda t: t.serialize(), list(user_profile.get_taken_tests()))

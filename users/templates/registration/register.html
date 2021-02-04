@@ -6,7 +6,9 @@
 <div class="login-backdrop"></div>
 
 <div class="login-box mt-3">
-    <div class="mb-4"><h1 class="text-center">Crea un account</h1></div>
+    <!-- <div class="mb-4"><h1 class="text-center">Crea un account</h1></div> -->
+    <div class="mb-4"><h2 class="text-center">Registrati <span class="mx-2">|</span> <a href="{% url 'login' %}">Login</a></h2></div>
+
     <form class="login-form" method="post" action="{% url 'signup' %}">
         {% csrf_token %}
         <div class="form-group">
@@ -40,36 +42,11 @@
         <!-- <div class="form-group">
             <input type="hidden" name="next" value="{{ next }}">
         </div> -->
-        <div class="password-forgotten-container mt-4 pt-4">
+       <!--<div class="password-forgotten-container mt-4 pt-4">
             <p><a class="password-forgotten" href="{% url 'login' %}">Hai già un account? Entra</a></p>
-        </div>
+        </div>-->
         </form>
 
 </div>
-<!-- <h1>Crea un account</h1>
-    <form method="POST" class="form-group">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
-    <div class="fieldWrapper">
-        {{ form.username.errors }}
-        <label for="{{ form.username.id_for_label }}">Username:</label>
-        {{ form.username }} {{ form.username.help_text }}
-    </div>
-    <div class="fieldWrapper">
-        {{ form.email.errors }}
-        <label for="{{ form.email.id_for_label }}">Email:</label>
-        {{ form.email }} {{ form.email.help_text }}
-    </div>
-    <div class="fieldWrapper">
-        {{ form.password1.errors }}
-        <label for="{{ form.password1.id_for_label }}">Password:</label>
-        {{ form.password1 }} {{ form.password1.help_text }}
-    </div>
-    <div class="fieldWrapper">
-        {{ form.password2.errors }}
-        <label for="{{ form.password2.id_for_label }}">Conferma password:</label>
-        {{ form.password2 }} {{ form.password2.help_text }}
-    </div>
-    <button type="submit" class="btn btn-success">Register</button>
-    </form> -->
+
 {% endblock %}

@@ -8,6 +8,8 @@ from .models import GlobalProfile, CourseSpecificProfile
 from elearningapp.models import Course
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import authenticate, login
+from django.contrib.auth import update_session_auth_hash
+import json
 
 # user registration
 def register(request):
@@ -68,3 +70,23 @@ def course_signup(request, course_id):
         profile = CourseSpecificProfile(user=request.user, course=course)
         profile.save()
         return redirect("view_course", course_id=course_id)
+
+
+def change_password(request):
+    if request.method == "POST":
+        print(request.body)
+        form = PasswordChangeForm(
+            request.user, json.loads(request.body.decode("utf-8"))
+        )
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            # messages.success(request, "Your password was successfully updated!")
+            # return redirect("change_password")
+            return JsonResponse({"success": True})
+        else:
+            # messages.error(request, "Please correct the error below.")
+            return JsonResponse({"success": False, "errors": form.errors})
+    # else:
+    #     form = PasswordChangeForm(request.user)
+    # return render(request, "accounts/change_password.html", {"form": form})

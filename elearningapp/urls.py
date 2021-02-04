@@ -12,17 +12,17 @@ urlpatterns = [
         r"^progex/(?P<prog_id>\d+)/$", views.program_exercise, name="program_exercise"
     ),
     re_path(
-        r"^question_history/(?P<user_id>\d+)/(?P<course_id>\d+)/$",
+        r"^question_history/(?P<course_id>\d+)/$",
         views.question_history,
         name="question_history",
     ),
     re_path(
-        r"^delete_question_history/(?P<user_id>\d+)/(?P<course_id>\d+)/$",
+        r"^delete_question_history/(?P<course_id>\d+)/$",
         views.delete_question_history,
         name="delete_question_history",
     ),
     re_path(
-        r"^test_history/(?P<user_id>\d+)/(?P<course_id>\d+)/$",
+        r"^test_history/(?P<course_id>\d+)/$",
         views.test_history,
         name="test_history",
     ),
@@ -34,6 +34,11 @@ urlpatterns = [
     ),
     re_path(
         r"^edit_question/(?P<course_id>\d+)/$",
+        views.edit_question,
+        name="edit_question",
+    ),
+    re_path(
+        r"^edit_question/(?P<course_id>\d+)/(?P<question_id>\d+)/$",
         views.edit_question,
         name="edit_question",
     ),

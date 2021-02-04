@@ -3,22 +3,25 @@
 {% load render_bundle from webpack_loader %}
 
 <div class="grid profile-grid">
-    <h1>Il tuo profilo</h1>
+    <h1 class="col-span-2">Il tuo profilo</h1>
     <div class="profile-header mt-3 mb-5">
         <div>I tuoi corsi</div>
         <div>Le tue informazioni</div>
     </div>
     <div class="profile-col">
+        <div class="profile-header-mobile mt-3 mb-3">
+            <div>I tuoi corsi</div>
+        </div>
         <ul class="profile-attribute-list">
             {% for course in courses %}
             <li>
                 <div class="course-item-flexbox">
-                    <div class="mr-5">
+                    <div>
                         <span class="list-item-title">{{ course.course_name }}</span>
                         <a href="{% url 'view_course' course_id=course.course_id%}"><button class="btn-sm btn-rounded btn-primary">Vai al corso</button></a>
                     </div>
                     <div class="mr-3 flex">
-                        <span class="text-muted mr-2">Media</span>
+                        <span class="text-muted mr-2 desktop">Media</span>
                         <div class="inline-block progress-border">
                             <div class="progress-amount" style="width: {{ course.average_score_perc }}%"></div>
                             <span class="average-text">
@@ -36,27 +39,34 @@
     </div>
 
     <div class="profile-col">
+        <div class="profile-header-mobile mt-3 mb-3">
+            <div>Le tue informazioni</div>
+        </div>
         <ul class="profile-attribute-list">
             <li><span class="list-item-title">Username</span><span class="locked"><input class="displayed-input" type="text" disabled value="{{ global_profile }}" /></span></li>
             <li><span class="list-item-title">Email</span><span class="locked"><input class="displayed-input" type="text" disabled value="{{ global_profile.user.email }}" /></span></li>
         </ul>
-        <form class="password-change-form mt-4" method="post" action="{% url 'password_change' %}">
-            {% csrf_token %}
+        <form class="password-change-form mt-4" method="post" action="{% url 'password_change' %}" onsubmit="postPasswordChange(event)">
             <!--{{ password_change_form }}-->
+            {% csrf_token %}
             <fieldset>
                 <legend>Cambia password</legend>
+                <p class="correct" id="password-change-success"></p>
                 <div class="form-group">
                     <!--<p>{{ password_change_form.username.label_tag }}</p>-->
                     <span>Password attuale</span>
+                    <p id="error_old_password" class="form-error-text"></p>
                     <p>{{ password_change_form.old_password }}</p>
                 </div>
                 <div class="form-group">
                     <!--<p>{{ password_change_form.password.label_tag }}</p>-->
+                    <p id="error_new_password1" class="form-error-text"></p>
                     <span>Nuova password</span>
                     <p>{{ password_change_form.new_password1 }}</p>
                 </div>
                 <div class="form-group">
                     <!--<p>{{ password_change_form.password.label_tag }}</p>-->
+                    <p id="error_new_password2" class="form-error-text"></p>
                     <span>Conferma nuova password</span>
                     <p>{{ password_change_form.new_password2 }}</p>
                 </div>
@@ -68,10 +78,47 @@
     </div>
 </div>
 
-{% render_bundle 'chunk-vendors' %}
-{% render_bundle 'vue_app_edit_question' %}
 {% endblock content %}
 
 {% block footer_javascript_section %}
-
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    function setSuccessTextAndCleanForm() {
+        document.getElementById("password-change-success").innerText = "Password cambiata con successo."
+        for(el of document.querySelectorAll('input[type=password]')) {
+            el.value = ""
+        }
+    }
+    function displayErrors(errors) {
+        for(let errorId of Object.keys(errors)) {
+            console.log(errorId)
+            document.getElementById("error_" + errorId).innerText = errors[errorId]
+        }
+    }
+    function clearErrors() {
+        for(el of document.getElementsByClassName("form-error-text")) {
+            el.innerText = ""
+        }
+    }
+    function postPasswordChange(e) {
+        e.preventDefault()
+        clearErrors()
+        axios.defaults.xsrfCookieName = 'csrftoken'
+        axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+        axios.post('{% url "change_password" %}', {
+            old_password: document.getElementById("id_old_password").value,
+            new_password1: document.getElementById("id_new_password1").value,
+            new_password2: document.getElementById("id_new_password2").value,
+        })
+        .then((response) => {
+            console.log(response)
+            if(response.data.success) {
+                setSuccessTextAndCleanForm()
+            } else {
+                displayErrors(response.data.errors)
+            }
+        })
+        .catch((error) => console.log(error))
+    }
+</script>
 {% endblock footer_javascript_section %}

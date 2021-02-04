@@ -5,12 +5,14 @@
 /* ---------------- */
 
 .two-col-grid {
-    grid-template-columns: 1fr 1fr;
+    //grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
 }
 
 .dashboard-grid {
     // justify-items: center;
     column-gap: 5rem;
+    row-gap: 2rem;
 }
 
 .list-grid {
@@ -70,6 +72,10 @@
 
 .expanded-grid-column {
     grid-column: 1 / 4;
+}
+
+.col-span-2 {
+    grid-column: span 2;
 }
 
 @media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {

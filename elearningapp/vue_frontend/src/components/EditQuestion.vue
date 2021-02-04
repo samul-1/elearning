@@ -111,12 +111,22 @@ export default {
       default: () => [],
     },
     editQuestionApiUrl: String,
+    openEditor: {
+      type: Number,
+      default: null,
+    },
   },
   mounted() {
     axios.defaults.xsrfCookieName = "csrftoken";
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     // copy prop value to local data (questionsData can be updated by the infinite scroll)
     this.questionsData = this.questions;
+
+    // if an initial question id is supplied, open the editor for that question on page load
+    // delay is needed to prevent issues with the text editor not loading TeX correctly
+    if (this.openEditor != null) {
+      this.openInitialEditor();
+    }
   },
   data: () => {
     return {
@@ -180,11 +190,44 @@ export default {
       }, 3000);
       this.editingId = null;
     },
+    // if an openEditor prop was supplied, open the editor of the corresponding question
+    // if the question isn't already in questionsData, download it first
+    openInitialEditor() {
+      if (
+        this.questionsData.findIndex((q) => q.questionId == this.openEditor) ==
+        -1
+      ) {
+        axios
+          .get(
+            "http://127.0.0.1:8000/get_questions/" +
+              this.courseId +
+              "/1/" +
+              (this.openEditor - 1) +
+              "/"
+          )
+          // TODO pass this url as a prop
+          .then((response) => {
+            this.loading = false;
+            console.log(response.data);
+            // the extra attribute means this id shouldn't be counted towards the
+            // maxQuestionId property
+            this.questionsData.unshift({ ...response.data[0], extra: true });
+          })
+          .catch((error) => {
+            // alert(error);
+            console.log(error);
+          });
+      }
 
+      setTimeout(() => {
+        // delay is needed to prevent issues with TeX in editor
+        this.editQuestion(this.openEditor);
+      }, 1000);
+    },
     // ask server for more questions (used for infinite scroll)
     // if a category is being filtered for, the server will only return questions belonging to that category
     // if overwrite is true, the fetched questions will overwrite the contents of this.questionsData rather than extending it
-    loadMoreQuestions(overwrite = false) {
+    loadMoreQuestions(overwrite = false, amount = 5) {
       if (overwrite) {
         this.questionsData = [];
       }
@@ -193,7 +236,9 @@ export default {
         .get(
           "http://127.0.0.1:8000/get_questions/" +
             this.courseId +
-            "/5/" +
+            "/" +
+            amount +
+            "/" +
             this.maxQuestionId +
             "/" +
             (this.filterByCategory.length ? this.filterByCategory + "/" : "")
@@ -217,7 +262,11 @@ export default {
       if (!this.questionsData.length) {
         return 0;
       }
-      return Math.max(...this.questionsData.map((q) => parseInt(q.questionId)));
+      return Math.max(
+        ...this.questionsData
+          .filter((q) => !q.extra)
+          .map((q) => parseInt(q.questionId))
+      );
     },
   },
 };

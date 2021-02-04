@@ -1,22 +1,6 @@
 <template>
   <div>
-    <h1 id="course_title">{{ courseName }}</h1>
-    <!--<h1>Benvenuto, {{ global_user_data.name }}</h1>-->
-    <br />
-    <!-- <div class="row">
-        <div class="col-md-3 col-12">
-            <a href="/test/{{ courseId }}"><button class="btn btn-dark">Simula un test</button></a><br />
-            <a href="/question_history/{{ userId }}/{{ courseId }}"><button class="btn btn-dark">Lista domande già
-                viste</button></a><br />
-            <a href="/test_history/{{ userId }}/{{ courseId }}"><button class="btn btn-dark">Cronologia test</button></a>
-        </div>
-        <div class="col-md-5 col-1"></div>
-        <div class="col-md-3 col-10 stats">
-            <h3>Le mie statistiche</h3>
-            <p><strong>Media punteggi:</strong> {{ course_specific_user_data.average_score }}</p>
-            <p><strong>Ultimo punteggio:</strong> {{ course_specific_user_data.last_score }}</p>
-        </div>
-    </div> -->
+    <h1 class="mb-5" id="course_title">{{ courseName }}</h1>
 
     <div class="grid two-col-grid dashboard-grid">
       <div style="margin-top: 0rem">
@@ -26,13 +10,13 @@
             Simula un test
           </button></a
         ><br />
-        <a :href="'/question_history/' + userId + '/' + courseId"
+        <a :href="'/question_history/' + courseId"
           ><button class="btn btn-dark dashboard-btn">
             <font-awesome-icon class="mr-1" icon="bookmark" />
             Lista domande già viste
           </button></a
         ><br />
-        <a :href="'/test_history/' + userId + '/' + courseId"
+        <a :href="'/test_history/' + courseId"
           ><button class="btn btn-dark dashboard-btn">
             <font-awesome-icon class="mr-1" icon="history" />
             Cronologia test

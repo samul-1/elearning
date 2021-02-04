@@ -23,6 +23,13 @@ Table of contents
   font-family: "Source Sans Pro", sans-serif;
 }
 
+.test-preview:hover {
+  -webkit-transform: scale(1.01);
+          transform: scale(1.01);
+  -webkit-box-shadow: 0px 0px 10px 0px rgba(19, 19, 19, 0.65);
+          box-shadow: 0px 0px 10px 0px rgba(19, 19, 19, 0.65);
+}
+
 .test-preview {
   display: -ms-grid;
   display: grid;
@@ -39,6 +46,8 @@ Table of contents
           box-shadow: 0px 0px 3px 0px rgba(19, 19, 19, 0.8);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(21%, #e4e4e4), color-stop(10%, white));
   background: linear-gradient(to bottom, #e4e4e4 21%, white 10%);
+  -webkit-transition: all .1s linear;
+  transition: all .1s linear;
 }
 
 .test-score-preview {

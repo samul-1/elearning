@@ -14,8 +14,29 @@
     font-weight: bold;
 }
 
+.stat-title {
+    font-family: $serif-font;
+    font-weight: bold;
+}
+
 .grid div {
     align-self: center;
+}
+
+.log-list {
+    list-style: none;
+}
+
+.timestamp:before {
+    content: "[";
+}
+
+.timestamp:after {
+    content: "]";
+}
+
+.timestamp {
+    margin-right: .5rem;
 }
 
 /* ------------------

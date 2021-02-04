@@ -3,6 +3,10 @@ from .models import *
 from users.models import *
 
 
+class StaffActionAdmin(admin.ModelAdmin):
+    list_display = ("course", "action", "user", "question")
+
+
 class ProgramExerciseAdmin(admin.ModelAdmin):
     list_display = ("text", "course")
 
@@ -23,7 +27,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ("text", "course", "pk")
+    list_display = ("text", "course", "pk", "percentage_of_correct_answers")
 
 
 class AnswerAdmin(admin.ModelAdmin):
@@ -67,3 +71,4 @@ admin.site.register(TakenTest, TakenTestAdmin)
 admin.site.register(SeenQuestion, SeenQuestionAdmin)
 admin.site.register(ProgramExercise, ProgramExerciseAdmin)
 admin.site.register(TestCase, TestCaseAdmin)
+admin.site.register(StaffAction, StaffActionAdmin)

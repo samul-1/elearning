@@ -1,20 +1,21 @@
 {% extends 'user-base.html' %}
+{% block title %}Login{% endblock %}
 
 {% block content %}
 
-{% if next %}
+<!-- {% if next %}
     {% if user.is_authenticated %}
     <p>Your account doesn't have access to this page. To proceed,
     please login with an account that has access.</p>
     {% else %}
     <p>Please login to see this page.</p>
     {% endif %}
-{% endif %}
+{% endif %} -->
 
 <div class="login-backdrop"></div>
 
 <div class="login-box mt-3">
-    <div class="mb-4"><h1 class="text-center">Login</h1></div>
+    <div class="mb-4"><h2 class="text-center">Login <span class="mx-2">|</span> <a href="{% url 'signup' %}">Registrati</a></h2></div>
     <form class="login-form" method="post" action="{% url 'login' %}">
         {% csrf_token %}
         <div class="form-group">

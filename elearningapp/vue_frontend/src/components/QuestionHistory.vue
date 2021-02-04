@@ -14,7 +14,7 @@
       </div>
       <b-button
         @click="showConfirmationModal"
-        :disabled="!questions.length"
+        :disabled="!questionsData.length"
         variant="outline-danger"
       >
         <font-awesome-icon class="mr-1" icon="trash-alt" />
@@ -119,15 +119,11 @@ export default {
       this.$root.$emit("bv::show::modal", "confirmation-modal");
     },
     confirmHistoryDeletion() {
-      this.questions = [];
+      this.questionsData = [];
       this.$root.$emit("bv::hide::modal", "confirmation-modal");
       axios
         .post(
-          "http://127.0.0.1:8000/delete_question_history/" +
-            this.userId +
-            "/" +
-            this.courseId +
-            "/"
+          "http://127.0.0.1:8000/delete_question_history/" + this.courseId + "/"
         )
         .then((response) => {
           console.log(response);

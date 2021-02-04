@@ -9,9 +9,7 @@ urlpatterns = [
         auth_views.LoginView.as_view(authentication_form=LoginFormWithPlaceholders),
         name="login",
     ),
-    # path(
-    #     "password_change/",
-    # ),
+    path("password_change/", views.change_password, name="change_password"),
     path("profile/", views.profile, name="profile"),
     path("", include("django.contrib.auth.urls")),
     path("register/", views.register, name="signup"),

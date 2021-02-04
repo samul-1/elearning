@@ -47,7 +47,7 @@ class Course(models.Model):
 
     def get_aggregated_info(self):
         subscribers = apps.get_model(
-            app_name="users", model_name="CourseSpecificProfile"
+            "users", model_name="CourseSpecificProfile"
         ).objects.filter(course=self)
         taken_tests = TakenTest.objects.filter(course=self)
 
@@ -58,7 +58,7 @@ class Course(models.Model):
         return {
             "number_of_subscribers": subscribers.count(),
             "number_of_tests_taken": taken_tests.count(),
-            "average_score": avg_score,
+            "average_score": round(avg_score, 1),
         }
 
     # returns 'amount' questions, showing correct answer and solution too
@@ -91,6 +91,27 @@ class Course(models.Model):
             map(
                 lambda q: q.serialize(),
                 questions,
+            )
+        )
+
+    # returns the 'quantity' hardest questions from this course,
+    # i.e. those with the lowest percentage of times they were answered correctly
+    def get_hardest_questions(self, quantity):
+        return list(
+            map(
+                lambda q: q.format_complete_question(),
+                self.question_set.all().order_by("percentage_of_correct_answers")[
+                    :quantity
+                ],
+            )
+        )
+
+    # returns the last 'quantity' actions taken by course admins or collaborators
+    def get_last_actions(self, quantity):
+        return list(
+            map(
+                lambda a: a.serialize(),
+                self.staffaction_set.all().order_by("-timestamp")[:quantity],
             )
         )
 
@@ -128,6 +149,7 @@ class Question(models.Model):
     # hint_text = models.CharField(max_length=1000, null=True)
     added_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     number_of_appearances = models.PositiveIntegerField(default=0)
+    percentage_of_correct_answers = models.FloatField(default=100.0)
 
     def __str__(self):
         return self.text
@@ -171,11 +193,23 @@ class Question(models.Model):
         info["correctAnswerIndex"] = self.correct_answer_index
         info["questionId"] = self.pk
         info["category"] = self.category.pk
+        info["wrongAnswersPercentage"] = 100 - self.percentage_of_correct_answers
 
         # get the source text for all the answers
         answers_sources = Answer.objects.filter(question=self)
         info["answersSources"] = [a.text for a in list(answers_sources)]
         return info
+
+    # returns the PERCENTAGE of times this question was answered correctly relative to
+    # how many times it appeared in tests
+    # this is intended to be called ONLY by Answer.save() each time this question is answered
+    # to access this property from somewhere else, use the field percentage_of_correct_answers
+    def get_percentage_right_answers(self):
+        print(self.number_of_appearances)
+        right_answer = self.answer_set.get(answer_index=self.correct_answer_index)
+        if self.number_of_appearances == 0:
+            return 100
+        return right_answer.selections / self.number_of_appearances * 100
 
 
 class Answer(models.Model):
@@ -189,16 +223,57 @@ class Answer(models.Model):
         return self.text
 
     # when model is saved, process the question text to render TeX as svg
+    # and update the percentage of times the corresponding question was answered correctly
     def save(self, re_render_text=True, *args, **kwargs):
         if re_render_text:
             self.rendered_text = tex_to_svg(self.text)
 
-        return super(Answer, self).save(*args, **kwargs)
+        instance = super(Answer, self).save(*args, **kwargs)
+
+        # re-compute the percentage of correct answers to the question
+        self.question.percentage_of_correct_answers = (
+            self.question.get_percentage_right_answers()
+        )
+        self.question.save(re_render_text=False)
+
+        return instance
 
 
 """
-Models to manage history and active tests
+Models to manage history, active tests, and course cp logs
 """
+
+
+class StaffAction(models.Model):
+    ACTIONS = [
+        ("C", "Create"),
+        ("E", "Edit"),
+    ]
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)  # many to one
+    action = models.CharField(max_length=1, choices=ACTIONS)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)  # many to one
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return (
+            str(self.course)
+            + ": "
+            + str(self.user)
+            + " "
+            + str(self.action)
+            + " "
+            + str(self.question)
+        )
+
+    def serialize(self):
+        return {
+            "action": self.action,
+            "user": self.user.username,
+            "question": self.question.text,
+            "questionId": self.question.pk,
+            "timestamp": str(self.timestamp),
+        }
 
 
 class TakenTest(models.Model):
@@ -330,7 +405,7 @@ class ActiveTest(models.Model):
         ):  # map {index:answer} to answer
 
             # increment number of appearances of this question
-            question.number_of_appearances = 1
+            question.number_of_appearances += 1
             question.save(re_render_text=False)
             # increment number of selections for this answer
             if answer != -1:

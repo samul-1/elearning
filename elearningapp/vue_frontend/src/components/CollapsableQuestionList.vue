@@ -23,6 +23,8 @@
             :correctAnswerIndex="item.correctAnswerIndex"
             :givenAnswer="item.yourAnswer"
             :questionId="'list' + index + '-' + idx"
+            :questionOnly="questionOnly"
+            :wrongAnswersPercentage="item.wrongAnswersPercentage"
           />
         </div>
       </b-card>
@@ -42,6 +44,14 @@ export default {
     text: String,
     questions: Array,
     index: String,
+    questionOnly: {
+      type: Boolean,
+      default: false,
+    },
+    wrongAnswerPercentage: {
+      type: Number,
+      default: null,
+    },
   },
   mounted() {},
   data: () => {

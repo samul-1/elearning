@@ -12,10 +12,31 @@
   font-weight: bold;
 }
 
+.stat-title {
+  font-family: "PT Serif Caption", serif;
+  font-weight: bold;
+}
+
 .grid div {
   -ms-flex-item-align: center;
       -ms-grid-row-align: center;
       align-self: center;
+}
+
+.log-list {
+  list-style: none;
+}
+
+.timestamp:before {
+  content: "[";
+}
+
+.timestamp:after {
+  content: "]";
+}
+
+.timestamp {
+  margin-right: .5rem;
 }
 
 /* ------------------

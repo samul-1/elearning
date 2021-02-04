@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Course, Question, Category, Answer
+from .models import Course, Question, Category, Answer, StaffAction
 import json
 
 
@@ -22,9 +22,23 @@ class QuestionForm(ModelForm):
             "answers",
         ]
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user", None)
+        self.action = kwargs.pop("action", None)
+        super(QuestionForm, self).__init__(*args, **kwargs)
+
     def save(self, force_insert=False, force_update=False):
         # save Question and obtain instance
         instance = super(QuestionForm, self).save(self)
+
+        # create log entry
+        log = StaffAction(
+            user=self.user,
+            course=instance.course,
+            question=instance,
+            action=self.action,
+        )
+        log.save()
 
         if self["answers"].value():
             # update or create Answers for this question
