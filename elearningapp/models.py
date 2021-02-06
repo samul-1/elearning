@@ -169,7 +169,7 @@ class Question(models.Model):
         output["text"] = self.rendered_text
 
         # get all answers to the question
-        answers = Answer.objects.filter(question=self)
+        answers = self.answer_set.all()  # Answer.objects.filter(question=self)
         output["answers"] = [a.rendered_text for a in list(answers)]
 
         # output["answers"] = {}  # index:text dictionary containing self's answer

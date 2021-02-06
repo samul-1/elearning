@@ -24,20 +24,6 @@ from django.shortcuts import get_object_or_404
 import subprocess
 from .exceptions import OutOfQuestionsException
 
-# user registration
-# ? handle this in a separate "user" app?
-# def register(response):
-#     if response.method == "POST":
-#         form = RegisterForm(response.POST)
-#         if form.is_valid():
-#             form.save()
-
-#             return redirect()
-#     else:
-#         form = RegisterForm()
-
-#     return render(response, "registration/register.html", {"form": form})
-
 
 @login_required
 def create_course(request):
@@ -82,6 +68,7 @@ def course_cp(request, course_id):
 
 # if accessed via GET, gets the first 5 questions for the course and renders template containing the EditQuestion component
 # if accessed via PUT, updates the question
+# if question_id is specified, the id is passed via the context object to EditQuestion vue component
 @login_required
 def edit_question(request, course_id, question_id=None):
     if request.method == "PUT":
@@ -157,18 +144,9 @@ def add_question(request, course_id):
         form_data = json.loads(request.body.decode("utf-8"))
         form = QuestionForm(form_data, user=request.user, action="C")
 
-        print(form_data)
         if form.is_valid():
-            print("is valid")
             # add new question to db
             new_question = form.save()
-
-            # ans_idx = 1
-            # # create an Answer instance for each answer to this question
-            # for answer in form_data["answers"]:
-            #     ans = Answer(question=new_question, text=answer, answer_index=ans_idx)
-            #     ans.save()
-            #     ans_idx += 1
 
             return JsonResponse("ok", safe=False)
         else:

@@ -4,10 +4,11 @@
 1.1 CourseCp
 ------------------ */
 .stats {
-    border: 1px solid #dbdbdb; //!
+    // border: 1px solid #dbdbdb; //!
     border-radius: 0.8rem;
     padding: 1rem;
     text-align: center;
+    box-shadow: $box-shadow-as-border;
 }
 
 .stats .data {
@@ -37,6 +38,30 @@
 
 .timestamp {
     margin-right: .5rem;
+}
+
+.course-stat {
+    display: grid;
+    grid-template-rows: 1fr 2fr;
+    border: none;
+    text-align: center;
+    font-weight: 900;
+    border-radius: 1rem;
+    box-shadow: $box-shadow-as-border;
+}
+
+.course-stat .heading {
+    background-image: $primary-gradient;
+    padding: 1rem;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    color: white;
+}
+
+
+.course-stat .data {
+    font-size: 2rem;
+    margin-top: 1.5rem;
 }
 
 /* ------------------

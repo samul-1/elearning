@@ -63,3 +63,12 @@ class CourseSpecificProfile(models.Model):
         for taken_test in self.user.takentest_set.all():
             sum += taken_test.score
         return sum / self.number_of_tests_taken
+
+
+# class CoursePermission(models.Model):
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+#     course = models.ForeignKey("elearningapp.Course", on_delete=models.CASCADE)
+#     can_add_questions = models.BooleanField(default=True)
+#     can_edit_questions = models.BooleanField(default=True)
+#     can_add_contributors = models.BooleanField(default=False)
+#     can_edit_contributors = models.BooleanField(default=False)

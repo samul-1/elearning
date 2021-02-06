@@ -2,10 +2,11 @@
 1.1 CourseCp
 ------------------ */
 .stats {
-  border: 1px solid #dbdbdb;
   border-radius: 0.8rem;
   padding: 1rem;
   text-align: center;
+  -webkit-box-shadow: 0 0 5px rgba(165, 165, 165, 0.7);
+          box-shadow: 0 0 5px rgba(165, 165, 165, 0.7);
 }
 
 .stats .data {
@@ -37,6 +38,33 @@
 
 .timestamp {
   margin-right: .5rem;
+}
+
+.course-stat {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 1fr 2fr;
+      grid-template-rows: 1fr 2fr;
+  border: none;
+  text-align: center;
+  font-weight: 900;
+  border-radius: 1rem;
+  -webkit-box-shadow: 0 0 5px rgba(165, 165, 165, 0.7);
+          box-shadow: 0 0 5px rgba(165, 165, 165, 0.7);
+}
+
+.course-stat .heading {
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#005fec), color-stop(#0061f1), color-stop(#0063f5), color-stop(#0065fa), to(#0067ff));
+  background-image: linear-gradient(to bottom, #005fec, #0061f1, #0063f5, #0065fa, #0067ff);
+  padding: 1rem;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  color: white;
+}
+
+.course-stat .data {
+  font-size: 2rem;
+  margin-top: 1.5rem;
 }
 
 /* ------------------

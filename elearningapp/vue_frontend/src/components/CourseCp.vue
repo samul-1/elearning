@@ -4,27 +4,29 @@
     <br />
     <div class="grid two-col-grid dashboard-grid">
       <div>
-        <a :href="'/add_question/' + courseId"
-          ><button class="btn btn-dark dashboard-btn mb-3">
-            <font-awesome-icon class="mr-1" icon="plus-circle" />
-            Aggiungi domande
-          </button></a
+        <a
+          class="w-100 btn btn-dark dashboard-btn mb-3"
+          :href="'/add_question/' + courseId"
         >
-        <a :href="'/edit_question/' + courseId"
-          ><button
-            style="margin-bottom: 0 !important"
-            class="btn btn-dark dashboard-btn"
-          >
-            <font-awesome-icon class="mr-1" icon="list" />
-            Visualizza / modifica domande
-          </button></a
+          <font-awesome-icon class="mr-1" icon="plus-circle" />
+          Aggiungi domande
+        </a>
+        <a
+          class="w-100 btn btn-dark dashboard-btn"
+          :href="'/edit_question/' + courseId"
         >
-        <button class="btn btn-dark dashboard-btn mt-3">
+          <font-awesome-icon class="mr-1" icon="list" />
+          Visualizza / modifica domande
+        </a>
+        <a
+          class="w-100 btn btn-dark dashboard-btn"
+          :href="'/edit_question/' + courseId"
+        >
           <font-awesome-icon class="mr-1" icon="user-shield" />
           Gestisci assistenti
-        </button>
+        </a>
       </div>
-      <div class="stats">
+      <!-- <div class="stats">
         <p class="stat-title">Statistiche del corso</p>
         <p>
           Iscritti al corso: <span class="data">{{ numberOfSubscribers }}</span>
@@ -35,6 +37,20 @@
         <p>
           Punteggio medio: <span class="data">{{ averageScore }}</span>
         </p>
+      </div> -->
+      <div class="grid h-100 three-col rem-1-gap">
+        <div class="course-stat">
+          <p class="heading">Iscritti</p>
+          <p class="data">{{ numberOfSubscribers }}</p>
+        </div>
+        <div class="course-stat">
+          <p style="letter-spacing: -1px" class="heading">Test svolti</p>
+          <p class="data">{{ numberOfTestsTaken }}</p>
+        </div>
+        <div class="course-stat">
+          <p class="heading">Media</p>
+          <p class="data">{{ averageScore }}</p>
+        </div>
       </div>
       <div style="align-self: start" class="stats">
         <p class="stat-title">Ultime azioni</p>

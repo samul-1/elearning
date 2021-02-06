@@ -24,6 +24,10 @@
     grid-template-columns: 2fr 1fr;
 }
 
+.three-col {
+    grid-template-columns: repeat(3, 1fr);
+}
+
 .question-editor-grid {
     grid-template-columns: 1fr 1fr;
     column-gap: 5rem;

@@ -7,9 +7,11 @@ $darker: #31363a;
 $light: rgb(232, 240, 254);
 $gray: rgb(165, 165, 165);
 
+$primary-gradient: linear-gradient(to bottom, #005fec, #0061f1, #0063f5, #0065fa, #0067ff);
+
 $background: white;
 
-$box-shadow-as-border: 0 0 5px $gray;
+$box-shadow-as-border: 0 0 5px rgba(165, 165, 165, 0.7);
 
 $serif-font: 'PT Serif Caption',
 serif;

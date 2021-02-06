@@ -26,6 +26,11 @@
       grid-template-columns: 2fr 1fr;
 }
 
+.three-col {
+  -ms-grid-columns: (1fr)[3];
+      grid-template-columns: repeat(3, 1fr);
+}
+
 .question-editor-grid {
   -ms-grid-columns: 1fr 1fr;
       grid-template-columns: 1fr 1fr;
