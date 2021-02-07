@@ -1,7 +1,7 @@
 @import "variables.scss";
 
 /* ------------------
-1.1 CourseCp
+1 CourseCp
 ------------------ */
 .stats {
     // border: 1px solid #dbdbdb; //!
@@ -64,8 +64,9 @@
     margin-top: 1.5rem;
 }
 
+
 /* ------------------
-1.1 CourseDashboard
+2 CourseDashboard
 ------------------ */
 .y-labels {
     font-size: 0.65rem;
@@ -92,7 +93,7 @@
 }
 
 /* ------------------
-1.3 CourseSetup
+3 CourseSetup
 ------------------ */
 
 .setupfield {
@@ -165,4 +166,40 @@ ul {
     padding: 0;
     margin-left: 1rem;
     margin-top: -0.5rem;
+}
+
+
+/* ------------------
+4 CoursePermissionManager
+------------------ */
+.user-list {
+    list-style: none;
+}
+
+.user-list-item:before {
+    font-family: 'Font Awesome 5 Free';
+    content: '\f007';
+    margin: 0 10px 0 -15px;
+    color: $secondary;
+    font-weight: 900;
+}
+
+.shield-user-list-item:before {
+    font-family: 'FontAwesome';
+    content: '\f505';
+    margin: 0 5px 0 -15px;
+    color: $purple;
+}
+
+.permissions {
+    padding: 1rem;
+    border-bottom: 1px solid $gray;
+    margin-bottom: 1rem;
+}
+
+.permission-name:before {
+    font-family: 'FontAwesome';
+    content: '\f3ed';
+    margin: 0 5px 0 -15px;
+    color: $secondary;
 }

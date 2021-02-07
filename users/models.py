@@ -1,5 +1,5 @@
 from django.db import models
-from elearningapp.models import TakenTest, SeenQuestion
+from elearningapp.models import TakenTest, SeenQuestion, CoursePermission
 from django.contrib.auth.models import User
 from django.conf import settings
 
@@ -11,8 +11,8 @@ Profiles
 class GlobalProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     is_teacher = models.BooleanField(default=False)
-    contributes_to = models.ManyToManyField("elearningapp.Course", blank=True)
-    admin = models.OneToOneField(
+    # contributes_to = models.ManyToManyField("elearningapp.Course", blank=True)
+    admin_of = models.OneToOneField(
         "elearningapp.Course",
         null=True,
         blank=True,
@@ -64,11 +64,15 @@ class CourseSpecificProfile(models.Model):
             sum += taken_test.score
         return sum / self.number_of_tests_taken
 
-
-# class CoursePermission(models.Model):
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-#     course = models.ForeignKey("elearningapp.Course", on_delete=models.CASCADE)
-#     can_add_questions = models.BooleanField(default=True)
-#     can_edit_questions = models.BooleanField(default=True)
-#     can_add_contributors = models.BooleanField(default=False)
-#     can_edit_contributors = models.BooleanField(default=False)
+    def serialize(self):
+        return {
+            "id": self.pk,
+            "username": self.user.username,
+            "firstName": self.user.first_name,
+            "lastName": self.user.last_name,
+            "email": self.user.email,
+            "permissions": self.coursepermission.serialize()
+            if hasattr(self, "coursepermission")
+            else {},
+            "isContributor": hasattr(self, "coursepermission"),
+        }

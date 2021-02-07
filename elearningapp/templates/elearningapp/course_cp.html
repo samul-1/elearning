@@ -1,33 +1,5 @@
 {% extends 'elearningapp/base.html' %}
-{% block head_css_page %}
-    <style>
-        /* button {
-            width: -webkit-fill-available;
-            padding: 8px !important;
-            margin-bottom: 15px;
-        }
-
-        .stats {
-            background-color: #f8f8ff;
-            border: 1px solid #cecdcd;
-            margin-bottom: 15px;
-            border-radius: 2px;
-            padding-top: 5px;
-        }
-
-        .stats p {
-            margin-bottom: 5px;
-        } */
-
-        #course_title {
-            text-align: center;
-        }
-    </style>
-{% endblock head_css_page %}
-    {% block header_title %} eLearning <span class="title-muted">Control Panel</span>{% endblock header_title %}
-    {% block usernavbar %}
-        <!-- <a class="nav-link user-link" href="/profile/{{ global_user_data.id}}">{{ global_user_data.name }}</a> -->
-    {% endblock usernavbar %}
+{% block header_title %} eLearning <span class="title-muted">Control Panel</span>{% endblock header_title %}
 {% block content %}
     {% load render_bundle from webpack_loader %}
     <div id="app">
@@ -39,6 +11,8 @@
         :number-of-tests-taken="{{ number_of_tests_taken }}"
         :hardest-questions="{{ hardest_questions }}"
         :last-actions="{{ last_actions }}"
+        :api-users-url="'{% url 'get_course_users' course_id=course.id %}'"
+        :update-permission-api-url="'{% url 'update_course_permissions' course_id=course.id %}'"
         ></course-cp>
     </div>
     

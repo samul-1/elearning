@@ -58,6 +58,10 @@ class SeenQuestionAdmin(admin.ModelAdmin):
     list_display = ("pk", "question", "timestamp", "answer_index", "user")
 
 
+class CoursePermissionAdmin(admin.ModelAdmin):
+    list_display = ("pk", "user")
+
+
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Question, QuestionAdmin)
@@ -72,3 +76,4 @@ admin.site.register(SeenQuestion, SeenQuestionAdmin)
 admin.site.register(ProgramExercise, ProgramExerciseAdmin)
 admin.site.register(TestCase, TestCaseAdmin)
 admin.site.register(StaffAction, StaffActionAdmin)
+admin.site.register(CoursePermission, CoursePermissionAdmin)

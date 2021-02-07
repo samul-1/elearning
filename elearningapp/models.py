@@ -115,8 +115,31 @@ class Course(models.Model):
             )
         )
 
+    # returns the profiles of users who are subscribed to this course
+    def get_subscribed_users(self):
+        return list(map(lambda u: u.serialize(), self.coursespecificprofile_set.all()))
+
     def maximum_score(self):
         return self.points_for_correct_answer * self.number_of_questions_per_test
+
+
+# used to keep track of courses assistants' permissions
+# (it's meant to work kinda like Django built-in permission system, but on a per-instance basis rather than per-model)
+class CoursePermission(models.Model):
+    user = models.OneToOneField("users.CourseSpecificProfile", on_delete=models.CASCADE)
+    # course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    can_add_questions = models.BooleanField(default=True)
+    can_edit_questions = models.BooleanField(default=True)
+    can_add_contributors = models.BooleanField(default=False)
+    can_edit_contributors = models.BooleanField(default=False)
+
+    def serialize(self):
+        return {
+            "can_add_questions": self.can_add_questions,
+            "can_edit_questions": self.can_edit_questions,
+            "can_add_contributors": self.can_add_contributors,
+            "can_edit_contributors": self.can_edit_contributors,
+        }
 
 
 class Category(models.Model):

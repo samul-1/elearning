@@ -1,8 +1,15 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import (
+    HttpResponse,
+    JsonResponse,
+    HttpResponseForbidden,
+    HttpResponseNotFound,
+    HttpResponseNotAllowed,
+)
 from .models import (
     Question,
     Course,
+    CoursePermission,
     Category,
     ActiveTest,
     Answer,
@@ -13,7 +20,7 @@ from .models import (
     TestCase,
 )
 from users.models import CourseSpecificProfile, GlobalProfile
-from .forms import QuestionForm, CourseForm
+from .forms import QuestionForm, CourseForm, PermissionForm
 from django.contrib.auth.models import User
 import random
 from django.db.models import Q
@@ -38,6 +45,7 @@ def create_course(request):
 
         return JsonResponse({"courseId": new_course.pk}, safe=False)
 
+    # GET
     return render(
         request,
         "elearningapp/createcourse.html",
@@ -66,6 +74,13 @@ def course_cp(request, course_id):
     )
 
 
+# accessed via GET, returns a list of users subscribed to the course
+@login_required
+def get_course_users(request, course_id):
+    course = get_object_or_404(Course, pk__exact=course_id)
+    return JsonResponse(course.get_subscribed_users(), safe=False)
+
+
 # if accessed via GET, gets the first 5 questions for the course and renders template containing the EditQuestion component
 # if accessed via PUT, updates the question
 # if question_id is specified, the id is passed via the context object to EditQuestion vue component
@@ -85,6 +100,7 @@ def edit_question(request, course_id, question_id=None):
         else:
             print(form.errors)
 
+    # GET
     course = get_object_or_404(Course, pk__exact=course_id)
     categories = Category.objects.filter(course=course)
     questions = course.get_complete_questions(5)
@@ -103,6 +119,40 @@ def edit_question(request, course_id, question_id=None):
         "elearningapp/edit_question.html",
         context,
     )
+
+
+# if accessed via PUT, updates or creates the permissions of a user for a course,
+# if accessed via DELETE, deletes the permission object for the specified user and course
+def update_course_permissions(request, course_id):
+    if request.method == "GET":
+        return HttpResponseNotAllowed()
+    print(request)
+    course = get_object_or_404(Course, pk__exact=course_id)
+    form_data = json.loads(request.body.decode("utf-8"))
+    print(form_data)
+    editing_profile = get_object_or_404(
+        CourseSpecificProfile, pk=form_data["profile_id"]
+    )
+    if request.method == "PUT":
+        # retrieve or create permissions for this user
+        # we don't need the boolean returned by get_or_create, hence the _ wildcard
+        permissions, _ = CoursePermission.objects.get_or_create(user=editing_profile)
+        form = PermissionForm(form_data["permissions"], instance=permissions)
+
+        print(form_data)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({"success": True})
+        else:
+            print(form.errors)
+
+    if request.method == "DELETE":
+        try:
+            permissions = CoursePermission.objects.get(user=editing_profile)
+        except CoursePermission.DoesNotExist:
+            return HttpResponseNotFound()
+        permissions.delete()
+        return JsonResponse({"success": True})
 
 
 # accessed via GET by the client for infinite scrolling in the EditQuestion vue component
@@ -153,6 +203,7 @@ def add_question(request, course_id):
             print(form.errors)
         return
 
+    # GET
     return render(
         request,
         "elearningapp/add_question.html",
@@ -325,7 +376,7 @@ def test_history(request, course_id):
 @login_required
 def check_answers(request):
     if request.method != "POST":
-        return
+        return HttpResponseNotAllowed()
 
     answers = json.loads(request.body.decode("utf-8"))
     print(answers)

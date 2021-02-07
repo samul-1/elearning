@@ -1,11 +1,22 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Course, Question, Category, Answer, StaffAction
+from .models import Course, Question, Category, Answer, StaffAction, CoursePermission
 import json
 
 
 class ProgramForm(forms.Form):
     program = forms.CharField(label="", widget=forms.Textarea())
+
+
+class PermissionForm(ModelForm):
+    class Meta:
+        model = CoursePermission
+        fields = [
+            "can_add_questions",
+            "can_edit_questions",
+            "can_add_contributors",
+            "can_edit_contributors",
+        ]
 
 
 class QuestionForm(ModelForm):
@@ -43,7 +54,7 @@ class QuestionForm(ModelForm):
         if self["answers"].value():
             # update or create Answers for this question
             for (idx, text) in enumerate(self["answers"].value()):
-                # we don't need the boolean returned by get_or_create, hence the wildcard _
+                # we don't need the boolean returned by get_or_create, hence the _ wildcard
                 ans, _ = Answer.objects.get_or_create(
                     question=self.instance, answer_index=(idx + 1)
                 )

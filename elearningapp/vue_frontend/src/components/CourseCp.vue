@@ -18,26 +18,15 @@
           <font-awesome-icon class="mr-1" icon="list" />
           Visualizza / modifica domande
         </a>
-        <a
+        <b-button
+          variant="dark"
           class="w-100 btn btn-dark dashboard-btn"
-          :href="'/edit_question/' + courseId"
+          v-b-modal="'assistant-modal'"
         >
           <font-awesome-icon class="mr-1" icon="user-shield" />
           Gestisci assistenti
-        </a>
+        </b-button>
       </div>
-      <!-- <div class="stats">
-        <p class="stat-title">Statistiche del corso</p>
-        <p>
-          Iscritti al corso: <span class="data">{{ numberOfSubscribers }}</span>
-        </p>
-        <p>
-          Test effettuati: <span class="data">{{ numberOfTestsTaken }}</span>
-        </p>
-        <p>
-          Punteggio medio: <span class="data">{{ averageScore }}</span>
-        </p>
-      </div> -->
       <div class="grid h-100 three-col rem-1-gap">
         <div class="course-stat">
           <p class="heading">Iscritti</p>
@@ -78,6 +67,17 @@
         ></CollapsableQuestionList>
       </div>
     </div>
+    <b-modal
+      :ok-only="true"
+      size="lg"
+      title="Gestisci assistenti"
+      id="assistant-modal"
+    >
+      <CoursePermissionManager
+        :apiUsersUrl="apiUsersUrl"
+        :updatePermissionApiUrl="updatePermissionApiUrl"
+      ></CoursePermissionManager>
+    </b-modal>
   </div>
 </template>
 
@@ -85,6 +85,7 @@
 // Fontawesome
 import { library } from "@fortawesome/fontawesome-svg-core";
 import CollapsableQuestionList from "./CollapsableQuestionList.vue";
+import CoursePermissionManager from "./CoursePermissionManager.vue";
 import {
   faList,
   faPlusCircle,
@@ -99,6 +100,7 @@ export default {
   name: "CourseCp",
   components: {
     CollapsableQuestionList,
+    CoursePermissionManager,
   },
   props: {
     courseName: String,
@@ -108,6 +110,8 @@ export default {
     numberOfTestsTaken: Number,
     hardestQuestions: Array,
     lastActions: Array,
+    apiUsersUrl: String,
+    updatePermissionApiUrl: String,
   },
   mounted() {},
   data: () => {

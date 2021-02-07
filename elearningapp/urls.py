@@ -6,10 +6,12 @@ urlpatterns = [
     re_path(r"^test/(?P<course_id>\d+)/$", views.render_test, name="render_test"),
     re_path(r"^course/(?P<course_id>\d+)/$", views.view_course, name="view_course"),
     re_path(
-        r"^eval_progsol/(?P<prog_id>\d+)/$", views.eval_progsol, name="eval_progsol"
+        r"^update_permissions/(?P<course_id>\d+)/$",
+        views.update_course_permissions,
+        name="update_course_permissions",
     ),
     re_path(
-        r"^progex/(?P<prog_id>\d+)/$", views.program_exercise, name="program_exercise"
+        r"^users/(?P<course_id>\d+)/$", views.get_course_users, name="get_course_users"
     ),
     re_path(
         r"^question_history/(?P<course_id>\d+)/$",
@@ -56,5 +58,11 @@ urlpatterns = [
         r"^get_questions/(?P<course_id>\d+)/(?P<amount>\d+)/(?P<starting_from_pk>\d+)/(?P<category>\d+)/$",
         views.get_questions,
         name="get_questions",
+    ),
+    re_path(
+        r"^eval_progsol/(?P<prog_id>\d+)/$", views.eval_progsol, name="eval_progsol"
+    ),
+    re_path(
+        r"^progex/(?P<prog_id>\d+)/$", views.program_exercise, name="program_exercise"
     ),
 ]
