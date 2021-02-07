@@ -14,6 +14,25 @@ Finally, students will have a history of questions they have seen already, so th
 
 A more thorough documentation is being worked on currently. Please note that the code for this app uses English names and comments, but the app texts are in Italian.
 
+# Features
+
+- Ability for teachers to create courses and adjust settings such as the minimum passing score in tests, the number of points given for questions answered correctly/incorrectly/unanswered, the number of questions per tests, the categories/topics to divide questions into
+    - Ability to also specify a distribution of questions in tests on a category basis: if your course has categories A, B, C, how many questions do you want to appear in tests from each one? (e.g 3 randomly picked questions from category A, 1 from B, 2 from C in each test)
+
+- Ability for teachers to add "assistants" to their course, that is users with certain privileges that can aid in maintaining the course board by adding questions or editing existing ones
+    - Assistants are based on a permission system that allows the admin of a course to choose, for each individual assistant, whether they have permissions for certain actions, such as: adding questions, editing questions, adding assistants, editing assistants' permissions
+
+- Ability for students to sign up to multiple courses
+
+- Ability for students to take tests made up of randomly chosen questions from the course they're taking the test, then view the results and the solutions and explanations for each question
+
+- An erasable question history for students to keep track of the questions they've already seen in tests, as well as to prevent questions from appearing twice in subsequent ones
+
+- A non-erasable history of tests taken by the student with all the details
+
+- Additional features, both for students and teachers, to track performance over time
+    - For example, teachers can see a list of the "hardest questions" for their course, that is those that have the highest percentage of wrong answers given relative to how many times they appeared in tests
+
 # A couple screenshots
 
 ## The teacher side
@@ -25,6 +44,12 @@ A more thorough documentation is being worked on currently. Please note that the
 ### Add/edit question views
 ![](https://i.imgur.com/vot6S9Q.png)
 ![](https://i.imgur.com/Qnbt6BS.png)
+
+### Adding/editing assistants and permissions
+(Click to watch the video)
+
+[![Watch the video](https://img.youtube.com/vi/f3Ox_Z3dwY0/maxresdefault.jpg)](https://www.youtube.com/watch?v=f3Ox_Z3dwY0)
+
 
 ## The student side
 
