@@ -130,15 +130,14 @@ class CoursePermission(models.Model):
     # course = models.ForeignKey(Course, on_delete=models.CASCADE)
     can_add_questions = models.BooleanField(default=True)
     can_edit_questions = models.BooleanField(default=True)
-    can_add_contributors = models.BooleanField(default=False)
-    can_edit_contributors = models.BooleanField(default=False)
+    can_manage_contributors = models.BooleanField(default=False)
+    # can_edit_contributors = models.BooleanField(default=False)
 
     def serialize(self):
         return {
             "can_add_questions": self.can_add_questions,
             "can_edit_questions": self.can_edit_questions,
-            "can_add_contributors": self.can_add_contributors,
-            "can_edit_contributors": self.can_edit_contributors,
+            "can_manage_contributors": self.can_manage_contributors,
         }
 
 

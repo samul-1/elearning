@@ -18,7 +18,14 @@
                 <div class="course-item-flexbox">
                     <div>
                         <span class="list-item-title">{{ course.course_name }}</span>
-                        <a href="{% url 'view_course' course_id=course.course_id%}"><button class="btn-sm btn-rounded btn-primary">Vai al corso</button></a>
+                        <a href="{% url 'view_course' course_id=course.course_id%}">
+                            <button class="btn-sm btn-rounded btn-primary">Vai al corso</button>
+                        </a>
+                        {% if course.access_to_cp %}
+                        <a href="{% url 'course_cp' course_id=course.course_id%}">
+                            <button class="btn-sm btn-rounded btn-primary">Pannello di controllo</button>
+                        </a>
+                        {% endif %}
                     </div>
                     <div class="mr-3 flex">
                         <span class="text-muted mr-2 desktop">Media</span>
@@ -54,8 +61,8 @@
                 <p class="correct" id="password-change-success"></p>
                 <div class="form-group">
                     <!--<p>{{ password_change_form.username.label_tag }}</p>-->
-                    <span>Password attuale</span>
                     <p id="error_old_password" class="form-error-text"></p>
+                    <span>Password attuale</span>
                     <p>{{ password_change_form.old_password }}</p>
                 </div>
                 <div class="form-group">

@@ -34,9 +34,12 @@ from .exceptions import OutOfQuestionsException
 
 @login_required
 def create_course(request):
+    if not request.user.globalprofile.is_teacher:
+        return HttpResponseForbidden()
+
     if request.method == "POST":
         form_data = json.loads(request.body.decode("utf-8"))
-        form = CourseForm(form_data)
+        form = CourseForm(form_data, user=request.user.globalprofile)
         print(form_data)
         if form.is_valid():
             new_course = form.save()
@@ -56,6 +59,17 @@ def create_course(request):
 @login_required
 def course_cp(request, course_id):
     course = get_object_or_404(Course, pk__exact=course_id)
+
+    # reject with 403 if user isn't authorized to view the control panel for this course
+    if course not in request.user.globalprofile.admin_of.all() and (
+        request.user.coursespecificprofile_set.filter(course=course).count == 0
+        or not hasattr(
+            request.user.coursespecificprofile_set.get(course=course),
+            "coursepermission",
+        )
+    ):
+        return HttpResponseForbidden()
+
     aggregated_info = course.get_aggregated_info()
 
     context = {
@@ -65,7 +79,24 @@ def course_cp(request, course_id):
         "number_of_tests_taken": aggregated_info["number_of_tests_taken"],
         "average_score": aggregated_info["average_score"],
         "hardest_questions": course.get_hardest_questions(3),
+        "admin": "true"
+        if course in request.user.globalprofile.admin_of.all()
+        else "false",  # using 'true' and 'false' to prevent issues with js frontend consuming the value
     }
+
+    # get user's permissions, if they have a permission object associated to them (admins don't)
+    if len(
+        course_profile := request.user.coursespecificprofile_set.filter(course=course)
+    ) != 0 and hasattr(course_profile[0], "coursepermission"):
+        context["my_permissions"] = json.dumps(
+            course_profile[0].coursepermission.serialize()
+        )
+        context["user_id"] = course_profile[0].pk
+    else:
+        context["my_permissions"] = {}
+        context[
+            "user_id"
+        ] = "null"  # once again using 'null' as a string for easier passing of the value as a prop
 
     return render(
         request,
@@ -86,6 +117,21 @@ def get_course_users(request, course_id):
 # if question_id is specified, the id is passed via the context object to EditQuestion vue component
 @login_required
 def edit_question(request, course_id, question_id=None):
+    course = get_object_or_404(Course, pk__exact=course_id)
+
+    # reject with 403 if user isn't authorized to view edit questions for this course
+    if course not in request.user.globalprofile.admin_of.all() and (
+        request.user.coursespecificprofile_set.filter(course=course).count == 0
+        or not hasattr(
+            request.user.coursespecificprofile_set.get(course=course),
+            "coursepermission",
+        )
+        or not request.user.coursespecificprofile_set.get(
+            course=course
+        ).coursepermission.can_edit_questions
+    ):
+        return HttpResponseForbidden()
+
     if request.method == "PUT":
         form_data = json.loads(request.body.decode("utf-8"))
         question = get_object_or_404(Question, pk=form_data["questionId"])
@@ -101,7 +147,6 @@ def edit_question(request, course_id, question_id=None):
             print(form.errors)
 
     # GET
-    course = get_object_or_404(Course, pk__exact=course_id)
     categories = Category.objects.filter(course=course)
     questions = course.get_complete_questions(5)
 
@@ -126,8 +171,21 @@ def edit_question(request, course_id, question_id=None):
 def update_course_permissions(request, course_id):
     if request.method == "GET":
         return HttpResponseNotAllowed()
-    print(request)
     course = get_object_or_404(Course, pk__exact=course_id)
+
+    # reject with 403 if user isn't authorized to view add assistants for this course
+    if course not in request.user.globalprofile.admin_of.all() and (
+        request.user.coursespecificprofile_set.filter(course=course).count == 0
+        or not hasattr(
+            request.user.coursespecificprofile_set.get(course=course),
+            "coursepermission",
+        )
+        or not request.user.coursespecificprofile_set.get(
+            course=course
+        ).coursepermission.can_manage_contributors
+    ):
+        return HttpResponseForbidden()
+
     form_data = json.loads(request.body.decode("utf-8"))
     print(form_data)
     editing_profile = get_object_or_404(
@@ -184,6 +242,19 @@ def get_seen_questions(request, course_id, amount, starting_from_pk, category=No
 @login_required
 def add_question(request, course_id):
     course = get_object_or_404(Course, pk__exact=course_id)
+    # reject with 403 if user isn't authorized to view add questions to this course
+    if course not in request.user.globalprofile.admin_of.all() and (
+        request.user.coursespecificprofile_set.filter(course=course).count == 0
+        or not hasattr(
+            request.user.coursespecificprofile_set.get(course=course),
+            "coursepermission",
+        )
+        or not request.user.coursespecificprofile_set.get(
+            course=course
+        ).coursepermission.can_add_questions
+    ):
+        return HttpResponseForbidden()
+
     categories = Category.objects.filter(course=course)
 
     context = {

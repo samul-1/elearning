@@ -265,6 +265,13 @@ button[disabled] {
     width: 30%;
 }
 
+// iPhone 6, 7, 8 portrait
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) {
+    .overlay-card {
+        width: 90%;
+    }
+}
+
 .question-filter-grid {
     background: $secondary;
     color: white;
@@ -282,7 +289,7 @@ button[disabled] {
 
 .progress-border {
     height: 22px;
-    width: 50%;
+    width: 47%;
     border: 1px solid $gray;
     position: relative;
     border-radius: .2rem;

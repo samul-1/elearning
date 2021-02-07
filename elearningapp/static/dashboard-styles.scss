@@ -176,6 +176,26 @@ ul {
     list-style: none;
 }
 
+
+.user-list li {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    break-inside: avoid;
+
+}
+
+
+// iPhone 6, 7, 8 portrait
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) {
+    .user-list {
+        column-count: 2 !important;
+    }
+
+    .user-list li {
+        margin: 2px;
+    }
+}
+
 .user-list-item:before {
     font-family: 'Font Awesome 5 Free';
     content: '\f007';
@@ -191,10 +211,27 @@ ul {
     color: $purple;
 }
 
+.admin-user-list-item:before {
+    color: $orange;
+    font-family: 'FontAwesome';
+    content: '\f502';
+    margin: 0 5px 0 -15px;
+}
+
 .permissions {
-    padding: 1rem;
-    border-bottom: 1px solid $gray;
+    padding: 1rem 0;
+    //border-bottom: 1px solid $gray;
     margin-bottom: 1rem;
+    position: relative;
+}
+
+.permissions:after {
+    width: 100%;
+    content: "";
+    border-bottom: 1px solid $gray;
+    position: absolute;
+    bottom: 0;
+    left: -25px;
 }
 
 .permission-name:before {

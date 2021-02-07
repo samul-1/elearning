@@ -10,17 +10,20 @@
       Cerca utenti
       <input v-model="searchText" placeholder="Nome utente" />
     </div>
-    <ul class="user-list">
+    <p v-if="loading" class="text-muted">Caricamento dati in corso...</p>
+    <ul class="user-list" :style="'column-count: ' + userColCount">
       <li
         v-for="(user, index) in usersDataFiltered"
         :key="user.id"
         :class="{
           'user-list-item': !user.isContributor,
           'shield-user-list-item': user.isContributor,
+          'admin-user-list-item': user.isAdmin,
         }"
       >
         {{ user.username }} {{ user.firstName }} {{ user.lastName }}
         <b-button
+          v-if="user.id != userId && !user.isAdmin"
           size="sm"
           variant="outline-primary"
           @click="
@@ -46,7 +49,7 @@
             />
           </div>
           <b-button
-            class="mt-2"
+            class="mt-2 mr-1"
             variant="outline-success"
             @click="updateUserPermissions()"
             :disabled="
@@ -58,13 +61,16 @@
           >
           <b-button
             v-if="user.isContributor"
-            class="mt-2 ml-2"
+            class="mt-2"
             variant="outline-danger"
             @click="deleteUserPermissions()"
             >Rimuovi assistente</b-button
           >
         </div>
       </li>
+      <p v-if="!usersDataFiltered.length && !loading" class="text-muted">
+        Nessun risultato
+      </p>
     </ul>
     <transition name="overlay-text">
       <div class="overlay-card" v-if="success">
@@ -97,6 +103,10 @@ library.add(faCheckCircle);
 export default {
   name: "CoursePermissionManager",
   props: {
+    userId: {
+      type: Number,
+      default: null,
+    },
     apiUsersUrl: String,
     updatePermissionApiUrl: String,
   },
@@ -120,11 +130,24 @@ export default {
       return this.searchText.length
         ? this.usersData.filter(
             (u) =>
-              u.username.includes(this.searchText) ||
-              u.firstName.includes(this.searchText) ||
-              u.lastName.includes(this.searchText)
+              u.username
+                .toLowerCase()
+                .includes(this.searchText.toLowerCase()) ||
+              u.firstName
+                .toLowerCase()
+                .includes(this.searchText.toLowerCase()) ||
+              u.lastName.toLowerCase().includes(this.searchText.toLowerCase())
           )
         : this.usersData;
+    },
+    userColCount() {
+      if (this.usersDataFiltered.length < 10) {
+        return 1;
+      }
+      if (this.usersDataFiltered.length < 20) {
+        return 2;
+      }
+      return 3;
     },
   },
   methods: {
@@ -153,8 +176,7 @@ export default {
       return {
         can_add_questions: false,
         can_edit_questions: false,
-        can_add_contributors: false,
-        can_edit_contributors: false,
+        can_manage_contributors: false,
       };
     },
     getPermissionDescription(desc) {
@@ -163,10 +185,8 @@ export default {
           return "Può aggiungere domande";
         case "can_edit_questions":
           return "Può modificare domande";
-        case "can_add_contributors":
-          return "Può aggiungere assistenti";
-        case "can_edit_contributors":
-          return "Può modificare i permessi degli assistenti";
+        case "can_manage_contributors":
+          return "Può gestire gli assistenti";
       }
     },
     updateUserPermissions() {

@@ -12,11 +12,8 @@ class GlobalProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     is_teacher = models.BooleanField(default=False)
     # contributes_to = models.ManyToManyField("elearningapp.Course", blank=True)
-    admin_of = models.OneToOneField(
+    admin_of = models.ManyToManyField(
         "elearningapp.Course",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
         related_name="admin_of_course",
     )
 
@@ -75,4 +72,5 @@ class CourseSpecificProfile(models.Model):
             if hasattr(self, "coursepermission")
             else {},
             "isContributor": hasattr(self, "coursepermission"),
+            "isAdmin": self.course in self.user.globalprofile.admin_of.all(),
         }

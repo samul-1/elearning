@@ -5,6 +5,7 @@
     <div class="grid two-col-grid dashboard-grid">
       <div>
         <a
+          v-if="admin || myPermissions.can_add_questions"
           class="w-100 btn btn-dark dashboard-btn mb-3"
           :href="'/add_question/' + courseId"
         >
@@ -12,6 +13,7 @@
           Aggiungi domande
         </a>
         <a
+          v-if="admin || myPermissions.can_edit_questions"
           class="w-100 btn btn-dark dashboard-btn"
           :href="'/edit_question/' + courseId"
         >
@@ -19,6 +21,7 @@
           Visualizza / modifica domande
         </a>
         <b-button
+          v-if="admin || myPermissions.can_manage_contributors"
           variant="dark"
           class="w-100 btn btn-dark dashboard-btn"
           v-b-modal="'assistant-modal'"
@@ -69,13 +72,15 @@
     </div>
     <b-modal
       :ok-only="true"
-      size="lg"
+      size="xl"
       title="Gestisci assistenti"
       id="assistant-modal"
     >
       <CoursePermissionManager
+        style="max-height: 65vh; overflow-y: auto"
         :apiUsersUrl="apiUsersUrl"
         :updatePermissionApiUrl="updatePermissionApiUrl"
+        :userId="userId"
       ></CoursePermissionManager>
     </b-modal>
   </div>
@@ -103,6 +108,10 @@ export default {
     CoursePermissionManager,
   },
   props: {
+    userId: {
+      type: Number,
+      default: null,
+    },
     courseName: String,
     courseId: Number,
     averageScore: Number,
@@ -112,6 +121,11 @@ export default {
     lastActions: Array,
     apiUsersUrl: String,
     updatePermissionApiUrl: String,
+    admin: Boolean,
+    myPermissions: {
+      type: Object,
+      default: () => {},
+    },
   },
   mounted() {},
   data: () => {

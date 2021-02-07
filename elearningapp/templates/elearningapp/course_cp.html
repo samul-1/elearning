@@ -13,6 +13,9 @@
         :last-actions="{{ last_actions }}"
         :api-users-url="'{% url 'get_course_users' course_id=course.id %}'"
         :update-permission-api-url="'{% url 'update_course_permissions' course_id=course.id %}'"
+        :admin="{{ admin }}"
+        :my-permissions="{{ my_permissions }}"
+        :user-id="{{ user_id }}"
         ></course-cp>
     </div>
     

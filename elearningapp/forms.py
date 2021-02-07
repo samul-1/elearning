@@ -14,8 +14,7 @@ class PermissionForm(ModelForm):
         fields = [
             "can_add_questions",
             "can_edit_questions",
-            "can_add_contributors",
-            "can_edit_contributors",
+            "can_manage_contributors",
         ]
 
 
@@ -85,6 +84,10 @@ class CourseForm(ModelForm):
             "minimum_passing_score",
         ]
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user", None)
+        super(CourseForm, self).__init__(*args, **kwargs)
+
     def save(self, force_insert=False, force_update=False):
         instance = super(CourseForm, self).save(self)
 
@@ -95,5 +98,9 @@ class CourseForm(ModelForm):
                 # if the course has a category distribution, add the number of questions for this category
                 cat.quantity = self["category_distribution_values"].value()[idx]
             cat.save()
+
+        # make user admin of the newly created course
+        self.user.admin_of.add(instance)
+        self.user.save()
 
         return instance

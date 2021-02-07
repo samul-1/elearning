@@ -47,6 +47,8 @@ def profile(request):
                 if p.get_average_score() > 0
                 else 0
             ),
+            "access_to_cp": p.course in global_profile.admin_of.all()
+            or hasattr(p, "coursepermission"),
         }
         for p in course_profiles
     ]
