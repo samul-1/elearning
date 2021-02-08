@@ -20,7 +20,7 @@ from .models import (
     TestCase,
 )
 from users.models import CourseSpecificProfile, GlobalProfile
-from .forms import QuestionForm, CourseForm, PermissionForm
+from .forms import QuestionForm, CourseForm, PermissionForm, ReportForm
 from django.contrib.auth.models import User
 import random
 from django.db.models import Q
@@ -43,6 +43,7 @@ def create_course(request):
         print(form_data)
         if form.is_valid():
             new_course = form.save()
+            CourseSpecificProfile.objects.create(user=request.user, course=new_course)
         else:
             print(form.errors)
 
@@ -74,6 +75,7 @@ def course_cp(request, course_id):
 
     context = {
         "course": course,
+        "reports": course.get_reports(),
         "last_actions": course.get_last_actions(5),
         "number_of_subscribers": aggregated_info["number_of_subscribers"],
         "number_of_tests_taken": aggregated_info["number_of_tests_taken"],
@@ -112,6 +114,13 @@ def get_course_users(request, course_id):
     return JsonResponse(course.get_subscribed_users(), safe=False)
 
 
+# accessed via GET, returns a lit of reports that have been made to questions from the course
+@login_required
+def get_course_reports(request, course_id):
+    course = get_object_or_404(Course, pk__exact=course_id)
+    return JsonResponse(course.get_reports(), safe=False)
+
+
 # if accessed via GET, gets the first 5 questions for the course and renders template containing the EditQuestion component
 # if accessed via PUT, updates the question
 # if question_id is specified, the id is passed via the context object to EditQuestion vue component
@@ -119,7 +128,7 @@ def get_course_users(request, course_id):
 def edit_question(request, course_id, question_id=None):
     course = get_object_or_404(Course, pk__exact=course_id)
 
-    # reject with 403 if user isn't authorized to view edit questions for this course
+    # reject with 403 if user isn't authorized to edit questions for this course
     if course not in request.user.globalprofile.admin_of.all() and (
         request.user.coursespecificprofile_set.filter(course=course).count == 0
         or not hasattr(
@@ -166,6 +175,25 @@ def edit_question(request, course_id, question_id=None):
     )
 
 
+# if accessed via POST, creates a new report for the specified question
+@login_required
+def report_question(request):
+    if request.method != "POST":
+        return HttpResponseNotAllowed()
+
+    form_data = json.loads(request.body.decode("utf-8"))
+    question = get_object_or_404(Question, pk__exact=form_data["questionId"])
+    form = ReportForm(form_data, user=request.user, question=question)
+
+    if form.is_valid():
+        # add new report to db
+        new_question = form.save()
+
+        return JsonResponse({"success": True})
+    else:
+        print(form.errors)
+
+
 # if accessed via PUT, updates or creates the permissions of a user for a course,
 # if accessed via DELETE, deletes the permission object for the specified user and course
 def update_course_permissions(request, course_id):
@@ -173,7 +201,7 @@ def update_course_permissions(request, course_id):
         return HttpResponseNotAllowed()
     course = get_object_or_404(Course, pk__exact=course_id)
 
-    # reject with 403 if user isn't authorized to view add assistants for this course
+    # reject with 403 if user isn't authorized to add assistants for this course
     if course not in request.user.globalprofile.admin_of.all() and (
         request.user.coursespecificprofile_set.filter(course=course).count == 0
         or not hasattr(
@@ -242,7 +270,7 @@ def get_seen_questions(request, course_id, amount, starting_from_pk, category=No
 @login_required
 def add_question(request, course_id):
     course = get_object_or_404(Course, pk__exact=course_id)
-    # reject with 403 if user isn't authorized to view add questions to this course
+    # reject with 403 if user isn't authorized to add questions to this course
     if course not in request.user.globalprofile.admin_of.all() and (
         request.user.coursespecificprofile_set.filter(course=course).count == 0
         or not hasattr(
@@ -272,7 +300,7 @@ def add_question(request, course_id):
             return JsonResponse("ok", safe=False)
         else:
             print(form.errors)
-        return
+        return JsonResponse({"success": True})
 
     # GET
     return render(
@@ -373,11 +401,14 @@ def render_test(request, course_id):
     # get user's global data
     global_profile = GlobalProfile.objects.get(user=request.user)
     global_user_data = {
-        "name": global_profile.first_name
-        if global_profile.user.first_name != ""
-        else global_profile.user.username,
+        "name": global_profile.user.username,
         "id": global_profile.user.pk,
     }
+
+    """
+    global_profile.first_name
+        if global_profile.user.first_name != ""
+        else """
 
     context = {
         "questions": current_test.format_test_for_user(),

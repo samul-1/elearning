@@ -1,11 +1,36 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Course, Question, Category, Answer, StaffAction, CoursePermission
+from .models import (
+    Course,
+    Question,
+    Category,
+    Answer,
+    StaffAction,
+    CoursePermission,
+    Report,
+)
 import json
 
 
 class ProgramForm(forms.Form):
     program = forms.CharField(label="", widget=forms.Textarea())
+
+
+class ReportForm(ModelForm):
+    class Meta:
+        model = Report
+        fields = ["text"]
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user", None)
+        self.question = kwargs.pop("question", None)
+        super(ReportForm, self).__init__(*args, **kwargs)
+
+    def save(self, force_insert=False, force_update=False):
+        instance = super(ReportForm, self).save(self)
+        instance.question = self.question
+        instance.user = self.user
+        return instance.save()
 
 
 class PermissionForm(ModelForm):

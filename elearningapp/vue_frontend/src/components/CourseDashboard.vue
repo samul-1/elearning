@@ -7,7 +7,7 @@
         <a :href="'/test/' + courseId"
           ><button class="btn btn-dark dashboard-btn">
             <font-awesome-icon class="mr-1" icon="stream" />
-            Simula un test
+            Inizia un test
           </button></a
         ><br />
         <a :href="'/question_history/' + courseId"

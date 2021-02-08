@@ -13,8 +13,7 @@ class GlobalProfile(models.Model):
     is_teacher = models.BooleanField(default=False)
     # contributes_to = models.ManyToManyField("elearningapp.Course", blank=True)
     admin_of = models.ManyToManyField(
-        "elearningapp.Course",
-        related_name="admin_of_course",
+        "elearningapp.Course", related_name="admin_of_course", blank=True
     )
 
     def __str__(self):

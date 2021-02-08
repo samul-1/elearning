@@ -10,9 +10,7 @@
 }
 
 .dashboard-grid {
-  -webkit-column-gap: 5rem;
-          column-gap: 5rem;
-  row-gap: 2rem;
+  grid-gap: 3rem;
 }
 
 .list-grid {

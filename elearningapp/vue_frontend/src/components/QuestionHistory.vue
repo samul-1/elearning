@@ -22,7 +22,7 @@
         Cancella cronologia domande</b-button
       >
     </div>
-    <div class="mt-3" v-if="!questions.length">
+    <div class="mt-3" v-if="!questionsData.length">
       <b-card bg-variant="light" text-variant="black">
         <b-card-text class="grid-card">
           <font-awesome-icon
@@ -46,7 +46,8 @@
           :solution="item.question.solution"
           :correctAnswerIndex="item.question.correctAnswerIndex"
           :givenAnswer="item.givenAnswer"
-          :questionId="index"
+          :questionId="item.question.questionId"
+          :sendReportApiUrl="sendReportApiUrl"
         />
       </div>
     </div>
@@ -69,7 +70,6 @@
 
         <b-button @click="cancel">Annulla</b-button>
       </template>
-      <div class="d-block">Hello From My Modal!</div>
     </b-modal>
   </div>
 </template>
@@ -98,6 +98,9 @@ export default {
     infiniteScroll,
   },
   props: {
+    getSeenQuestionsApiUrl: String,
+    deleteQuestionHistoryApiUrl: String,
+    sendReportApiUrl: String,
     questions: Array,
     userId: Number,
     courseId: Number,
@@ -123,7 +126,8 @@ export default {
       this.$root.$emit("bv::hide::modal", "confirmation-modal");
       axios
         .post(
-          "http://127.0.0.1:8000/delete_question_history/" + this.courseId + "/"
+          // "http://127.0.0.1:8000/delete_question_history/" + this.courseId + "/"
+          this.deleteQuestionHistoryApiUrl
         )
         .then((response) => {
           console.log(response);
@@ -140,9 +144,10 @@ export default {
       this.loading = true;
       axios
         .get(
-          "http://127.0.0.1:8000/get_seen_questions/" +
-            this.courseId +
-            "/5/" +
+          //"http://127.0.0.1:8000/get_seen_questions/" +
+          //this.courseId +
+          //"/5/" +
+          this.getSeenQuestionsApiUrl +
             this.maxQuestionId +
             "/" +
             (this.filterByCategory.length ? this.filterByCategory + "/" : "")
@@ -174,10 +179,4 @@ export default {
 
 <style scoped>
 @import "../../../static/question-styles.css";
-
-/* .grid-card {
-  display: grid;
-  grid-template-columns: 110px auto;
-  align-items: center;
-} */
 </style>

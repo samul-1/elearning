@@ -24,8 +24,16 @@
     align-self: center;
 }
 
-.log-list {
+.log-list,
+.report-list {
     list-style: none;
+}
+
+.report-list li:before {
+    font-family: 'FontAwesome';
+    content: '\f071';
+    color: $red;
+    margin: 0 5px 0 -15px;
 }
 
 .timestamp:before {
@@ -36,12 +44,7 @@
     content: "]";
 }
 
-.timestamp {
-    margin-right: .5rem;
-}
-
 .course-stat {
-    display: grid;
     grid-template-rows: 1fr 2fr;
     border: none;
     text-align: center;
@@ -52,7 +55,7 @@
 
 .course-stat .heading {
     background-image: $primary-gradient;
-    padding: 1rem;
+    padding: .5rem;
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
     color: white;
@@ -61,7 +64,7 @@
 
 .course-stat .data {
     font-size: 2rem;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
 }
 
 

@@ -23,25 +23,34 @@
         <b-button
           v-if="admin || myPermissions.can_manage_contributors"
           variant="dark"
-          class="w-100 btn btn-dark dashboard-btn"
+          class="w-100 mb-0 btn btn-dark dashboard-btn"
           v-b-modal="'assistant-modal'"
         >
           <font-awesome-icon class="mr-1" icon="user-shield" />
           Gestisci assistenti
         </b-button>
       </div>
-      <div class="grid h-100 three-col rem-1-gap">
-        <div class="course-stat">
-          <p class="heading">Iscritti</p>
-          <p class="data">{{ numberOfSubscribers }}</p>
-        </div>
-        <div class="course-stat">
-          <p style="letter-spacing: -1px" class="heading">Test svolti</p>
-          <p class="data">{{ numberOfTestsTaken }}</p>
-        </div>
-        <div class="course-stat">
-          <p class="heading">Media</p>
-          <p class="data">{{ averageScore }}</p>
+      <div class="grid">
+        <div class="grid three-col rem-1-gap">
+          <div class="course-stat">
+            <p class="heading">Iscritti</p>
+            <p class="data">{{ numberOfSubscribers }}</p>
+          </div>
+          <div class="course-stat">
+            <p style="letter-spacing: -1px" class="heading">Test svolti</p>
+            <p class="data">{{ numberOfTestsTaken }}</p>
+          </div>
+          <div class="course-stat">
+            <p class="heading">Media</p>
+            <p class="data">{{ averageScore }}</p>
+          </div>
+          <div class="stats" style="grid-column: 1 / span 3">
+            <i class="fas fa-link mr-1"></i>
+            Link al corso per gli studenti:
+            <a :href="'/course/' + courseId">
+              {{ "http://127.0.0.1/course/" + courseId }}</a
+            >
+          </div>
         </div>
       </div>
       <div style="align-self: start" class="stats">
@@ -59,7 +68,21 @@
           </li>
         </ul>
       </div>
-      <div class="stats">
+      <div style="align-self: start" v-if="reports.length" class="stats">
+        <p class="stat-title">Segnalazioni</p>
+        <ul class="report-list">
+          <li class="mb-1" v-for="(report, index) in reports" :key="index">
+            <span class="text-muted timestamp">{{
+              formattedTimestamp(new Date(report.timestamp))
+            }}</span>
+            {{ report.username }}
+            <b-button class="py-0 px-2 btn-rounded" variant="outline-primary"
+              >Mostra</b-button
+            >
+          </li>
+        </ul>
+      </div>
+      <div style="align-self: start" class="stats">
         <p class="stat-title">
           {{ "Le " + hardestQuestions.length + " domande più sbagliate" }}
         </p>
@@ -108,9 +131,14 @@ export default {
     CoursePermissionManager,
   },
   props: {
+    // TODO get course url as a prop
     userId: {
       type: Number,
       default: null,
+    },
+    reports: {
+      type: Array,
+      default: () => [],
     },
     courseName: String,
     courseId: Number,
@@ -153,19 +181,4 @@ export default {
 
 <style scoped>
 @import "../../../static/dashboard-styles.css";
-
-/* .stats {
-  border: 1px solid #dbdbdb;
-  border-radius: 0.8rem;
-  padding: 1rem;
-  text-align: center;
-}
-
-.stats .data {
-  font-weight: bold;
-}
-
-.grid div {
-  align-self: center;
-} */
 </style>

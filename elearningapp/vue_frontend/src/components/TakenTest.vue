@@ -54,16 +54,19 @@
       </p>
 
       <CollapsableQuestionList
+        :sendReportApiUrl="sendReportApiUrl"
         :text="'Domande a cui hai risposto correttamente:'"
         :questions="correctlyAnsweredQuestions"
         :index="'test-' + index + '-1'"
       />
       <CollapsableQuestionList
+        :sendReportApiUrl="sendReportApiUrl"
         :text="'Domande a cui hai risposto in maniera errata:'"
         :questions="incorrectlyAnsweredQuestions"
         :index="'test-' + index + '-2'"
       />
       <CollapsableQuestionList
+        :sendReportApiUrl="sendReportApiUrl"
         :text="'Domande a cui non hai risposto:'"
         :questions="unansweredQuestions"
         :index="'test-' + index + '-3'"
@@ -93,6 +96,7 @@ export default {
   components: { CollapsableQuestionList },
   name: "TakenTest",
   props: {
+    sendReportApiUrl: String,
     index: Number,
     score: Number,
     timestamp: String,

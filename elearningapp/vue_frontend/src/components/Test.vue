@@ -86,7 +86,9 @@
                     :solution="item.solution"
                     :correctAnswerIndex="item.correctAnswerIndex"
                     :givenAnswer="item.yourAnswer"
-                    :questionId="'1_' + index"
+                    :questionIddex="'1_' + index"
+                    :questionId="item.questionId"
+                    :sendReportApiUrl="sendReportApiUrl"
                   />
                 </div>
               </b-card>
@@ -116,7 +118,9 @@
                     :solution="item.solution"
                     :correctAnswerIndex="item.correctAnswerIndex"
                     :givenAnswer="item.yourAnswer"
-                    :questionId="'2_' + index"
+                    :questionIndex="'2_' + index"
+                    :questionId="item.questionId"
+                    :sendReportApiUrl="sendReportApiUrl"
                   />
                 </div>
               </b-card>
@@ -144,7 +148,9 @@
                     :solution="item.solution"
                     :correctAnswerIndex="item.correctAnswerIndex"
                     :givenAnswer="item.yourAnswer"
-                    :questionId="'3_' + index"
+                    :questionIndex="'3_' + index"
+                    :questionId="item.questionId"
+                    :sendReportApiUrl="sendReportApiUrl"
                   />
                 </div>
               </b-card>
@@ -183,8 +189,8 @@ export default {
     SeenQuestion,
   },
   props: {
+    sendReportApiUrl: String,
     questions: Array,
-    exerciseModality: String,
   },
   data: () => {
     return {

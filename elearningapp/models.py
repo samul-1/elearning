@@ -52,7 +52,9 @@ class Course(models.Model):
         taken_tests = TakenTest.objects.filter(course=self)
 
         avg_score = (
-            sum([test.score for test in list(taken_tests)]) / taken_tests.count()
+            (sum([test.score for test in list(taken_tests)]) / taken_tests.count())
+            if taken_tests.count() > 0
+            else 0
         )
 
         return {
@@ -118,6 +120,20 @@ class Course(models.Model):
     # returns the profiles of users who are subscribed to this course
     def get_subscribed_users(self):
         return list(map(lambda u: u.serialize(), self.coursespecificprofile_set.all()))
+
+    # returns all the reports that have been made to questions from this course
+    def get_reports(self):
+        print(
+            list(
+                map(
+                    lambda r: r.serialize(),
+                    Report.objects.filter(question__course=self),
+                )
+            )
+        )
+        return list(
+            map(lambda r: r.serialize(), Report.objects.filter(question__course=self))
+        )
 
     def maximum_score(self):
         return self.points_for_correct_answer * self.number_of_questions_per_test
@@ -232,6 +248,27 @@ class Question(models.Model):
         if self.number_of_appearances == 0:
             return 100
         return right_answer.selections / self.number_of_appearances * 100
+
+
+class Report(models.Model):
+    timestamp = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
+    )
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True)
+    text = models.TextField(default="")
+    resolved = models.BooleanField(default=False)
+
+    def serialize(self):
+        return {
+            "reportId": self.pk,
+            "timestamp": str(self.timestamp),
+            "userId": self.user.pk,
+            "username": self.user.username,
+            "question": self.question.format_complete_question(),
+            "text": self.text,
+            "resolved": "true" if self.resolved else "false",
+        }
 
 
 class Answer(models.Model):

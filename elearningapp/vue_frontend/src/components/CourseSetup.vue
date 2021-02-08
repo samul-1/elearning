@@ -279,10 +279,6 @@
             <div class="summary">
               <div>
                 <p><strong>Nome del corso:</strong> {{ coursename }}</p>
-                <p>
-                  <strong>Tipologia esercizi:</strong>
-                  {{ questionmodeAsString }}
-                </p>
                 <p v-if="categorymode == 'A'">
                   <strong>Categorie:</strong>
                   <span v-if="categorymode == 'B'"><em>nessuna</em></span>
@@ -377,10 +373,43 @@
         >
       </div>
     </div>
+    <b-modal
+      :no-close-on-backdrop="true"
+      :ok-only="true"
+      size="xl"
+      title="Corso creato con successo!"
+      id="done-modal"
+      ref="doneModal"
+      @hide="goToCourseCp"
+    >
+      <p>
+        Il link al corso, che dovrai dare ai tuoi studenti per unirsi, è:
+        <a :href="'course/' + courseId">{{
+          "http://127.0.0.1/course/" + courseId
+        }}</a
+        >.
+      </p>
+      <p>
+        Da adesso in poi, questo corso comparirà nella tua
+        <a href="/accounts/profile">pagina del profilo</a>.
+      </p>
+      <div class="text-center">
+        <a :href="'/course_cp/' + courseId"
+          ><b-button variant="success"
+            >Accedi al pannello del corso</b-button
+          ></a
+        >
+      </div>
+    </b-modal>
   </div>
 </template>
 <script>
 import axios from "axios";
+
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faCheckCircle);
 
 export default {
   name: "App",
@@ -390,6 +419,8 @@ export default {
   },
   data: () => {
     return {
+      success: false,
+      courseId: null,
       // currstep: 1,
       // loading: false,
       // questionmode: null,
@@ -491,12 +522,20 @@ export default {
         .then((response) => {
           // this.$root.$emit("bv::show::modal", "outcome-modal", "#sendAnswers");
           console.log(response);
+          this.courseId = response.data.courseId;
+          this.showConfirmation();
           // this.loading = false;
         })
         .catch((error) => {
           // alert(error);
           console.log(error);
         });
+    },
+    showConfirmation() {
+      this.$root.$emit("bv::show::modal", "done-modal");
+    },
+    goToCourseCp() {
+      window.location.href = "course_cp/" + this.courseId;
     },
   },
 };

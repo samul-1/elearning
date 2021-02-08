@@ -29,6 +29,7 @@
         :maxScore="maxScore"
         @expanded="previewExpanded"
         :class="{ 'expanded-grid-column': index == expanded }"
+        :sendReportApiUrl="sendReportApiUrl"
       />
     </div>
   </div>
@@ -51,6 +52,7 @@ export default {
   props: {
     tests: Array,
     maxScore: Number,
+    sendReportApiUrl: String,
   },
   mounted() {},
   data: () => {
@@ -74,30 +76,5 @@ export default {
 </script>
 
 <style scoped>
-@import "../../../static/test-styles.css"; /* .grid-card {
-  display: grid;
-  grid-template-columns: 110px auto;
-  align-items: center;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-column-gap: 2rem;
-  grid-row-gap: 2rem;
-}
-
-.expanded-grid-column {
-  grid-column: 1 / 4;
-}
-
-@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr;
-  }
-  .expanded-grid-column {
-    grid-column: 1 / 1;
-  }
-} */
+@import "../../../static/test-styles.css";
 </style>

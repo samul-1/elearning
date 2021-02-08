@@ -62,6 +62,10 @@ class CoursePermissionAdmin(admin.ModelAdmin):
     list_display = ("pk", "user")
 
 
+class ReportAdmin(admin.ModelAdmin):
+    list_display = ("pk", "question", "user", "text", "resolved")
+
+
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Question, QuestionAdmin)
@@ -77,3 +81,4 @@ admin.site.register(ProgramExercise, ProgramExerciseAdmin)
 admin.site.register(TestCase, TestCaseAdmin)
 admin.site.register(StaffAction, StaffActionAdmin)
 admin.site.register(CoursePermission, CoursePermissionAdmin)
+admin.site.register(Report, ReportAdmin)

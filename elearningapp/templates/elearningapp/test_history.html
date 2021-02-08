@@ -4,7 +4,11 @@
     <h2>Cronologia dei test</h2>
     <!-- <p>Le domande presenti in questa pagina non ricompariranno nei prossimi test che effettuerai.</p> -->
     <div id="app">
-        <test-history :tests="{{ tests }}" :max-score="{{ maxScore }}"></test-history>
+        <test-history 
+        :tests="{{ tests }}"
+        :max-score="{{ maxScore }}"
+        :send-report-api-url="'{% url 'report_question' %}'"
+        ></test-history>
     </div>
     {% render_bundle 'chunk-vendors' %}
     {% render_bundle 'vue_app_test_history' %}

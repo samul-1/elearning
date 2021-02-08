@@ -11,6 +11,16 @@ urlpatterns = [
         name="update_course_permissions",
     ),
     re_path(
+        r"^get_reports/(?P<course_id>\d+)/$",
+        views.get_course_reports,
+        name="get_course_reports",
+    ),
+    path(
+        "report",
+        views.report_question,
+        name="report_question",
+    ),
+    re_path(
         r"^users/(?P<course_id>\d+)/$", views.get_course_users, name="get_course_users"
     ),
     re_path(
@@ -48,6 +58,11 @@ urlpatterns = [
         r"^get_questions/(?P<course_id>\d+)/(?P<amount>\d+)/(?P<starting_from_pk>\d+)/$",
         views.get_questions,
         name="get_questions",
+    ),
+    re_path(
+        r"^get_seen_questions/(?P<course_id>\d+)/(?P<amount>\d+)/$",
+        views.get_seen_questions,
+        name="get_seen_questions",
     ),
     re_path(
         r"^get_seen_questions/(?P<course_id>\d+)/(?P<amount>\d+)/(?P<starting_from_pk>\d+)/$",

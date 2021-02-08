@@ -22,9 +22,11 @@
             :solution="item.solution"
             :correctAnswerIndex="item.correctAnswerIndex"
             :givenAnswer="item.yourAnswer"
-            :questionId="'list' + index + '-' + idx"
+            :questionId="item.questionId"
+            :questionIndex="'list' + index + '-' + idx"
             :questionOnly="questionOnly"
             :wrongAnswersPercentage="item.wrongAnswersPercentage"
+            :sendReportApiUrl="sendReportApiUrl"
           />
         </div>
       </b-card>
@@ -41,6 +43,7 @@ export default {
     SeenQuestion,
   },
   props: {
+    sendReportApiUrl: String,
     text: String,
     questions: Array,
     index: String,

@@ -13,7 +13,10 @@
         <h1>Domande</h1>
         {% load render_bundle from webpack_loader %}
         <div id="app">
-            <test :questions="{{ questions }}"></test>
+            <test 
+            :questions="{{ questions }}"
+            :send-report-api-url="'{% url 'report_question' %}'"
+            ></test>
         </div>
         {% render_bundle 'chunk-vendors' %}
         {% render_bundle 'vue_app_test' %}

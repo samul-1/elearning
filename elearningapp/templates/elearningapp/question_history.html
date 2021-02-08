@@ -2,7 +2,13 @@
 {% block content %}
     {% load render_bundle from webpack_loader %}
     <div id="app">
-        <question-history :questions="{{ questions }}" :user-id="{{ user_id }}" :course-id="{{ course_id }}"></question-history>
+        <question-history
+        :questions="{{ questions }}"
+        :user-id="{{ user_id }}"
+        :course-id="{{ course_id }}"
+        :send-report-api-url="'{% url 'report_question' %}'"
+        :get-seen-questions-api-url="'{% url 'get_seen_questions' course_id=course_id amount=5 %}'"
+        :delete-question-history-api-url="'{% url 'delete_question_history' course_id=course_id %}'"></question-history>
     </div>
     {% render_bundle 'chunk-vendors' %}
     {% render_bundle 'vue_app_question_history' %}
