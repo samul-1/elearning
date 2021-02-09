@@ -1,4 +1,5 @@
 {% extends 'user-base.html' %}
+{% block title %}Il tuo profilo{% endblock title %}
 {% block content %}
 {% load render_bundle from webpack_loader %}
 
@@ -39,8 +40,15 @@
                 </div>
             </li>
             {% empty %}
-            <p class="text-muted">Non sei iscritto ad alcun corso. Chiedi al tuo insegnante il link per il corso a cui vuoi iscriverti.</p>
+            <p class="text-muted">Non sei iscritto ad alcun corso.
+                {% if not global_profile.is_teacher %}
+                    Chiedi al tuo insegnante il link per il corso a cui vuoi iscriverti.
+                {% endif %}
+            </p>
             {% endfor %}
+            {% if global_profile.is_teacher %}
+                <a href="{% url 'create_course' %}" class="btn btn-rounded btn-primary mt-3"><i class="fas fa-plus-circle"></i> Crea corso</a>
+            {% endif %}
         </ul>
 
     </div>
@@ -49,9 +57,10 @@
         <div class="profile-header-mobile mt-3 mb-3">
             <div>Le tue informazioni</div>
         </div>
-        <ul class="profile-attribute-list">
+        <ul class="profile-attribute-list personal-details-list">
+            <li><span class="list-item-title">Nome e cognome</span><span class="locked"><input class="displayed-input" type="text" disabled value="{{ global_profile.user.first_name }} {{ global_profile.user.last_name }}" /></span></li>
             <li><span class="list-item-title">Username</span><span class="locked"><input class="displayed-input" type="text" disabled value="{{ global_profile }}" /></span></li>
-            <li><span class="list-item-title">Email</span><span class="locked"><input class="displayed-input" type="text" disabled value="{{ global_profile.user.email }}" /></span></li>
+            <li><span class="list-item-title">Indirizzo email</span><span class="locked"><input class="displayed-input" type="text" disabled value="{{ global_profile.user.email }}" /></span></li>
         </ul>
         <form class="password-change-form mt-4" method="post" action="{% url 'password_change' %}" onsubmit="postPasswordChange(event)">
             <!--{{ password_change_form }}-->

@@ -8,13 +8,33 @@
 <div class="login-box mt-3">
     <!-- <div class="mb-4"><h1 class="text-center">Crea un account</h1></div> -->
     <div class="mb-4"><h2 class="text-center">Registrati <span class="mx-2">|</span> <a href="{% url 'login' %}">Login</a></h2></div>
-
-    <form class="login-form" method="post" action="{% url 'signup' %}">
+    {% if teacher %}
+        <p class="text-muted">Stai effettuando la registrazione come insegnante.</p>
+    {% endif %}
+    <form class="login-form" method="post" action="
+    {% if teacher %}
+        {% url 'teacher_signup' %}
+    {% else %}
+        {% url 'signup' %}
+    {% endif %}
+    ">
         {% csrf_token %}
         <div class="form-group">
             {{ form.username }}
             {% if form.username.errors %}
                 <p class="form-error-text">{{form.username.errors}}</p>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form.first_name }}
+            {% if form.first_name.errors %}
+                <p class="form-error-text">{{form.first_name.errors}}</p>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form.last_name }}
+            {% if form.last_name.errors %}
+                <p class="form-error-text">{{form.last_name.errors}}</p>
             {% endif %}
         </div>
         <div class="form-group">

@@ -17,7 +17,7 @@
           </button></a
         ><br />
         <a :href="'/test_history/' + courseId"
-          ><button class="btn btn-dark dashboard-btn">
+          ><button class="btn mb-0 btn-dark dashboard-btn">
             <font-awesome-icon class="mr-1" icon="history" />
             Cronologia test
           </button></a

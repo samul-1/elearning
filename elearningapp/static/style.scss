@@ -35,6 +35,9 @@ body {
     background: $danger !important;
 }
 
+.bg-dark {
+    background-color: $dark !important;
+}
 
 /* ------------------
 2. layout
@@ -175,9 +178,24 @@ button[disabled] {
     border-color: $red;
 }
 
-.btn-primary {
+.btn-dark {
+    background-color: $dark !important;
+    border-color: $dark !important;
+}
+
+.btn-primary,
+.btn-primary.disabled,
+.btn-primary:disabled {
     background-color: $primary;
     border-color: $primary;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-outline-primary:active,
+.btn-primary:active {
+    background-color: $primary-hover !important;
+    border-color: $primary-hover !important;
 }
 
 .btn-secondary {
@@ -214,7 +232,7 @@ button[disabled] {
     padding: 1rem !important;
     box-shadow: 0 0 4px rgba(71, 71, 71, 0.55); //!
     transition: all .1s linear;
-    width: 90%;
+    width: 100%;
     margin-bottom: 1rem;
 }
 
@@ -268,7 +286,7 @@ button[disabled] {
     width: 30%;
 }
 
-// iPhone 6, 7, 8 portrait
+// iPhone 6, 7, 8
 @media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) {
     .overlay-card {
         width: 90%;

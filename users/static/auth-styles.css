@@ -152,12 +152,8 @@
 }
 
 .displayed-input {
-  width: 50%;
+  width: 90%;
   padding: 2px;
-}
-
-.locked {
-  position: relative;
 }
 
 .locked:after {
@@ -165,9 +161,8 @@
   font-weight: 900;
   opacity: .6;
   content: "\f023";
-  position: absolute;
-  right: 6px;
-  top: -2px;
+  position: relative;
+  right: 22px;
 }
 
 .password-change-form {
@@ -185,6 +180,13 @@
 
 .desktop {
   display: unset;
+}
+
+.personal-details-list li {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 2fr;
+      grid-template-columns: 1fr 2fr;
 }
 
 @media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) {

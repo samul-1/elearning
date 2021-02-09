@@ -187,7 +187,7 @@ def report_question(request):
 
     if form.is_valid():
         # add new report to db
-        new_question = form.save()
+        form.save()
 
         return JsonResponse({"success": True})
     else:
@@ -220,6 +220,9 @@ def update_course_permissions(request, course_id):
         CourseSpecificProfile, pk=form_data["profile_id"]
     )
     if request.method == "PUT":
+        # cannot edit permissions of a course admin
+        if course in editing_profile.user.globalprofile.admin_of.all():
+            return HttpResponseForbidden()
         # retrieve or create permissions for this user
         # we don't need the boolean returned by get_or_create, hence the _ wildcard
         permissions, _ = CoursePermission.objects.get_or_create(user=editing_profile)
@@ -411,6 +414,7 @@ def render_test(request, course_id):
         else """
 
     context = {
+        "course_id": course.pk,
         "questions": current_test.format_test_for_user(),
         "global_user_data": global_user_data,
     }

@@ -131,12 +131,8 @@
 }
 
 .displayed-input {
-    width: 50%;
+    width: 90%;
     padding: 2px;
-}
-
-.locked {
-    position: relative;
 }
 
 .locked:after {
@@ -144,9 +140,8 @@
     font-weight: 900;
     opacity: .6;
     content: "\f023";
-    position: absolute;
-    right: 6px;
-    top: -2px;
+    position: relative;
+    right: 22px;
 }
 
 .password-change-form {
@@ -164,6 +159,11 @@
 
 .desktop {
     display: unset;
+}
+
+.personal-details-list li {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
 }
 
 // iPhone 6, 6S, 7, 8 portrait

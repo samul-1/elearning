@@ -7,10 +7,12 @@
     ></b-spinner>
     <h2>Domande già viste</h2>
 
-    <div class="grid two-to-one-col-fr">
+    <div class="grid two-to-one-col-fr one-col-mobile">
       <div style="align-self: center">
-        Le domande presenti in questa pagina non ricompariranno nei prossimi
-        test che effettuerai.
+        <p>
+          Le domande presenti in questa pagina non ricompariranno nei prossimi
+          test che effettuerai.
+        </p>
       </div>
       <b-button
         @click="showConfirmationModal"

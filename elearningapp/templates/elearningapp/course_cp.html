@@ -1,4 +1,5 @@
 {% extends 'elearningapp/base.html' %}
+{% block title %}Pannello di controllo di {{ course.name }}{% endblock title %}
 {% block header_title %} eLearning <span class="title-muted">Control Panel</span>{% endblock header_title %}
 {% block content %}
     {% load render_bundle from webpack_loader %}

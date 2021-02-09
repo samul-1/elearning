@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from .forms import RegisterForm
+from .forms import RegisterForm, TeacherRegisterForm
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
@@ -10,9 +10,13 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import update_session_auth_hash
 import json
+from django.contrib.auth.decorators import login_required
+
 
 # user registration
 def register(request):
+    if request.user.is_authenticated:
+        return redirect("profile")
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -22,14 +26,40 @@ def register(request):
                 password=form.cleaned_data["password1"],
             )
             login(request, new_user)
-            return redirect(reverse("profile"))
+            return redirect("profile")
     else:
         form = RegisterForm()
 
-    return render(request, "registration/register.html", {"form": form})
+    return render(
+        request, "registration/register.html", {"form": form, "teacher": False}
+    )
+
+
+# teacher registration
+def teacher_register(request):
+    if request.user.is_authenticated:
+        return redirect("profile")
+    if request.method == "POST":
+        print("post teacher")
+        form = TeacherRegisterForm(request.POST)
+        if form.is_valid():
+            new_user = form.save()
+            new_user = authenticate(
+                username=form.cleaned_data["username"],
+                password=form.cleaned_data["password1"],
+            )
+            login(request, new_user)
+            return redirect("profile")
+    else:
+        form = TeacherRegisterForm()
+    print("get teacher")
+    return render(
+        request, "registration/register.html", {"form": form, "teacher": True}
+    )
 
 
 # user profile page
+@login_required
 def profile(request):
     global_profile = request.user.globalprofile
     password_change_form = PasswordChangeForm(user=request.user)
@@ -63,6 +93,7 @@ def profile(request):
 
 
 # creates a new CourseSpecificProfile for the user when signing up to a new course
+@login_required
 def course_signup(request, course_id):
     course = Course.objects.get(pk=course_id)
     try:
@@ -74,6 +105,7 @@ def course_signup(request, course_id):
         return redirect("view_course", course_id=course_id)
 
 
+@login_required
 def change_password(request):
     if request.method == "POST":
         print(request.body)

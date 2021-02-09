@@ -113,5 +113,9 @@
     -ms-grid-column: 1;
     grid-column: 1 / 1;
   }
+  .one-col-mobile {
+    -ms-grid-columns: 1fr;
+        grid-template-columns: 1fr;
+  }
 }
 /*# sourceMappingURL=grid-layouts.css.map */

@@ -23,7 +23,13 @@
         />
       </div>
 
-      <b-modal size="xl" id="outcome-modal">
+      <b-modal
+        :ok-only="true"
+        :ok-title="'Torna al corso'"
+        @hide="toCoursePage"
+        size="xl"
+        id="outcome-modal"
+      >
         <template #modal-header="{}">
           <h1>Risultati</h1>
         </template>
@@ -157,13 +163,6 @@
             </b-collapse>
           </div>
         </template>
-
-        <template #modal-footer="{ ok, cancel, hide }">
-          <!-- Button with custom close trigger value -->
-          <b-button size="md" variant="dark" @click="hide('ok')">
-            Concludi
-          </b-button>
-        </template>
       </b-modal>
     </div>
   </div>
@@ -191,6 +190,8 @@ export default {
   props: {
     sendReportApiUrl: String,
     questions: Array,
+    courseDashboardUrl: String,
+    sendAnswersApiUrl: String,
   },
   data: () => {
     return {
@@ -235,7 +236,7 @@ export default {
       console.log(postData);
       this.loading = true;
       axios
-        .post("http://127.0.0.1:8000/send_answers", postData)
+        .post(this.sendAnswersApiUrl, postData)
         .then((response) => {
           this.outcomeObj = response.data;
           this.$root.$emit("bv::show::modal", "outcome-modal", "#sendAnswers");
@@ -248,22 +249,13 @@ export default {
           console.log(error);
         });
     },
+    toCoursePage() {
+      window.location.href = this.courseDashboardUrl;
+    },
   },
 };
 </script>
 
 <style>
 @import "../../../static/test-styles.css";
-
-/* .passed {
-  color: green;
-}
-
-.failed {
-  color: red;
-} */
-/* 
-.score {
-  font-weight: bold;
-} */
 </style>

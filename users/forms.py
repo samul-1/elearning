@@ -15,6 +15,22 @@ class RegisterForm(UserCreationForm):
             }
         ),
     )
+    first_name = forms.CharField(
+        max_length=150,
+        widget=TextInput(
+            attrs={
+                "placeholder": "Nome",
+            }
+        ),
+    )
+    last_name = forms.CharField(
+        max_length=150,
+        widget=TextInput(
+            attrs={
+                "placeholder": "Cognome",
+            }
+        ),
+    )
     email = forms.EmailField(widget=TextInput(attrs={"placeholder": "Email"}))
     password1 = forms.CharField(widget=PasswordInput(attrs={"placeholder": "Password"}))
     password2 = forms.CharField(
@@ -23,7 +39,14 @@ class RegisterForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ["username", "email", "password1", "password2"]
+        fields = [
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "password1",
+            "password2",
+        ]
         help_texts = {
             "username": "",
             "password1": "La password deve contenere almeno 8 caratteri, non tutti numerici, e non deve essere una stringa comunemente utilizzata.",
@@ -37,6 +60,18 @@ class RegisterForm(UserCreationForm):
         # create global profile for user
         global_profile = GlobalProfile(user=new_user)
         global_profile.save()
+
+        return new_user
+
+
+class TeacherRegisterForm(RegisterForm):
+    def save(self, force_insert=False, force_update=False):
+        new_user = super(TeacherRegisterForm, self).save(self)
+
+        # create global teacher profile for user
+        print("setting to true")
+        new_user.globalprofile.is_teacher = True
+        new_user.globalprofile.save()
 
         return new_user
 

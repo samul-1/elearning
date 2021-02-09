@@ -1,24 +1,7 @@
 {% extends 'elearningapp/base.html' %}
+{% block title %}Homepage di {{ course_data.name}}{% endblock title %}
 {% block head_css_page %}
     <style>
-        /* button {
-            width: -webkit-fill-available;
-            padding: 8px !important;
-            margin-bottom: 15px;
-        }
-
-        .stats {
-            background-color: #f8f8ff;
-            border: 1px solid #cecdcd;
-            margin-bottom: 15px;
-            border-radius: 2px;
-            padding-top: 5px;
-        }
-
-        .stats p {
-            margin-bottom: 5px;
-        } */
-
         #course_title {
             text-align: center;
         }

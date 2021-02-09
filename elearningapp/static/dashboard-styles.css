@@ -56,8 +56,7 @@
 }
 
 .course-stat .heading {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#005fec), color-stop(#0061f1), color-stop(#0063f5), color-stop(#0065fa), to(#0067ff));
-  background-image: linear-gradient(to bottom, #005fec, #0061f1, #0063f5, #0065fa, #0067ff);
+  background: #1f276f;
   padding: .5rem;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;

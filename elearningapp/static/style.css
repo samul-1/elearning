@@ -32,6 +32,10 @@ body {
   background: rgba(190, 79, 79, 0.35) !important;
 }
 
+.bg-dark {
+  background-color: #142B33 !important;
+}
+
 /* ------------------
 2. layout
 ------------------ */
@@ -170,34 +174,49 @@ button[disabled] {
   border-color: #be0000;
 }
 
-.btn-primary {
-  background-color: #005fec;
-  border-color: #005fec;
+.btn-dark {
+  background-color: #142B33 !important;
+  border-color: #142B33 !important;
+}
+
+.btn-primary,
+.btn-primary.disabled,
+.btn-primary:disabled {
+  background-color: #1f276f;
+  border-color: #1f276f;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-outline-primary:active,
+.btn-primary:active {
+  background-color: #293496 !important;
+  border-color: #293496 !important;
 }
 
 .btn-secondary {
-  background-color: #4b4b4b;
-  border-color: #4b4b4b;
+  background-color: #636363;
+  border-color: #636363;
 }
 
 .btn-outline-primary {
-  color: #005fec;
-  border-color: #005fec;
+  color: #1f276f;
+  border-color: #1f276f;
 }
 
 .btn-outline-secondary {
-  color: #4b4b4b;
-  border-color: #4b4b4b;
+  color: #636363;
+  border-color: #636363;
 }
 
 .btn-outline-primary:hover {
-  background-color: #005fec;
-  border-color: #005fec;
+  background-color: #1f276f;
+  border-color: #1f276f;
 }
 
 .btn-outline-secondary:hover {
-  background-color: #4b4b4b;
-  border-color: #4b4b4b;
+  background-color: #636363;
+  border-color: #636363;
 }
 
 .small-button {
@@ -211,7 +230,7 @@ button[disabled] {
           box-shadow: 0 0 4px rgba(71, 71, 71, 0.55);
   -webkit-transition: all .1s linear;
   transition: all .1s linear;
-  width: 90%;
+  width: 100%;
   margin-bottom: 1rem;
 }
 
@@ -275,7 +294,7 @@ button[disabled] {
 }
 
 .question-filter-grid {
-  background: #4b4b4b;
+  background: #636363;
   color: white;
   border-radius: 3rem;
   padding: .5rem 1.5rem;
