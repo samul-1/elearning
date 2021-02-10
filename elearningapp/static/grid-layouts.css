@@ -102,6 +102,16 @@
   grid-column: span 2;
 }
 
+.two-to-one-col {
+  -ms-grid-columns: 2fr 1fr;
+      grid-template-columns: 2fr 1fr;
+}
+
+.self-align-start {
+  -ms-flex-item-align: start !important;
+      align-self: flex-start !important;
+}
+
 @media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
   .grid-test-history {
     display: -ms-grid;

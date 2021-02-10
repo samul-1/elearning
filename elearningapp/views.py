@@ -18,6 +18,7 @@ from .models import (
     SeenQuestion,
     ProgramExercise,
     TestCase,
+    Report,
 )
 from users.models import CourseSpecificProfile, GlobalProfile
 from .forms import QuestionForm, CourseForm, PermissionForm, ReportForm
@@ -75,7 +76,7 @@ def course_cp(request, course_id):
 
     context = {
         "course": course,
-        "reports": course.get_reports(),
+        "reports": course.get_reports(resolved=False),
         "last_actions": course.get_last_actions(5),
         "number_of_subscribers": aggregated_info["number_of_subscribers"],
         "number_of_tests_taken": aggregated_info["number_of_tests_taken"],
@@ -176,22 +177,40 @@ def edit_question(request, course_id, question_id=None):
 
 
 # if accessed via POST, creates a new report for the specified question
+# if accessed via PUT, updates the status of the specified report
 @login_required
 def report_question(request):
-    if request.method != "POST":
+    if request.method != "POST" and request.method != "PUT":
         return HttpResponseNotAllowed()
 
     form_data = json.loads(request.body.decode("utf-8"))
-    question = get_object_or_404(Question, pk__exact=form_data["questionId"])
-    form = ReportForm(form_data, user=request.user, question=question)
 
-    if form.is_valid():
-        # add new report to db
-        form.save()
+    if request.method == "POST":
+        question = get_object_or_404(Question, pk__exact=form_data["questionId"])
+        form = ReportForm(form_data, user=request.user, question=question)
 
-        return JsonResponse({"success": True})
-    else:
-        print(form.errors)
+        if form.is_valid():
+            # add new report to db
+            form.save()
+
+            return JsonResponse({"success": True})
+        else:
+            print(form.errors)
+
+    if request.method == "PUT":
+        report = get_object_or_404(Report, pk__exact=form_data["reportId"])
+        # add report text to form data as it is a mandatory field that isn't supplied when the view is accessed via PUT
+        # ? maybe there's a better way to do this
+        form_data["text"] = report.text
+
+        form = ReportForm(form_data, instance=report, resolved=form_data["resolved"])
+        print(form_data)
+        if form.is_valid():
+            print("is valid")
+            form.save()
+            return JsonResponse({"success": True})
+        else:
+            print(form.errors)
 
 
 # if accessed via PUT, updates or creates the permissions of a user for a course,

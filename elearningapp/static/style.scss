@@ -103,6 +103,19 @@ h2 {
     opacity: 0.4;
 }
 
+
+.passed {
+    color: $green;
+    font-weight: 900;
+    //font-size: 1.2rem;
+}
+
+.failed {
+    color: $red;
+    font-weight: 900;
+    //font-size: 1.2rem;
+}
+
 .navbar-item {
     transition: all .5s linear;
 }

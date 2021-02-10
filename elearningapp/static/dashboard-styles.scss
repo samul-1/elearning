@@ -36,6 +36,11 @@
     margin: 0 5px 0 -15px;
 }
 
+.resolved-issue:before {
+    content: '\f00c' !important;
+    color: $green !important;
+}
+
 .timestamp:before {
     content: "[";
 }

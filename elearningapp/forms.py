@@ -24,12 +24,17 @@ class ReportForm(ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user", None)
         self.question = kwargs.pop("question", None)
+        self.resolved = kwargs.pop("resolved", False)
         super(ReportForm, self).__init__(*args, **kwargs)
 
     def save(self, force_insert=False, force_update=False):
         instance = super(ReportForm, self).save(self)
-        instance.question = self.question
-        instance.user = self.user
+        if self.question is not None:
+            instance.question = self.question
+        if self.user is not None:
+            instance.user = self.user
+
+        instance.resolved = self.resolved
         return instance.save()
 
 

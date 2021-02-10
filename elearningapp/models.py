@@ -122,18 +122,12 @@ class Course(models.Model):
         return list(map(lambda u: u.serialize(), self.coursespecificprofile_set.all()))
 
     # returns all the reports that have been made to questions from this course
-    def get_reports(self):
-        print(
-            list(
-                map(
-                    lambda r: r.serialize(),
-                    Report.objects.filter(question__course=self),
-                )
-            )
-        )
-        return list(
-            map(lambda r: r.serialize(), Report.objects.filter(question__course=self))
-        )
+    def get_reports(self, resolved=None):
+        reports = Report.objects.filter(question__course=self)
+
+        if resolved is not None:
+            reports = reports.filter(resolved=resolved)
+        return list(map(lambda r: r.serialize(), reports))
 
     def maximum_score(self):
         return self.points_for_correct_answer * self.number_of_questions_per_test
@@ -265,9 +259,11 @@ class Report(models.Model):
             "timestamp": str(self.timestamp),
             "userId": self.user.pk,
             "username": self.user.username,
+            "firstName": self.user.first_name,
+            "lastName": self.user.last_name,
             "question": self.question.format_complete_question(),
             "text": self.text,
-            "resolved": "true" if self.resolved else "false",
+            "resolved": 1 if self.resolved else 0,
         }
 
 

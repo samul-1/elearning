@@ -34,6 +34,7 @@ A more thorough documentation is being worked on currently. Please note that the
     - For example, teachers can see a list of the "hardest questions" for their course, that is those that have the highest percentage of wrong answers given relative to how many times they appeared in tests
 
 # A couple screenshots
+(Note: some screenshots may contain slightly different graphics such as a different color palette, as the user interface is still being worked on.)
 
 ## The teacher side
 
@@ -50,12 +51,19 @@ A more thorough documentation is being worked on currently. Please note that the
 
 [![Watch the video](https://img.youtube.com/vi/f3Ox_Z3dwY0/maxresdefault.jpg)](https://www.youtube.com/watch?v=f3Ox_Z3dwY0)
 
+### Reporting errors in questions and handling reports
+(Click to watch the video)
+
+[![Watch the video](https://img.youtube.com/vi/N_nQqujdbM0/maxresdefault.jpg)](https://youtu.be/N_nQqujdbM0)
 
 ## The student side
 
-
 ### Course homepage
 ![](https://i.imgur.com/OVWVDQV.png)
+
+### Taking tests
+![](https://i.imgur.com/zDwCo28.png)
+![](https://i.imgur.com/fnbCsSF.png)
 
 ### Question and test history
 ![](https://i.imgur.com/quprKH5.png)

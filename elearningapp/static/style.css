@@ -98,6 +98,16 @@ h2 {
   opacity: 0.4;
 }
 
+.passed {
+  color: #006e09;
+  font-weight: 900;
+}
+
+.failed {
+  color: #be0000;
+  font-weight: 900;
+}
+
 .navbar-item {
   -webkit-transition: all .5s linear;
   transition: all .5s linear;

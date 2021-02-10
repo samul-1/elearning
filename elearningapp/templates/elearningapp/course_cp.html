@@ -18,6 +18,9 @@
         :my-permissions="{{ my_permissions }}"
         :user-id="{{ user_id }}"
         :reports="{{ reports }}"
+        :add-questions-api-url="'{% url 'add_question' course_id=course.id %}'"
+        :edit-questions-api-url="'{% url 'edit_question' course_id=course.id %}'"
+        :update-report-api-url="'{% url 'report_question' %}'"
         ></course-cp>
     </div>
     
@@ -25,3 +28,12 @@
     {% render_bundle 'vue_app_course_cp' %}
 
 {% endblock content %}
+
+{% block footer_javascript_section %}
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript"
+        src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+{% endblock footer_javascript_section %}

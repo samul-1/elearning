@@ -7,7 +7,7 @@
         <a
           v-if="admin || myPermissions.can_add_questions"
           class="w-100 btn btn-dark dashboard-btn mb-3"
-          :href="'/add_question/' + courseId"
+          :href="addQuestionsApiUrl"
         >
           <font-awesome-icon class="mr-1" icon="plus-circle" />
           Aggiungi domande
@@ -15,7 +15,7 @@
         <a
           v-if="admin || myPermissions.can_edit_questions"
           class="w-100 btn btn-dark dashboard-btn"
-          :href="'/edit_question/' + courseId"
+          :href="editQuestionsApiUrl"
         >
           <font-awesome-icon class="mr-1" icon="list" />
           Visualizza / modifica domande
@@ -71,12 +71,20 @@
       <div style="align-self: start" v-if="reports.length" class="stats">
         <p class="stat-title">Segnalazioni</p>
         <ul class="report-list">
-          <li class="mb-1" v-for="(report, index) in reports" :key="index">
+          <li
+            class="mb-1"
+            :class="{ 'resolved-issue': report.resolved }"
+            v-for="(report, index) in reports"
+            :key="index"
+          >
             <span class="text-muted timestamp">{{
               formattedTimestamp(new Date(report.timestamp))
             }}</span>
             {{ report.username }}
-            <b-button class="py-0 px-2 btn-rounded" variant="outline-primary"
+            <b-button
+              class="py-0 px-2 btn-rounded"
+              variant="outline-primary"
+              @click="showReport(report)"
               >Mostra</b-button
             >
           </li>
@@ -106,14 +114,90 @@
         :userId="userId"
       ></CoursePermissionManager>
     </b-modal>
+    <b-modal
+      :ok-only="true"
+      size="xl"
+      id="report-modal"
+      title="Dettagli segnalazione"
+    >
+      <p>
+        <strong>Inviata da:</strong> {{ shownReport.username }} ({{
+          shownReport.firstName
+        }}
+        {{ shownReport.lastName }}), <strong>in data</strong>
+        {{ formattedTimestamp(new Date(shownReport.timestamp)) }}
+      </p>
+      <p>
+        <strong>Stato:</strong>
+        <span
+          class="ml-1"
+          :class="{
+            failed: !shownReport.resolved,
+            passed: shownReport.resolved,
+          }"
+          >{{ shownReport.resolved ? "risolta" : "non risolta" }}</span
+        >
+        <b-button
+          v-if="!shownReport.resolved"
+          @click="closeReport()"
+          class="ml-1 py-0"
+          variant="outline-success"
+          >Contrassegna come risolta</b-button
+        >
+      </p>
+      <p>
+        <strong>Relativa alla domanda:</strong>
+
+        <a :href="editQuestionsApiUrl + shownReport.question.questionId"
+          ><b-button class="ml-3 py-0" variant="outline-secondary"
+            ><i class="fas fa-edit"></i> Modifica questa domanda</b-button
+          ></a
+        >
+      </p>
+      <div class="grid two-to-one-col rem-1-gap">
+        <QuestionPreview
+          :text="shownReport.question.text"
+          :answers="shownReport.question.answers"
+          :solution="shownReport.question.solution"
+          :correctAnswerIndex="shownReport.question.correctAnswerIndex"
+        ></QuestionPreview>
+        <div class="self-align-start">
+          <p><strong>Testo della segnalazione</strong></p>
+          <vue-mathjax
+            :formula="shownReport.text"
+            :safe="false"
+            :options="mathjaxOptions"
+          ></vue-mathjax>
+        </div>
+      </div>
+    </b-modal>
+    <transition name="overlay-text">
+      <div class="overlay-card" v-if="success">
+        <b-card bg-variant="light" text-variant="black">
+          <b-card-text class="grid-card">
+            <font-awesome-icon
+              class="correct"
+              icon="check-circle"
+              style="width: 80px; height: 80px"
+            />
+            Segnalazione chiusa con successo
+          </b-card-text>
+        </b-card>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 // Fontawesome
 import { library } from "@fortawesome/fontawesome-svg-core";
 import CollapsableQuestionList from "./CollapsableQuestionList.vue";
 import CoursePermissionManager from "./CoursePermissionManager.vue";
+import QuestionPreview from "./QuestionPreview.vue";
+import { VueMathjax } from "vue-mathjax";
+
 import {
   faList,
   faPlusCircle,
@@ -129,6 +213,8 @@ export default {
   components: {
     CollapsableQuestionList,
     CoursePermissionManager,
+    QuestionPreview,
+    "vue-mathjax": VueMathjax,
   },
   props: {
     // TODO get course url as a prop
@@ -148,16 +234,39 @@ export default {
     hardestQuestions: Array,
     lastActions: Array,
     apiUsersUrl: String,
-    updatePermissionApiUrl: String,
     admin: Boolean,
     myPermissions: {
       type: Object,
       default: () => {},
     },
+    updatePermissionApiUrl: String,
+    addQuestionsApiUrl: String,
+    editQuestionsApiUrl: String,
+    updateReportApiUrl: String,
   },
-  mounted() {},
+  mounted() {
+    axios.defaults.xsrfCookieName = "csrftoken";
+    axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+  },
   data: () => {
-    return {};
+    return {
+      success: false,
+      shownReport: { question: {} },
+      mathjaxOptions: {
+        tex2jax: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+          displayMath: [
+            ["$$", "$$"],
+            ["[", "]"],
+          ],
+          processEscapes: true,
+          processEnvironments: true,
+        },
+      },
+    };
   },
   methods: {
     formattedTimestamp(date) {
@@ -174,6 +283,42 @@ export default {
         ":" +
         (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes())
       );
+    },
+    showReport(report) {
+      console.log(report);
+      this.shownReport = report;
+      this.$bvModal.show("report-modal");
+    },
+    closeReport() {
+      this.loading = true;
+      const putData = {
+        reportId: this.shownReport.reportId, // this is the user whose permissions were being edited
+        resolved: true,
+      };
+      this.loading = true;
+
+      console.log(putData);
+
+      axios
+        .put(this.updateReportApiUrl, putData)
+        .then((response) => {
+          console.log(response);
+          this.showConfirmationAndClose();
+          this.loading = false;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    showConfirmationAndClose() {
+      this.$bvModal.hide("report-modal");
+      this.shownReport.resolved = true;
+
+      // show success message and hide it programmatically
+      this.success = true;
+      setTimeout(() => {
+        this.success = false;
+      }, 2000);
     },
   },
 };

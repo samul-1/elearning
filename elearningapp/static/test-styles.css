@@ -65,14 +65,4 @@ Table of contents
   -ms-flex-item-align: start;
       align-self: flex-start;
 }
-
-.passed {
-  color: #006e09;
-  font-size: 1.2rem;
-}
-
-.failed {
-  color: #be0000;
-  font-size: 1.2rem;
-}
 /*# sourceMappingURL=test-styles.css.map */
