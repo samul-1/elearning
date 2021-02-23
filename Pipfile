@@ -10,6 +10,8 @@ mysqlclient = "*"
 naked = "*"
 js2py = "*"
 isort = "*"
+gunicorn = "*"
+dj-database-url = "*"
 
 [dev-packages]
 
