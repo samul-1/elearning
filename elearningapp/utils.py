@@ -1,5 +1,6 @@
-import subprocess
 import re
+import subprocess
+
 
 # takes in a text that might contain TeX formulas wrapped between $ or $$ tags,
 # returns the original text unchanged if no $ tags are found, otherwise returns the original text
@@ -32,7 +33,8 @@ def tex_to_svg(formula):
                     "esm",
                     "../elearning/elearningapp/tex-render/component/tex2svg",
                     stripped_token,
-                ]
+                ],
+                shell=True,
             )
             # strip off the "b'" and "\n'"
             output_str += str(res)[2:-3]
