@@ -1,13 +1,14 @@
-from django.db import models
-from django.contrib.auth.models import User
-from django.db.models import Q
 import random
-from .utils import tex_to_svg
-from django.conf import settings
-from django.core.exceptions import ValidationError
-from .exceptions import OutOfQuestionsException
 
 from django.apps import apps
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.db import models
+from django.db.models import Q
+
+from .exceptions import OutOfQuestionsException
+from .utils import tex_to_svg
 
 
 class Course(models.Model):
@@ -45,6 +46,7 @@ class Course(models.Model):
 
         return random_questions
 
+    # returns an object containing info about the course
     def get_aggregated_info(self):
         subscribers = apps.get_model(
             "users", model_name="CourseSpecificProfile"
@@ -80,7 +82,7 @@ class Course(models.Model):
             )
         )
 
-    # TODO move this to CourseSpecificProfile
+    # ? move this to CourseSpecificProfile
     def get_seen_questions(self, user, amount, pk_greater_than=0, category=None):
         questions = user.seenquestion_set.filter(pk__gt=pk_greater_than)
         if category is not None:
@@ -122,6 +124,7 @@ class Course(models.Model):
         return list(map(lambda u: u.serialize(), self.coursespecificprofile_set.all()))
 
     # returns all the reports that have been made to questions from this course
+    # if resolved is specified, only reports with that status are returned
     def get_reports(self, resolved=None):
         reports = Report.objects.filter(question__course=self)
 
@@ -160,6 +163,9 @@ class Category(models.Model):
     # (used only if the course has 'category distribution' enabled)
     quantity = models.PositiveIntegerField(default=None, null=True)
 
+    class Meta:
+        verbose_name_plural = "categories"
+
     def __str__(self):
         return self.name
 
@@ -178,7 +184,7 @@ class Question(models.Model):
     correct_answer_index = models.PositiveIntegerField()
     solution_text_rendered = models.TextField()
     solution_text = models.TextField(default="")
-    # hint_text = models.CharField(max_length=1000, null=True)
+    # TODO add logic to track who added a question
     added_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     number_of_appearances = models.PositiveIntegerField(default=0)
     percentage_of_correct_answers = models.FloatField(default=100.0)
@@ -188,6 +194,8 @@ class Question(models.Model):
 
     # when model is saved, process the question text to render TeX as svg
     def save(self, re_render_text=True, *args, **kwargs):
+        # TODO raise exception if question is saved to a category for a course different than that specified in fk Course
+
         if re_render_text:
             self.rendered_text = tex_to_svg(self.text)
             self.solution_text_rendered = tex_to_svg(self.solution_text)
@@ -216,7 +224,7 @@ class Question(models.Model):
 
     # returns a dict containing all the information about the question;
     # i.e. all its public information, the index of the correct answer, and the solution,
-    # as well as the source code for all the texts (question, solution, answers)
+    # as well as the source code for all the texts (question, solution, answers), used for editing a question
     def format_complete_question(self):
         info = self.format_question_for_user()
         info["textSource"] = self.text
@@ -237,13 +245,13 @@ class Question(models.Model):
     # this is intended to be called ONLY by Answer.save() each time this question is answered
     # to access this property from somewhere else, use the field percentage_of_correct_answers
     def get_percentage_right_answers(self):
-        print(self.number_of_appearances)
         right_answer = self.answer_set.get(answer_index=self.correct_answer_index)
         if self.number_of_appearances == 0:
             return 100
         return right_answer.selections / self.number_of_appearances * 100
 
 
+# a report made by a user about a question containing a mistake
 class Report(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(
@@ -331,6 +339,7 @@ class StaffAction(models.Model):
         }
 
 
+# a test that was taken by a user, detailed with its outcome
 class TakenTest(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # many to one
     course = models.ForeignKey(
@@ -372,16 +381,22 @@ class TakenTest(models.Model):
         return json_self
 
 
+# a question that appeared on a TakenTest, and its answer
 class AnswersInTakenTest(models.Model):
     test = models.ForeignKey(TakenTest, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    answer_index = models.IntegerField()
+    # ? should probably use null instead of -1 for unanswered
+    answer_index = models.IntegerField()  # -1 if unanswered
 
 
+# a question that was seen by the user, together with its answer
+# needs a separate model from TakenTest because the history of seen questions
+# is erasable, whereas that of taken tests isn't
 class SeenQuestion(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, null=True, on_delete=models.CASCADE)
-    answer_index = models.IntegerField(default=-1)
+    # ? should probably use null instead of -1 for unanswered
+    answer_index = models.IntegerField(default=-1)  # -1 if unanswered
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def serialize(self):
@@ -392,6 +407,9 @@ class SeenQuestion(models.Model):
         }
 
 
+# a test currently, associated to a user: used in case they leave and come back to the test
+# to retrieve the data without generating a new one, as well as to keep track of what questions
+# the answers given by the user need to be checked against
 class ActiveTest(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     questions = models.ManyToManyField(Question)
@@ -402,7 +420,7 @@ class ActiveTest(models.Model):
     # and adds them to the ManyToMany relationship with Question
     def init_test(self):
         if not self.course.uses_category_distribution:
-            # the course doesn't have a category distribution (or questions for this course aren't grouped in categories)
+            # course doesn't have a category distribution (or questions for this course aren't grouped in categories)
             for question in self.course.get_questions_for(
                 self.user, self.course.number_of_questions_per_test
             ):
@@ -424,8 +442,8 @@ class ActiveTest(models.Model):
                 self.questions.add(question)
         self.save()
 
-    # returns a list containing all the questions of the test, formatted to display
-    # their public information
+    # returns a list containing all questions of the test,
+    # formatted to display their public information
     def format_test_for_user(self):
         output = []
 
@@ -440,8 +458,8 @@ class ActiveTest(models.Model):
 
         return output
 
-    # takes in a dict containing the answers to the test's questions;
-    # computes the result, saves the test questions to the history of
+    # takes in a dict containing the answers to the test's questions; computes the result,
+    # updates data about questions and answers, saves the test questions to the history of
     # seen questions, and returns a TakenTest object detailing the outcome of the test
     def evaluate_answers(self, answers):
         taken_test = TakenTest(user=self.user, course=self.course, score=0)
@@ -452,7 +470,7 @@ class ActiveTest(models.Model):
         user_profile.number_of_tests_taken += 1
         user_profile.save()
 
-        questions = self.questions.all()
+        questions = self.questions.all()  # ? could use select_related('answer_set')
         score = 0
 
         for question, answer in zip(
@@ -506,40 +524,40 @@ class ActiveTest(models.Model):
 """
 
 
-class ProgramExercise(models.Model):
-    # TODO implement different types of program question (exact correspondence, function evaluation, ...)
+# class ProgramExercise(models.Model):
+#     # TODO implement different types of program question (exact correspondence, function evaluation, ...)
 
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    text = models.TextField()
-    is_visible = models.BooleanField(default=True)
-    minimum_passing_testcase_perc = models.PositiveIntegerField(default=100)
+#     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+#     text = models.TextField()
+#     is_visible = models.BooleanField(default=True)
+#     minimum_passing_testcase_perc = models.PositiveIntegerField(default=100)
 
-    def __str__(self):
-        return self.text
+#     def __str__(self):
+#         return self.text
 
-    def get_test_cases(self):
-        return TestCase.objects.filter(exercise=self)
+#     def get_test_cases(self):
+#         return TestCase.objects.filter(exercise=self)
 
-    def get_public_test_cases(self):
-        return map(
-            lambda t: t.serialize(),
-            TestCase.objects.filter(exercise=self, is_public=True),
-        )
+#     def get_public_test_cases(self):
+#         return map(
+#             lambda t: t.serialize(),
+#             TestCase.objects.filter(exercise=self, is_public=True),
+#         )
 
 
-class TestCase(models.Model):
-    exercise = models.ForeignKey(
-        ProgramExercise, on_delete=models.CASCADE
-    )  # many to one
-    input_case = models.TextField()
-    expected_output = models.TextField()
-    is_public = models.BooleanField(default=True)
+# class TestCase(models.Model):
+#     exercise = models.ForeignKey(
+#         ProgramExercise, on_delete=models.CASCADE
+#     )  # many to one
+#     input_case = models.TextField()
+#     expected_output = models.TextField()
+#     is_public = models.BooleanField(default=True)
 
-    def __str__(self):
-        return self.input_case
+#     def __str__(self):
+#         return self.input_case
 
-    def serialize(self):
-        return {
-            "input": self.input_case,
-            "output": self.expected_output,
-        }
+#     def serialize(self):
+#         return {
+#             "input": self.input_case,
+#             "output": self.expected_output,
+#         }

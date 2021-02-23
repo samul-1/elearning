@@ -74,10 +74,10 @@ urlpatterns = [
         views.get_questions,
         name="get_questions",
     ),
-    re_path(
-        r"^eval_progsol/(?P<prog_id>\d+)/$", views.eval_progsol, name="eval_progsol"
-    ),
-    re_path(
-        r"^progex/(?P<prog_id>\d+)/$", views.program_exercise, name="program_exercise"
-    ),
+    # re_path(
+    #     r"^eval_progsol/(?P<prog_id>\d+)/$", views.eval_progsol, name="eval_progsol"
+    # ),
+    # re_path(
+    #     r"^progex/(?P<prog_id>\d+)/$", views.program_exercise, name="program_exercise"
+    # ),
 ]

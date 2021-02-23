@@ -1,0 +1,26 @@
+/accounts/course_signup/<course_id>/	users.views.course_signup	course_signup
+/accounts/login/	django.contrib.auth.views.LoginView	login
+/accounts/logout/	django.contrib.auth.views.LogoutView	logout
+/accounts/password_change/	users.views.change_password	change_password
+/accounts/password_reset/	django.contrib.auth.views.PasswordResetView	password_reset
+/accounts/profile/	users.views.profile	profile
+/accounts/register/	users.views.register	signup
+/accounts/register/teacher/	users.views.teacher_register	teacher_signup
+/course/<course_id>/	elearningapp.views.view_course	view_course
+/course_cp/<course_id>/	elearningapp.views.course_cp	course_cp
+/createcourse	elearningapp.views.create_course	create_course
+/delete_question_history/<course_id>/	elearningapp.views.delete_question_history	delete_question_history
+/edit_question/<course_id>/	elearningapp.views.edit_question	edit_question
+/edit_question/<course_id>/<question_id>/	elearningapp.views.edit_question	edit_question
+/get_questions/<course_id>/<amount>/<starting_from_pk>/	elearningapp.views.get_questions	get_questions
+/get_questions/<course_id>/<amount>/<starting_from_pk>/<category>/	elearningapp.views.get_questions	get_questions
+/get_reports/<course_id>/	elearningapp.views.get_course_reports	get_course_reports
+/get_seen_questions/<course_id>/<amount>/	elearningapp.views.get_seen_questions	get_seen_questions
+/get_seen_questions/<course_id>/<amount>/<starting_from_pk>/	elearningapp.views.get_seen_questions	get_seen_questions
+/question_history/<course_id>/	elearningapp.views.question_history	question_history
+/report	elearningapp.views.report_question	report_question
+/send_answers	elearningapp.views.check_answers	send_answers
+/test/<course_id>/	elearningapp.views.render_test	render_test	login_required
+/test_history/<course_id>/	elearningapp.views.test_history	test_history
+/update_permissions/<course_id>/	elearningapp.views.update_course_permissions	update_course_permissions
+/users/<course_id>/	elearningapp.views.get_course_users	get_course_users

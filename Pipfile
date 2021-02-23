@@ -10,6 +10,12 @@ mysqlclient = "*"
 naked = "*"
 js2py = "*"
 sphinx = "*"
+django-extensions = "*"
+graphviz = "*"
+pygraphviz = "*"
+pydot = "*"
+pydot-ng = "*"
+isort = "*"
 
 [dev-packages]
 

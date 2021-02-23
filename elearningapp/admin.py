@@ -7,8 +7,8 @@ class StaffActionAdmin(admin.ModelAdmin):
     list_display = ("course", "action", "user", "question")
 
 
-class ProgramExerciseAdmin(admin.ModelAdmin):
-    list_display = ("text", "course")
+# class ProgramExerciseAdmin(admin.ModelAdmin):
+#     list_display = ("text", "course")
 
 
 class TestCaseAdmin(admin.ModelAdmin):
@@ -77,8 +77,8 @@ admin.site.register(ActiveTest, ActiveTestAdmin)
 admin.site.register(AnswersInTakenTest, AnswersInTakenTestAdmin)
 admin.site.register(TakenTest, TakenTestAdmin)
 admin.site.register(SeenQuestion, SeenQuestionAdmin)
-admin.site.register(ProgramExercise, ProgramExerciseAdmin)
-admin.site.register(TestCase, TestCaseAdmin)
+# admin.site.register(ProgramExercise, ProgramExerciseAdmin)
+# admin.site.register(TestCase, TestCaseAdmin)
 admin.site.register(StaffAction, StaffActionAdmin)
 admin.site.register(CoursePermission, CoursePermissionAdmin)
 admin.site.register(Report, ReportAdmin)

@@ -1,36 +1,36 @@
-from django.shortcuts import render
+import json
+import random
+import subprocess
+
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.db.models import Q
 from django.http import (
     HttpResponse,
-    JsonResponse,
+    HttpResponseBadRequest,
     HttpResponseForbidden,
-    HttpResponseNotFound,
     HttpResponseNotAllowed,
+    HttpResponseNotFound,
+    JsonResponse,
 )
+from django.shortcuts import get_object_or_404, render
+from django.template import loader
+from users.models import CourseSpecificProfile, GlobalProfile
+
+from .exceptions import OutOfQuestionsException
+from .forms import CourseForm, PermissionForm, QuestionForm, ReportForm
 from .models import (
-    Question,
-    Course,
-    CoursePermission,
-    Category,
     ActiveTest,
     Answer,
-    TakenTest,
     AnswersInTakenTest,
-    SeenQuestion,
-    ProgramExercise,
-    TestCase,
+    Category,
+    Course,
+    CoursePermission,
+    Question,
     Report,
+    SeenQuestion,
+    TakenTest,
 )
-from users.models import CourseSpecificProfile, GlobalProfile
-from .forms import QuestionForm, CourseForm, PermissionForm, ReportForm
-from django.contrib.auth.models import User
-import random
-from django.db.models import Q
-from django.template import loader
-import json
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404
-import subprocess
-from .exceptions import OutOfQuestionsException
 
 
 @login_required
@@ -47,6 +47,7 @@ def create_course(request):
             CourseSpecificProfile.objects.create(user=request.user, course=new_course)
         else:
             print(form.errors)
+            return HttpResponseBadRequest()
 
         return JsonResponse({"courseId": new_course.pk}, safe=False)
 
@@ -155,6 +156,7 @@ def edit_question(request, course_id, question_id=None):
             return JsonResponse(updated_question.format_complete_question(), safe=False)
         else:
             print(form.errors)
+            return HttpResponseBadRequest()
 
     # GET
     categories = Category.objects.filter(course=course)
@@ -180,7 +182,7 @@ def edit_question(request, course_id, question_id=None):
 # if accessed via PUT, updates the status of the specified report
 @login_required
 def report_question(request):
-    if request.method != "POST" and request.method != "PUT":
+    if request.method not in ["POST", "PUT"]:
         return HttpResponseNotAllowed()
 
     form_data = json.loads(request.body.decode("utf-8"))
@@ -196,6 +198,7 @@ def report_question(request):
             return JsonResponse({"success": True})
         else:
             print(form.errors)
+            return HttpResponseBadRequest()
 
     if request.method == "PUT":
         report = get_object_or_404(Report, pk__exact=form_data["reportId"])
@@ -211,6 +214,7 @@ def report_question(request):
             return JsonResponse({"success": True})
         else:
             print(form.errors)
+            return HttpResponseBadRequest()
 
 
 # if accessed via PUT, updates or creates the permissions of a user for a course,
@@ -253,6 +257,7 @@ def update_course_permissions(request, course_id):
             return JsonResponse({"success": True})
         else:
             print(form.errors)
+            return HttpResponseBadRequest()
 
     if request.method == "DELETE":
         try:
@@ -322,6 +327,8 @@ def add_question(request, course_id):
             return JsonResponse("ok", safe=False)
         else:
             print(form.errors)
+            return HttpResponseBadRequest()
+
         return JsonResponse({"success": True})
 
     # GET
@@ -332,18 +339,18 @@ def add_question(request, course_id):
     )
 
 
-@login_required
-def program_exercise(request, prog_id):
-    exercise = get_object_or_404(ProgramExercise, pk__exact=prog_id)
+# @login_required
+# def program_exercise(request, prog_id):
+#     exercise = get_object_or_404(ProgramExercise, pk__exact=prog_id)
 
-    return render(
-        request,
-        "elearningapp/program.html",
-        {
-            "exercise": exercise,
-            "public_test_cases": list(exercise.get_public_test_cases()),
-        },
-    )
+#     return render(
+#         request,
+#         "elearningapp/program.html",
+#         {
+#             "exercise": exercise,
+#             "public_test_cases": list(exercise.get_public_test_cases()),
+#         },
+#     )
 
 
 # def test_tex(request):
@@ -355,46 +362,46 @@ def program_exercise(request, prog_id):
 #     return HttpResponse(":)")
 
 
-@login_required
-def eval_progsol(request, prog_id):
-    exercise = get_object_or_404(ProgramExercise, pk__exact=prog_id)
-    count = 0  # number of passed test cases
+# @login_required
+# def eval_progsol(request, prog_id):
+#     exercise = get_object_or_404(ProgramExercise, pk__exact=prog_id)
+#     count = 0  # number of passed test cases
 
-    program = json.loads(
-        request.body.decode("utf-8")
-    )  # user's submission is in request body
+#     program = json.loads(
+#         request.body.decode("utf-8")
+#     )  # user's submission is in request body
 
-    for testcase in exercise.get_test_cases():
-        inputcase = testcase.input_case
+#     for testcase in exercise.get_test_cases():
+#         inputcase = testcase.input_case
 
-        # call node to evaluate user's submission passing the test case input parameters
-        res = subprocess.check_output(
-            [
-                "node",
-                "elearningapp/node_scripts/evalUserFunction.js",
-                program,
-                inputcase,
-            ]
-        )
-        res = str(res)[2:-3]  # trim b' and \n' from the string converted from byte type
+#         # call node to evaluate user's submission passing the test case input parameters
+#         res = subprocess.check_output(
+#             [
+#                 "node",
+#                 "elearningapp/node_scripts/evalUserFunction.js",
+#                 program,
+#                 inputcase,
+#             ]
+#         )
+#         res = str(res)[2:-3]  # trim b' and \n' from the string converted from byte type
 
-        # successful test case
-        if res == testcase.expected_output:
-            count += 1
-    if (
-        count / TestCase.objects.filter(exercise=exercise).count()
-    ) * 100 >= exercise.minimum_passing_testcase_perc:
-        passing = 1
-    else:
-        passing = 0
+#         # successful test case
+#         if res == testcase.expected_output:
+#             count += 1
+#     if (
+#         count / TestCase.objects.filter(exercise=exercise).count()
+#     ) * 100 >= exercise.minimum_passing_testcase_perc:
+#         passing = 1
+#     else:
+#         passing = 0
 
-    outcome = {
-        "passing": passing,
-        "positiveCases": count,
-        "totalCases": exercise.get_test_cases().count(),
-    }
+#     outcome = {
+#         "passing": passing,
+#         "positiveCases": count,
+#         "totalCases": exercise.get_test_cases().count(),
+#     }
 
-    return JsonResponse(outcome)
+#     return JsonResponse(outcome)
 
 
 # renders a test for the user
