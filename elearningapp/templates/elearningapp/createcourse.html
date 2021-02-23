@@ -15,7 +15,9 @@
         <h1>Creazione nuovo corso</h1>
         {% load render_bundle from webpack_loader %}
         <div id="app">
-            <course-setup></course-setup>
+            <course-setup
+            :post-api-url="'{% url 'create_course' %}'"
+            ></course-setup>
         </div>
         {% render_bundle 'chunk-vendors' %}
         {% render_bundle 'vue_app_course_setup' %}

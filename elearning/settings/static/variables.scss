@@ -1,0 +1,29 @@
+// correct, incorrect
+$red: rgb(190, 0, 0);
+$green: rgb(0, 110, 9);
+
+// palette colors
+$primary: #1f276f;
+$secondary: rgb(99, 99, 99);
+$danger: rgba(190, 79, 79, 0.35);
+$dark: #142B33;
+$light: rgb(232, 240, 254);
+$gray: rgb(165, 165, 165);
+
+// variations of palette colors
+$primary-hover: #293496;
+$darker: #31363a;
+
+// user roles
+$purple: rgb(91, 0, 128);
+$orange: rgb(250, 79, 0);
+
+// $primary-gradient: linear-gradient(to bottom, #005fec, #0061f1, #0063f5, #0065fa, #0067ff);
+
+$background: white;
+
+// used for borderless boxes
+$box-shadow-as-border: 0 0 5px rgba(165, 165, 165, 0.7);
+
+$serif-font: 'PT Serif Caption',
+serif;

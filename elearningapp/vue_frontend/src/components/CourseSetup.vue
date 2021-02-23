@@ -416,6 +416,7 @@ export default {
   components: {},
   props: {
     questions: Array,
+    postApiUrl: String,
   },
   data: () => {
     return {
@@ -518,7 +519,7 @@ export default {
       console.log(postData);
       // this.loading = true;
       axios
-        .post("http://127.0.0.1:8000/createcourse", postData)
+        .post(this.postApiUrl, postData)
         .then((response) => {
           // this.$root.$emit("bv::show::modal", "outcome-modal", "#sendAnswers");
           console.log(response);

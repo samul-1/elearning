@@ -1,0 +1,385 @@
+/* ------------------
+Table of contents
+0. imports
+1. global styles
+2. layout
+3. typography
+4. buttons
+5. component styles
+6. vue animation classes
+------------------ */
+/* ------------------
+0. imports
+------------------ */
+@import url("https://fonts.googleapis.com/css2?family=Raleway&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Quicksand&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=PT+Serif+Caption&display=swap");
+/* ------------------
+1. global styles
+------------------ */
+html,
+body {
+  /*
+    font-family: 'Open Sans', sans-serif !important;
+    font-family: 'Quicksand', sans-serif !important;
+    */
+  font-family: 'Oxygen', sans-serif !important;
+}
+
+.bg-danger {
+  background: rgba(190, 79, 79, 0.35) !important;
+}
+
+.bg-dark {
+  background-color: #142B33 !important;
+}
+
+/* ------------------
+2. layout
+------------------ */
+#page_wrapper {
+  padding-top: 4rem;
+  padding-bottom: 2rem;
+  width: 80%;
+  margin: auto;
+  margin-top: 1rem;
+}
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
+  #page_wrapper {
+    width: 90%;
+  }
+}
+
+.question-box {
+  border: none;
+  border-radius: 0.8rem;
+  padding: 1rem 2.5rem;
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(49, 49, 49, 0.5);
+          box-shadow: 0px 0px 5px 0px rgba(49, 49, 49, 0.5);
+}
+
+.w-90 {
+  width: 90% !important;
+}
+
+/* ------------------
+3. typography
+------------------ */
+h1,
+h3 {
+  margin-bottom: 1rem;
+}
+
+h2 {
+  margin-bottom: 2rem;
+}
+
+.title-muted {
+  opacity: 0.7;
+  font-size: .9rem;
+}
+
+.form-error-text,
+.errorlist {
+  color: #be0000 !important;
+}
+
+.correct {
+  color: #006e09 !important;
+  text-shadow: 0 0 1px #006e09;
+}
+
+.incorrect {
+  color: #be0000 !important;
+  text-shadow: 0 0 1px #be0000;
+  opacity: 0.4;
+}
+
+.passed {
+  color: #006e09;
+  font-weight: 900;
+}
+
+.failed {
+  color: #be0000;
+  font-weight: 900;
+}
+
+.navbar-item {
+  -webkit-transition: all .5s linear;
+  transition: all .5s linear;
+}
+
+.nav-item:hover {
+  -webkit-transform: perspective(200px) translateZ(5px);
+          transform: perspective(200px) translateZ(5px);
+}
+
+.navbar-user {
+  color: white;
+}
+
+.user-link {
+  color: white;
+  display: inline;
+  padding: 0 0 0 2px !important;
+}
+
+.user-link:hover {
+  color: #DCDCDC;
+}
+
+.dashboard-icon {
+  color: #bababa;
+}
+
+/* ------------------
+4. buttons
+------------------ */
+button:disabled:hover,
+button[disabled] {
+  cursor: not-allowed;
+}
+
+.btn-sm {
+  border: none;
+}
+
+.btn-rounded {
+  border-radius: .5rem;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+}
+
+.btn-success {
+  background-color: #006e09;
+  border-color: #006e09;
+}
+
+.btn-outline-success {
+  color: #006e09;
+  border-color: #006e09;
+}
+
+.btn-outline-success:hover {
+  background-color: #006e09;
+  border-color: #006e09;
+}
+
+.btn-outline-danger {
+  color: #be0000;
+  border-color: #be0000;
+}
+
+.btn-outline-danger:hover {
+  background-color: #be0000;
+  border-color: #be0000;
+}
+
+.btn-danger {
+  background-color: #be0000;
+  border-color: #be0000;
+}
+
+.btn-dark {
+  background-color: #142B33 !important;
+  border-color: #142B33 !important;
+}
+
+.btn-primary,
+.btn-primary.disabled,
+.btn-primary:disabled {
+  background-color: #1f276f;
+  border-color: #1f276f;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-outline-primary:active,
+.btn-primary:active {
+  background-color: #293496 !important;
+  border-color: #293496 !important;
+}
+
+.btn-secondary {
+  background-color: #636363;
+  border-color: #636363;
+}
+
+.btn-outline-primary {
+  color: #1f276f;
+  border-color: #1f276f;
+}
+
+.btn-outline-secondary {
+  color: #636363;
+  border-color: #636363;
+}
+
+.btn-outline-primary:hover {
+  background-color: #1f276f;
+  border-color: #1f276f;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #636363;
+  border-color: #636363;
+}
+
+.small-button {
+  padding: 0rem 1rem;
+}
+
+.dashboard-btn {
+  border-radius: 1rem;
+  padding: 1rem !important;
+  -webkit-box-shadow: 0 0 4px rgba(71, 71, 71, 0.55);
+          box-shadow: 0 0 4px rgba(71, 71, 71, 0.55);
+  -webkit-transition: all .1s linear;
+  transition: all .1s linear;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.dashboard-btn:hover {
+  -webkit-transform: perspective(200px) translateZ(1.5px);
+          transform: perspective(200px) translateZ(1.5px);
+  background-color: #31363a;
+  -webkit-box-shadow: 0 0 8px rgba(71, 71, 71, 0.75);
+          box-shadow: 0 0 8px rgba(71, 71, 71, 0.75);
+}
+
+/* ------------------
+5. component styles
+------------------ */
+.form-error {
+  border: 1.5px solid #be0000 !important;
+  background-color: rgba(190, 79, 79, 0.35) !important;
+}
+
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.75) !important;
+}
+
+.inline-icon {
+  font-size: 1.2rem;
+  margin-right: .5rem;
+}
+
+.shadow-sm-c {
+  -webkit-box-shadow: 0 0 0.7rem rgba(0, 0, 0, 0.65) !important;
+          box-shadow: 0 0 0.7rem rgba(0, 0, 0, 0.65) !important;
+}
+
+.no-border {
+  border: none;
+}
+
+.no-border .card-body {
+  margin-top: -0.5rem;
+  padding: 0;
+}
+
+.overlay-card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  z-index: 2;
+  -webkit-box-shadow: 0 0 15px gray;
+          box-shadow: 0 0 15px gray;
+  border: none !important;
+  border-radius: 0.3rem !important;
+  width: 30%;
+}
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) {
+  .overlay-card {
+    width: 90%;
+  }
+}
+
+.question-filter-grid {
+  background: #636363;
+  color: white;
+  border-radius: 3rem;
+  padding: .5rem 1.5rem;
+}
+
+.transparent-card {
+  background-color: transparent !important;
+}
+
+.list-wrapper {
+  padding-bottom: 10px;
+}
+
+.progress-border {
+  height: 22px;
+  width: 47%;
+  border: 1px solid #a5a5a5;
+  position: relative;
+  border-radius: .2rem;
+}
+
+.progress-amount {
+  background: #006e09;
+  height: 20px;
+}
+
+.average-text {
+  position: absolute;
+  top: 0;
+  font-size: .8rem;
+  padding: 2px;
+  text-align: center;
+}
+
+/* ------------------
+6. vue animation classes
+------------------ */
+.slide-fade-enter-active {
+  -webkit-transition: all .2s linear;
+  transition: all .2s linear;
+  -webkit-transition-delay: .3s;
+          transition-delay: .3s;
+}
+
+.slide-fade-leave-active {
+  -webkit-transition: all .2s linear;
+  transition: all .2s linear;
+}
+
+.slide-fade-enter {
+  -webkit-transform: translateX(-200px);
+          transform: translateX(-200px);
+  opacity: 0;
+}
+
+.slide-fade-enter-to {
+  -webkit-transform: translateX(0);
+          transform: translateX(0);
+  opacity: 1;
+}
+
+.slide-fade-leave-to {
+  -webkit-transform: translateX(200px);
+          transform: translateX(200px);
+  opacity: 0;
+}
+
+.overlay-text-leave-active,
+.overlay-text-enter-active {
+  -webkit-transition: all .4s ease;
+  transition: all .4s ease;
+}
+
+.overlay-text-leave-to,
+.overlay-text-enter {
+  opacity: 0;
+}
+/*# sourceMappingURL=style.css.map */

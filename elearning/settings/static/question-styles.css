@@ -1,0 +1,136 @@
+/*
+This file contains styling for all the vue components that contain questions
+*/
+/* ------------------
+Table of contents
+1. CollapsableQuestionPreview
+2. QuestionPreview
+3. Question
+4. SeenQuestion
+------------------ */
+/* ------------------
+1. CollapsableQuestionPreview
+------------------ */
+.preview-box {
+  height: 300px;
+  background: -webkit-gradient(linear, left bottom, left top, color-stop(21%, #e4e4e4), color-stop(10%, white));
+  background: linear-gradient(to top, #e4e4e4 21%, white 10%);
+}
+
+.preview-text {
+  height: 200px;
+  word-break: break-all;
+  overflow-y: hidden;
+  position: relative;
+}
+
+.preview-text-fade {
+  background-image: -webkit-gradient(linear, left top, left bottom, from(transparent), to(white));
+  background-image: linear-gradient(to bottom, transparent, white);
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  margin: 0;
+  padding: 30px 0;
+}
+
+.hidden {
+  height: 0;
+  opacity: 0;
+  margin: 0;
+  position: fixed;
+  bottom: -1000px;
+}
+
+.answer-paragraph-full:nth-of-type(2),
+.answer-paragraph-preview:first-of-type {
+  padding-top: 1.2rem;
+  position: relative;
+}
+
+.answer-paragraph-full:nth-of-type(2):before,
+.answer-paragraph-preview:first-of-type:before {
+  content: "";
+  border-top: 1px solid lightgray;
+  -webkit-box-shadow: 0 0 3px rgba(114, 114, 114, 0.2);
+          box-shadow: 0 0 3px rgba(114, 114, 114, 0.2);
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+/* ------------------
+2. QuestionPreview
+------------------ */
+.question-preview-box {
+  border: none;
+  border-radius: 0.8rem;
+  padding: 1rem 2.5rem;
+  -webkit-box-shadow: 0px 0px 3px 0px rgba(19, 19, 19, 0.8);
+          box-shadow: 0px 0px 3px 0px rgba(19, 19, 19, 0.8);
+}
+
+.comment {
+  margin-left: 50px;
+}
+
+/* ------------------
+3. Question
+------------------ */
+.question-label {
+  margin-right: .5rem;
+}
+
+.question-wrapper {
+  padding: 2rem 0;
+}
+
+.question-box {
+  border: 1px solid grey;
+  border-radius: 3px;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 15px;
+  overflow-x: auto;
+}
+
+.answer:hover {
+  cursor: pointer;
+  background-color: rgba(194, 194, 194, 0.2);
+  border-radius: 5px;
+  -webkit-transition: 0.1s ease;
+  transition: 0.1s ease;
+}
+
+.answer {
+  width: 90%;
+  -webkit-transition: 0.1s ease;
+  transition: 0.1s ease;
+}
+
+.answer-list {
+  padding: 0.5rem 1rem;
+}
+
+.answer-list li {
+  padding: 0.2rem 0;
+}
+
+/* ------------------
+4. SeenQuestion
+------------------ */
+.seen-question-box {
+  border: none;
+  margin: 2rem;
+  border-radius: 0.8rem;
+  padding: 1rem 2.5rem;
+  -webkit-box-shadow: 0px 0px 3px 0px rgba(19, 19, 19, 0.8);
+          box-shadow: 0px 0px 3px 0px rgba(19, 19, 19, 0.8);
+}
+
+.answer-p {
+  -webkit-transition: all .3s ease;
+  transition: all .3s ease;
+}
+/*# sourceMappingURL=question-styles.css.map */
