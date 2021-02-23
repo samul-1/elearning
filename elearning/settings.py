@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django_extensions",  # development only
 ]
 
 VUE_FRONTEND_DIR = os.path.join(BASE_DIR, "elearningapp/vue_frontend")
