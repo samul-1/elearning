@@ -13,10 +13,13 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
-import dj_database_url
+# import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# ! BASE_DIR = Path(__file__).resolve().parent.parent
+
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 # Quick-start development settings - unsuitable for production
@@ -109,23 +112,23 @@ WSGI_APPLICATION = "elearning.wsgi.application"
 # }
 
 # ! KEEP THIS FOR DEV
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.mysql",
-#         "NAME": "elearning",
-#         "USER": "samuele",
-#         "PASSWORD": "4JHycb79",
-#         "HOST": "localhost",
-#         "PORT": "3306",
-#     }
-# }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "elearning",
+        "USER": "samuele",
+        "PASSWORD": "4JHycb79",
+        "HOST": "localhost",
+        "PORT": "3306",
+    }
+}
 
 # ! ONLY FOR TEST ON DO
-DATABASES = {
-    "default": dj_database_url.parse(
-        os.environ.get("DATABASE_URL", False), conn_max_age=600
-    )
-}
+# DATABASES = {
+#     "default": dj_database_url.parse(
+#         os.environ.get("DATABASE_URL", False), conn_max_age=600
+#     )
+# }
 
 
 # Password validation
@@ -163,7 +166,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-
+STATIC_ROOT = os.path.join(PROJECT_DIR, "staticfiles")
 STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
