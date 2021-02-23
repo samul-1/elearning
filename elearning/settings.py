@@ -106,14 +106,23 @@ WSGI_APPLICATION = "elearning.wsgi.application"
 #     }
 # }
 
+# ! KEEP THIS FOR DEV
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": "elearning",
+#         "USER": "samuele",
+#         "PASSWORD": "4JHycb79",
+#         "HOST": "localhost",
+#         "PORT": "3306",
+#     }
+# }
+
+# ! ONLY FOR TEST ON DO
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "elearning",
-        "USER": "samuele",
-        "PASSWORD": "4JHycb79",
-        "HOST": "localhost",
-        "PORT": "3306",
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
