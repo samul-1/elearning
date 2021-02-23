@@ -34,7 +34,6 @@ def tex_to_svg(formula):
                     "../elearning/elearningapp/tex-render/component/tex2svg",
                     stripped_token,
                 ],
-                shell=True,
             )
             # strip off the "b'" and "\n'"
             output_str += str(res)[2:-3]
