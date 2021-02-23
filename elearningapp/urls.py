@@ -1,4 +1,4 @@
-from django.urls import path, include, re_path
+from django.urls import include, path, re_path
 
 from . import views
 
@@ -53,6 +53,11 @@ urlpatterns = [
         r"^edit_question/(?P<course_id>\d+)/(?P<question_id>\d+)/$",
         views.edit_question,
         name="edit_question",
+    ),
+    re_path(
+        r"^get_questions/(?P<course_id>\d+)/$",
+        views.get_questions,
+        name="get_questions",
     ),
     re_path(
         r"^get_questions/(?P<course_id>\d+)/(?P<amount>\d+)/(?P<starting_from_pk>\d+)/$",

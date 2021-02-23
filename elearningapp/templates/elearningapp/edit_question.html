@@ -10,6 +10,7 @@
     :course-id="{{ course_id }}"
     :categories="{{ categories }}"
     :edit-question-api-url="'{% url 'edit_question' course_id=course_id %}'"
+    :get-questions-api-url="'{% url 'get_questions' course_id=course_id %}'"
     {% if editing_id %}
         :open-editor={{editing_id}}
     {%endif%}

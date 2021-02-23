@@ -111,6 +111,7 @@ export default {
       default: () => [],
     },
     editQuestionApiUrl: String,
+    getQuestionsApiUrl: String,
     openEditor: {
       type: Number,
       default: null,
@@ -199,11 +200,8 @@ export default {
       ) {
         axios
           .get(
-            "http://127.0.0.1:8000/get_questions/" +
-              this.courseId +
-              "/1/" +
-              (this.openEditor - 1) +
-              "/"
+            //"http://127.0.0.1:8000/get_questions/" +
+            this.getQuestionsApiUrl + "1/" + (this.openEditor - 1) + "/"
           )
           // TODO pass this url as a prop
           .then((response) => {
@@ -234,9 +232,8 @@ export default {
       this.loading = true;
       axios
         .get(
-          "http://127.0.0.1:8000/get_questions/" +
-            this.courseId +
-            "/" +
+          //"http://127.0.0.1:8000/get_questions/" +
+          this.getQuestionsApiUrl +
             amount +
             "/" +
             this.maxQuestionId +
