@@ -139,7 +139,9 @@ class Course(models.Model):
 # used to keep track of courses assistants' permissions
 # (it's meant to work kinda like Django built-in permission system, but on a per-instance basis rather than per-model)
 class CoursePermission(models.Model):
-    user = models.OneToOneField("users.CourseSpecificProfile", on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        "users.CourseSpecificProfile", on_delete=models.CASCADE, null=True
+    )
     # course = models.ForeignKey(Course, on_delete=models.CASCADE)
     can_add_questions = models.BooleanField(default=True)
     can_edit_questions = models.BooleanField(default=True)
