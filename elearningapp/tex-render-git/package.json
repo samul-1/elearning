@@ -1,0 +1,29 @@
+{
+  "name": "MathJax-demos-node",
+  "version": "3.1.0",
+  "description": "Demos using MathJax v3 in node",
+  "dependencies": {
+    "esm": "^3.2.25",
+    "mathjax-full": "^3.1.0",
+    "yargs": "^15.4.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.1",
+    "@babel/preset-env": "^7.11.0",
+    "babel-loader": "^8.1.0",
+    "mj-context-menu": "^0.5.4",
+    "terser-webpack-plugin": "^4.1.0",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mathjax/MathJax-demos-node/"
+  },
+  "keywords": [
+    "MathJax",
+    "examples",
+    "nodejs"
+  ],
+  "license": "Apache-2.0"
+}
