@@ -171,6 +171,7 @@ STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "elearningapp/static/"),
+    os.path.join(BASE_DIR, "elearningapp/django_vue_mpa/static/"),
     os.path.join(BASE_DIR, "users/static/"),
 ]
 
