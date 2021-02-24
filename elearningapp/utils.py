@@ -26,12 +26,21 @@ def tex_to_svg(formula):
             # prepend a backslash: this prevents issues if the TeX formula starts with a - character
             # which node would otherwise interpret as an argument (the node script will remove this backslash)
             stripped_token = "\\" + stripped_token
+            # res = subprocess.check_output(
+            #     [
+            #         "node",
+            #         "-r",
+            #         "esm",
+            #         "../elearning/elearningapp/tex-render/component/tex2svg",
+            #         stripped_token,
+            #     ],
+            # )
             res = subprocess.check_output(
                 [
                     "node",
                     "-r",
                     "esm",
-                    "../elearning/elearningapp/tex-render/component/tex2svg",
+                    "tex-render/component/tex2svg",
                     stripped_token,
                 ],
             )
