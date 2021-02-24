@@ -26,6 +26,7 @@ def tex_to_svg(formula):
             # prepend a backslash: this prevents issues if the TeX formula starts with a - character
             # which node would otherwise interpret as an argument (the node script will remove this backslash)
             stripped_token = "\\" + stripped_token
+            # ! this is for local development
             # res = subprocess.check_output(
             #     [
             #         "node",
@@ -35,6 +36,7 @@ def tex_to_svg(formula):
             #         stripped_token,
             #     ],
             # )
+            # * comment this out when not deploying to production and use the above instead
             res = subprocess.check_output(
                 [
                     "node",
