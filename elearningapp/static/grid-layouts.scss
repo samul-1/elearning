@@ -9,6 +9,13 @@
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
 }
 
+// make the two column grid's cols take up 1fr each on big screens
+@media screen and (min-device-width: 1432px) {
+    .two-col-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
 .dashboard-grid {
     grid-gap: 3rem;
 }
@@ -59,6 +66,13 @@
     grid-column: 1 / span 2;
 }
 
+// for very big screens, make sure this spans the whole grid (maybe choose a better name for the class)
+@media screen and (min-device-width: 1540px) {
+    .column-span-2 {
+        grid-column: 1 / span 3;
+    }
+}
+
 .grid-card {
     display: grid;
     grid-template-columns: 110px auto;
@@ -88,8 +102,8 @@
     align-self: flex-start !important;
 }
 
-// iPhone 6, 7, 8 portrait
-@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
+// iPhone 6, 7, 8 portrait and slightly below width-wise
+@media only screen and (min-device-width: 300px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
     .grid-test-history {
         display: grid;
         grid-template-columns: 1fr;
@@ -98,9 +112,21 @@
     .expanded-grid-column {
         grid-column: 1 / 1;
     }
+}
 
+// iPhone 6, 7, 8 portrait and landscape and slightly below width-wise
+@media only screen and (min-device-width: 300px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) {
     .one-col-mobile {
         grid-template-columns: 1fr;
+        grid-gap: 1rem;
     }
 
+}
+
+// iPad portrait
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+    .one-col-tablet {
+        grid-template-columns: 1fr;
+        grid-gap: 1rem;
+    }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="grid question-editor-grid one-col-mobile">
+  <div class="grid question-editor-grid one-col-mobile one-col-tablet">
     <div class="grid-col">
       <div>
         <h3>Testo della domanda</h3>

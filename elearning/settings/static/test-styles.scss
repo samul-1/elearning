@@ -10,6 +10,7 @@ This file contains styling for all the vue components that contain tests
 /* ------------------
 Table of contents
 1. TakenTest
+2. Test
 /* ------------------
 
 /* ------------------
@@ -57,4 +58,23 @@ Table of contents
     color: rgb(107, 107, 107); //!
     text-shadow: 0px 0px 1px rgb(94, 94, 94); //!
     align-self: flex-start;
+}
+
+/* ------------------
+2. Test
+------------------ */
+#send-answers-btn {
+    position: fixed;
+    top: 100px;
+    right: 100px;
+}
+
+// iPhone 6, 7, 8 portrait
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
+
+    #send-answers-btn {
+        position: relative !important;
+        top: 0;
+        right: 0;
+    }
 }

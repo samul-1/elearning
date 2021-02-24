@@ -189,7 +189,7 @@
       grid-template-columns: 1fr 2fr;
 }
 
-@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) {
+@media only screen and (min-device-width: 300px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) {
   .login-box {
     padding: 2rem 2rem;
     width: 95%;
@@ -223,6 +223,14 @@
   }
   .desktop {
     display: none;
+  }
+}
+
+@media only screen and (min-device-width: 668px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+  .login-box {
+    padding: 2rem 2rem;
+    width: 70%;
+    height: 40%;
   }
 }
 /*# sourceMappingURL=auth-styles.css.map */

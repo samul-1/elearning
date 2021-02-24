@@ -57,11 +57,8 @@
         <p class="stat-title">Ultime azioni</p>
         <ul class="log-list">
           <li v-for="(action, index) in lastActions" :key="index">
-            <!-- spaces in timestamp are being replaced with T's to maintain compatibility with iOS
-                https://www.elliotjreed.com/post/javascript/2019-03-20_Invalid_date_format_in_Javascript_on_iOS_devices
-            -->
             <span class="text-muted timestamp">{{
-              formattedTimestamp(new Date(action.timestamp.replace(" ", "T")))
+              formattedTimestamp(action.timestamp)
             }}</span>
             {{ action.user }} ha
             {{ action.action == "E" ? "modificato" : "creato" }}
@@ -81,7 +78,7 @@
             :key="index"
           >
             <span class="text-muted timestamp">{{
-              formattedTimestamp(new Date(report.timestamp.replace(" ", "T")))
+              formattedTimestamp(report.timestamp)
             }}</span>
             {{ report.username }}
             <b-button
@@ -128,7 +125,7 @@
           shownReport.firstName
         }}
         {{ shownReport.lastName }}), <strong>in data</strong>
-        {{ formattedTimestamp(new Date(shownReport.timestamp.replace(" ", "T"))) }}
+        {{ formattedTimestamp(shownReport.timestamp) }}
       </p>
       <p>
         <strong>Stato:</strong>
@@ -272,7 +269,10 @@ export default {
     };
   },
   methods: {
-    formattedTimestamp(date) {
+    formattedTimestamp(timestamp) {
+      //  spaces in timestamp are being replaced with T's to maintain compatibility with iOS
+      //  https://www.elliotjreed.com/post/javascript/2019-03-20_Invalid_date_format_in_Javascript_on_iOS_devices
+      const date = new Date(timestamp?.replace(" ", "T"))
       return (
         (date.getDate() < 10 ? "0" + date.getDate() : date.getDate() + 1) +
         "/" +
