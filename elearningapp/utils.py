@@ -40,7 +40,7 @@ def tex_to_svg(formula):
                     "node",
                     "-r",
                     "esm",
-                    "tex-render/component/tex2svg",
+                    "elearningapp/tex-render/component/tex2svg",
                     stripped_token,
                 ],
             )
