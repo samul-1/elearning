@@ -151,7 +151,7 @@ export default {
       );
     },
     formattedDate() {
-      let date = new Date(this.timestamp);
+      let date = new Date(this.timestamp.replace(" ", "T"));
       return (
         date.getDate() +
         //(date.getDate() < 10 ? "0" + date.getDate() : date.getDate() + 1) +
