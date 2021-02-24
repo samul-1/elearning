@@ -166,8 +166,8 @@
     grid-template-columns: 1fr 2fr;
 }
 
-// iPhone 6, 6S, 7, 8 portrait
-@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) {
+// iPhone 6, 6S, 7, 8 portrait and slightly below width-wise
+@media only screen and (min-device-width: 300px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) {
     .login-box {
         padding: 2rem 2rem;
         width: 95%;
@@ -202,5 +202,14 @@
 
     .desktop {
         display: none;
+    }
+}
+
+// iPad portrait and slightly below width-wise
+@media only screen and (min-device-width: 668px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+    .login-box {
+        padding: 2rem 2rem;
+        width: 70%;
+        height: 40%;
     }
 }
