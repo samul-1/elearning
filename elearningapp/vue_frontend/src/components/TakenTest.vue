@@ -133,7 +133,9 @@ export default {
       return this.fullShown ? "Nascondi dettagli" : "Mostra dettagli";
     },
     formattedTimestamp() {
-      let date = new Date(this.timestamp);
+      // spaces in the timestamp are being replaced with T's to maintain compatibility with iOS
+      // https://www.elliotjreed.com/post/javascript/2019-03-20_Invalid_date_format_in_Javascript_on_iOS_devices
+      let date = new Date(this.timestamp.replace(" ", "T"));
       return (
         (date.getDate() < 10 ? "0" + date.getDate() : date.getDate() + 1) +
         "/" +

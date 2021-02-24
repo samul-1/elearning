@@ -90,4 +90,11 @@
   height: -moz-min-content;
   height: min-content;
 }
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
+  .quillWrapper,
+  .ql-editor {
+    max-width: 100%;
+  }
+}
 /*# sourceMappingURL=editor-styles.css.map */

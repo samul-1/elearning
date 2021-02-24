@@ -6,12 +6,7 @@
       label="Loading..."
     ></b-spinner>
     <div class="container-fluid h-100">
-      <div style="float: right; position: sticky; top: 70px">
-        <button class="btn btn-dark" ref="sendAnswers" @click="sendAnswers()">
-          <font-awesome-icon class="mr-1" icon="check" />
-          Invia risposte
-        </button>
-      </div>
+      <!--<div style="float: right; position: sticky; top: 70px">-->
       <div class="row">
         <Question
           v-for="(question, index) in questions"
@@ -21,6 +16,12 @@
           :questionIndex="index"
           @answer="registerAnswer($event, index)"
         />
+      </div>
+      <div id="send-answers-btn">
+        <button class="btn btn-dark" ref="sendAnswers" @click="sendAnswers()">
+          <font-awesome-icon class="mr-1" icon="check" />
+          Invia risposte
+        </button>
       </div>
 
       <b-modal
@@ -36,21 +37,21 @@
         <template #default="{}">
           <div class="container">
             <div class="row">
-              <div class="col-md-3 col-10">
+              <div class="col-12 col-md-3">
                 <p>
                   <strong>Punteggio: </strong>
                   <span class="score">{{ outcomeObj.score }}</span>
                 </p>
               </div>
-              <div class="col-3">
+              <div class="col-4 col-md-3">
                 <strong>Risposte corrette:</strong>
                 {{ outcomeObj.correctlyAnsweredQuestions.length }}
               </div>
-              <div class="col-3">
+              <div class="col-4 col-md-3">
                 <strong>Risposte errate:</strong>
                 {{ outcomeObj.incorrectlyAnsweredQuestions.length }}
               </div>
-              <div class="col-md-3 col-4">
+              <div class="col-4 col-md-3">
                 <strong>Risposte non date:</strong>
                 {{ outcomeObj.unansweredQuestions.length }}
               </div>

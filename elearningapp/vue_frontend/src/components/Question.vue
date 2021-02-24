@@ -1,5 +1,5 @@
 <template>
-  <div class="col-10 question-wrapper">
+  <div class="col-12 col-md-10 question-wrapper">
     <p class="question-text">
       <strong class="question-label"
         >Domanda{{

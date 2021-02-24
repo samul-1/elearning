@@ -1,5 +1,5 @@
 <template>
-  <div class="seen-question-box col-10">
+  <div class="seen-question-box col-12 col-md-10">
     <p class="question-text">
       <span v-html="text"></span>
     </p>

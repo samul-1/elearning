@@ -127,3 +127,11 @@ Table of contents
 .answer-p {
     transition: all .3s ease;
 }
+
+// iPhone 6, 7, 8 portrait
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
+    .seen-question-box {
+        margin: 1rem 0;
+        padding: .7rem;
+    }
+}
