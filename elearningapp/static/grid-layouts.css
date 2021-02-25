@@ -5,11 +5,11 @@
 
 /* ---------------- */
 .two-col-grid {
-  -ms-grid-columns: (minmax(350px, 1fr))[auto-fill];
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  -ms-grid-columns: (minmax(285px, 1fr))[auto-fill];
+      grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
 }
 
-@media screen and (min-device-width: 1432px) {
+@media screen and (min-device-width: 1189px) {
   .two-col-grid {
     -ms-grid-columns: 1fr 1fr;
         grid-template-columns: 1fr 1fr;

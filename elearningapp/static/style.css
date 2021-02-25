@@ -28,6 +28,11 @@ body {
   font-family: 'Oxygen', sans-serif !important;
 }
 
+html {
+  min-height: 100%;
+  position: relative;
+}
+
 .bg-danger {
   background: rgba(190, 79, 79, 0.35) !important;
 }
@@ -45,6 +50,18 @@ body {
   width: 80%;
   margin: auto;
   margin-top: 1rem;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.footer a {
+  color: #7cc8ff !important;
 }
 
 @media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
@@ -341,7 +358,7 @@ button[disabled] {
 
 @media (min-width: 576px) {
   .modal-dialog.modal-xl {
-    max-width: 700px !important;
+    max-width: 85% !important;
   }
 }
 

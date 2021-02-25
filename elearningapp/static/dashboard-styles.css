@@ -196,6 +196,13 @@ ul {
           break-inside: avoid;
 }
 
+@media only screen and (max-device-width: 374px) {
+  .user-list {
+    -webkit-column-count: 1 !important;
+            column-count: 1 !important;
+  }
+}
+
 @media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) {
   .user-list {
     -webkit-column-count: 2 !important;

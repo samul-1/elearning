@@ -82,17 +82,19 @@
             </nav>
         </header>
         {# The Document Body #}
-        <div class="" id="page_wrapper">
-            {% block content %}
-                ---
-            {% endblock content %}
-        </div>
+        <main role="main" class="mb-5">
+          <div id="page_wrapper">
+              {% block content %}
+                  ---
+              {% endblock content %}
+          </div>
+        </main>
         {# The Footer #}
-        <!--<div class="footer bg-dark">
+        <footer class="footer bg-dark">
             <div class="container">
-                <p>Copyright 2021 &copy; <a target="blank" href="http://bsamu.it">Samuele Bonini</a></p>
+                <p class="text-white py-3 mb-0">Copyright 2021 &copy; <a target="blank" href="http://bsamu.it">Samuele Bonini</a></p>
             </div>
-        </div>-->
+        </footer>
     </body>
 
     {# Set of blocks that can be used to display JavaScript files #}
