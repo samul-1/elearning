@@ -65,7 +65,7 @@ def course_cp(request, course_id):
 
     # reject with 403 if user isn't authorized to view the control panel for this course
     if course not in request.user.globalprofile.admin_of.all() and (
-        request.user.coursespecificprofile_set.filter(course=course).count == 0
+        request.user.coursespecificprofile_set.filter(course=course).count() == 0
         or not hasattr(
             request.user.coursespecificprofile_set.get(course=course),
             "coursepermission",
@@ -132,7 +132,7 @@ def edit_question(request, course_id, question_id=None):
 
     # reject with 403 if user isn't authorized to edit questions for this course
     if course not in request.user.globalprofile.admin_of.all() and (
-        request.user.coursespecificprofile_set.filter(course=course).count == 0
+        request.user.coursespecificprofile_set.filter(course=course).count() == 0
         or not hasattr(
             request.user.coursespecificprofile_set.get(course=course),
             "coursepermission",
@@ -226,7 +226,7 @@ def update_course_permissions(request, course_id):
 
     # reject with 403 if user isn't authorized to add assistants for this course
     if course not in request.user.globalprofile.admin_of.all() and (
-        request.user.coursespecificprofile_set.filter(course=course).count == 0
+        request.user.coursespecificprofile_set.filter(course=course).count() == 0
         or not hasattr(
             request.user.coursespecificprofile_set.get(course=course),
             "coursepermission",
@@ -299,7 +299,7 @@ def add_question(request, course_id):
     course = get_object_or_404(Course, pk__exact=course_id)
     # reject with 403 if user isn't authorized to add questions to this course
     if course not in request.user.globalprofile.admin_of.all() and (
-        request.user.coursespecificprofile_set.filter(course=course).count == 0
+        request.user.coursespecificprofile_set.filter(course=course).count() == 0
         or not hasattr(
             request.user.coursespecificprofile_set.get(course=course),
             "coursepermission",

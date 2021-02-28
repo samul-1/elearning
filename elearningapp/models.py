@@ -211,7 +211,9 @@ class Question(models.Model):
         output["text"] = self.rendered_text
 
         # get all answers to the question
-        answers = self.answer_set.all()  # Answer.objects.filter(question=self)
+        answers = self.answer_set.all().order_by(
+            "answer_index"
+        )  # Answer.objects.filter(question=self)
         output["answers"] = [a.rendered_text for a in list(answers)]
 
         # output["answers"] = {}  # index:text dictionary containing self's answer
@@ -238,7 +240,7 @@ class Question(models.Model):
         info["wrongAnswersPercentage"] = 100 - self.percentage_of_correct_answers
 
         # get the source text for all the answers
-        answers_sources = Answer.objects.filter(question=self)
+        answers_sources = Answer.objects.filter(question=self).order_by("answer_index")
         info["answersSources"] = [a.text for a in list(answers_sources)]
         return info
 

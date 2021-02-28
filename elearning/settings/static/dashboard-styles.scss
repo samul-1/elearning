@@ -192,6 +192,13 @@ ul {
 
 }
 
+// smaller than iPhones
+@media only screen and (max-device-width: 374px) {
+    .user-list {
+        column-count: 1 !important;
+    }
+}
+
 
 // iPhone 6, 7, 8 portrait
 @media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) {

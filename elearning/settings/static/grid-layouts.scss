@@ -6,11 +6,11 @@
 
 .two-col-grid {
     //grid-template-columns: 1fr 1fr;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
 }
 
 // make the two column grid's cols take up 1fr each on big screens
-@media screen and (min-device-width: 1432px) {
+@media screen and (min-device-width: 1189px) {
     .two-col-grid {
         grid-template-columns: 1fr 1fr;
     }

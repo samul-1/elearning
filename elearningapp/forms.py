@@ -1,15 +1,17 @@
+import json
+
 from django import forms
 from django.forms import ModelForm
+
 from .models import (
-    Course,
-    Question,
-    Category,
     Answer,
-    StaffAction,
+    Category,
+    Course,
     CoursePermission,
+    Question,
     Report,
+    StaffAction,
 )
-import json
 
 
 class ProgramForm(forms.Form):

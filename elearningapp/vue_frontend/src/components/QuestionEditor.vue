@@ -218,77 +218,16 @@ export default {
     // used to disable the save button when invalid information is supplied
     invalidForm() {
       return (
-        !this.questionTextData.length ||
-        this.answersData.some((a) => !a.length) ||
-        (this.categories.length && !this.categoryData.length)
+        !this.questionTextData.length || // question is empty
+        this.correctAnswerIndexData == -1 || // no correct answer is selected
+        this.answersData.some((a) => !a.length) || // there are empty answers
+        (this.categories.length && !this.categoryData.length) // course has categories and no category is selected
       );
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
 @import "../../../static/editor-styles.css";
-
-/* .transparent-card {
-  background-color: transparent !important;
-}
-
-.list-wrapper {
-  padding-bottom: 10px;
-}
-
-.quillWrapper,
-.ql-editor {
-  width: 100%;
-  max-width: 38vw;
-}
-
-.answer-editor .quillWrapper,
-.answer-editor .ql-editor {
-  height: 100px !important;
-  min-height: 100px !important;
-  max-width: 30vw;
-}
-
-.big-editor .quillWrapper,
-.big-editor .ql-editor {
-  height: 150px !important;
-  min-height: 150px !important;
-}
-
-.two-to-one-col-fr {
-  height: 150px;
-}
-
-.radio-option {
-  margin-top: 0.5rem;
-}
-
-/* 
-  TODO fix sticky positioning that needs separate top values for each element in the div,
-  TODO the whole div should be sticky and elements inside it should move together as a unit 
- 
-.preview h3,
-.preview div,
-.preview button {
-  position: sticky;
-  top: 12%;
-}
-
-.preview div {
-  top: 20%;
-  max-width: 45vw;
-  word-break: break-all;
-}
-
-.preview button {
-  top: 52%;
-}
-
-.preview-col {
-  position: sticky;
-  top: 12%;
-  height: min-content;
-} */
 </style>

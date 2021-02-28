@@ -137,7 +137,7 @@ export default {
       // https://www.elliotjreed.com/post/javascript/2019-03-20_Invalid_date_format_in_Javascript_on_iOS_devices
       let date = new Date(this.timestamp.replace(" ", "T"));
       return (
-        (date.getDate() < 10 ? "0" + date.getDate() : date.getDate() + 1) +
+        (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) +
         "/" +
         (date.getMonth() + 1 < 10
           ? "0" + (date.getMonth() + 1)
@@ -173,61 +173,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 @import "../../../static/test-styles.css";
-/* @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@800&display=swap");
-
-
-}
-.taken-test {
-  box-shadow: 0px 0px 3px 0px rgba(19, 19, 19, 0.8);
-  border: 0px solid grey;
-  border-radius: 0.8rem;
-  overflow-x: auto;
-  margin: 10px;
-  padding: 15px;
-  font-family: "Source Sans Pro", sans-serif;
-  /* background-color: #f2f2f2; */
-
-/* .mb-2px {
-  margin-bottom: 2px;
-}
-
-.test-preview {
-  display: grid;
-  grid-template-rows: repeat(4, 1fr);
-  align-items: center;
-  justify-items: center;
-  border: none;
-  border-radius: 0.8rem;
-  padding: 10px;
-  box-shadow: 0px 0px 3px 0px rgba(19, 19, 19, 0.8);
-  background: linear-gradient(to bottom, rgb(228, 228, 228) 21%, white 10%);
-} */
-
-/* .preview-passed {
-  background-color: rgba(55, 194, 0, 0.2);
-}
-
-.preview-failed {
-  background-color: rgba(255, 0, 0, 0.2);
-}
-
-.test-score-preview {
-  font-size: 2rem;
-  font-weight: thin;
-}
-
-.your-score-preview {
-  font-weight: bold;
-}
-
-.test-date-preview {
-  color: rgb(107, 107, 107);
-  text-shadow: 0px 0px 1px rgb(94, 94, 94);
-  align-self: flex-start;
-} */
 </style>
