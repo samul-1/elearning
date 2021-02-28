@@ -204,7 +204,9 @@ export default {
     serializedQuestionData() {
       const obj = {
         text: this.questionTextWithoutParagraphTag,
-        solution_text: this.solutionTextWithoutParagraphTag,
+        solution_text: this.solutionTextWithoutParagraphTag
+          ? this.solutionData.length
+          : "(soluzione non ancora inserita)", // TODO handle this on serverside
         category: this.categoryData,
         answers: this.answerTextsWithoutParagraphTag,
         correct_answer_index: this.correctAnswerIndexData,
@@ -219,7 +221,7 @@ export default {
     invalidForm() {
       return (
         !this.questionTextData.length || // question is empty
-        this.correctAnswerIndexData == -1 || // no correct answer is selected
+        this.correctAnswerIndexData == 0 || // no correct answer is selected
         this.answersData.some((a) => !a.length) || // there are empty answers
         (this.categories.length && !this.categoryData.length) // course has categories and no category is selected
       );

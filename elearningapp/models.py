@@ -289,19 +289,20 @@ class Answer(models.Model):
     def __str__(self):
         return self.text
 
-    # when model is saved, process the question text to render TeX as svg
+    # when model is saved, process the answer text to render TeX as svg
     # and update the percentage of times the corresponding question was answered correctly
-    def save(self, re_render_text=True, *args, **kwargs):
+    def save(self, re_render_text=True, re_compute_perc=False, *args, **kwargs):
         if re_render_text:
             self.rendered_text = tex_to_svg(self.text)
 
         instance = super(Answer, self).save(*args, **kwargs)
 
-        # re-compute the percentage of correct answers to the question
-        self.question.percentage_of_correct_answers = (
-            self.question.get_percentage_right_answers()
-        )
-        self.question.save(re_render_text=False)
+        if re_compute_perc:
+            # re-compute the percentage of correct answers to the question
+            self.question.percentage_of_correct_answers = (
+                self.question.get_percentage_right_answers()
+            )
+            self.question.save(re_render_text=False)
 
         return instance
 
@@ -489,7 +490,7 @@ class ActiveTest(models.Model):
                 given_answer = question.answer_set.get(answer_index=answer)
                 print(given_answer)
                 given_answer.selections += 1
-                given_answer.save(re_render_text=False)
+                given_answer.save(re_render_text=False, re_compute_perc=True)
 
             # record given answer for history
             ans = AnswersInTakenTest(
