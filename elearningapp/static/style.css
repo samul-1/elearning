@@ -148,6 +148,9 @@ h2 {
 }
 
 @media only screen and (min-device-width: 300px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) {
+  .cp-text {
+    font-size: 0.8rem;
+  }
   .navbar-username {
     display: none;
   }

@@ -12,6 +12,15 @@
         <li class="nav-item">
             <a class="nav-link" href="{% url 'course_cp' course_id=course_data.id%}">Pannello di controllo</a>
         </li>
+    {% else %}
+    {% block hamburger-menu %}
+    {% if course_specific_user_data.access_to_cp %}
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    {% endif %}
+    {% endblock hamburger-menu %}
+
     {% endif %}
 {% endblock navbarlinks %}
     {% block usernavbar %}

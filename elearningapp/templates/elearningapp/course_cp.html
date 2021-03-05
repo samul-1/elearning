@@ -1,6 +1,11 @@
 {% extends 'elearningapp/base.html' %}
 {% block title %}Pannello di controllo di {{ course.name }}{% endblock title %}
-{% block header_title %} eLearning <span class="title-muted">Control Panel</span>{% endblock header_title %}
+{% block header_title %} eLearning <span class="title-muted cp-text">Control Panel</span>{% endblock header_title %}
+{% block navbarlinks %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'view_course' course_id=course.id%}">Vai al corso</a>
+    </li>
+{% endblock navbarlinks %}
 {% block content %}
     {% load render_bundle from webpack_loader %}
     <div id="app">

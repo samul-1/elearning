@@ -1,9 +1,17 @@
 {% extends 'elearningapp/base.html' %}
 {% block title %}Nuova domanda{% endblock title %}
-    {% block header_title %} eLearning <span class="title-muted">Control Panel</span>{% endblock header_title %}
+    {% block header_title %} eLearning <span class="title-muted cp-text">Control Panel</span>{% endblock header_title %}
     {% block usernavbar %}
         <a class="nav-link user-link" href="/profile/{{ global_user_data.id}}">{{ global_user_data.name }}</a>
     {% endblock usernavbar %}
+{% block navbarlinks %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'course_cp' course_id=course_id%}">Torna al pannello di controllo</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'view_course' course_id=course_id%}">Vai al corso</a>
+    </li>
+{% endblock navbarlinks %}
 {% block content %}
     {% load render_bundle from webpack_loader %}
     <h1>Aggiungi una domanda</h1>

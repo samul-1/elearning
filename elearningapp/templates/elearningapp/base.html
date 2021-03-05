@@ -36,14 +36,33 @@
     <body>
         {# Navigation Menu #}
         <header>
-            <nav class="navbar fixed-top navbar-expand navbar-dark bg-dark shadow-sm-c">
+            <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-dark shadow-sm-c">
                 <a class="navbar-brand" href="#">{% block header_title %} eLearning {% endblock header_title %}</a>
-                <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-                </button> -->
-              
+                <div class="order-md-10">
+                  <span>
+                    <span class="nav-item transform-item">
+                      <span class="navbar-user">
+                        {% if user.is_authenticated %}
+                          <a class="nav-link user-link" href="{% url 'profile' %}"><i class="fas fa-user"></i>
+                              <span class="navbar-username">{{ user.username }}</span></a>
+                      </span>
+                    </span>
+                    <span class="nav-item transform-item">
+                          <a class="ml-3 mr-2 btn-sm btn-danger btn-rounded" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i></a>
+                          {% endif %}
+                        {% block usernavbar %}
+                        {% endblock usernavbar %}
+                    </span>
+                  </span>
+                  {% block hamburger-menu %}
+                  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                  {% endblock hamburger-menu %}
+                  
+                </div>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                  <ul class="navbar-nav mr-auto mt-auto">
+                  <ul class="navbar-nav mr-auto ml-0 mt-auto">
                      <!--<li class="nav-item active">
                       <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li>-->
@@ -65,21 +84,9 @@
                   
                 </ul>
                   
-                    <span class="nav-item transform-item mr-sm-2">
-                      <span class="navbar-user">
-                        {% if user.is_authenticated %}
-                          <a class="nav-link user-link" href="{% url 'profile' %}"><i class="fas fa-user"></i>
-                             <span class="navbar-username">{{ user.username }}</span></a>
-                      </span>
-                    </span>
-                    <span class="nav-item transform-item mr-sm-2">
-                          <a class="ml-3 btn-sm btn-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i></a>
-                          {% endif %}
-                        {% block usernavbar %}
-                        {% endblock usernavbar %}
-                        </span>
-                    </span>
+                    
                 </div>
+
             </nav>
         </header>
         {# The Document Body #}

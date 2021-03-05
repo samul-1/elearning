@@ -598,7 +598,7 @@ def view_course(request, course_id):
             course in request.user.globalprofile.admin_of.all()
             or (
                 request.user.coursespecificprofile_set.filter(course=course).count() > 0
-                or hasattr(
+                and hasattr(
                     request.user.coursespecificprofile_set.get(course=course),
                     "coursepermission",
                 )
