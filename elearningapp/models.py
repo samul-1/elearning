@@ -142,14 +142,16 @@ class CoursePermission(models.Model):
     user = models.OneToOneField(
         "users.CourseSpecificProfile", on_delete=models.CASCADE, null=True
     )
-    # course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
     can_add_questions = models.BooleanField(default=True)
     can_edit_questions = models.BooleanField(default=True)
     can_manage_contributors = models.BooleanField(default=False)
 
     class Meta:
         constraints = [
-            UniqueConstraint(fields=["user"], name="unique_user_course_permission")
+            UniqueConstraint(
+                fields=["user", "course"], name="unique_user_course_permission"
+            )
         ]
 
     def serialize(self):
