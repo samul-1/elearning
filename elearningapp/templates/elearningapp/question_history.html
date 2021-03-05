@@ -1,5 +1,10 @@
 {% extends 'elearningapp/base.html' %}
 {% block title %}Domande già viste{% endblock title %}
+{% block navbarlinks %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'view_course' course_id=course_id%}">Torna al corso</a>
+    </li>
+{% endblock navbarlinks %}
 {% block content %}
     {% load render_bundle from webpack_loader %}
     <div id="app">

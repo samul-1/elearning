@@ -44,7 +44,7 @@
         }"
         :id="'q-' + question.questionId"
       >
-        <!-- Display a collapsable preview for each question, and put a question editor near it
+        <!-- Display a collapsible preview for each question, and put a question editor near it
         which is rendered when the question is edited. The editor gets wired to the question via the props -->
         <QuestionEditor
           v-if="editingId == question.questionId"
@@ -272,28 +272,4 @@ export default {
 <style>
 @import "../../../static/editor-styles.css";
 @import "../../../static/question-styles.css";
-
-/* .distinct {
-  background-color: rgb(250, 250, 250) !important;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  border-radius: 0.8rem;
-}
-.successfully-edited:after {
-  position: absolute;
-  content: "Salvata!";
-  bottom: 2%;
-  right: 2%;
-  color: green;
-  font-weight: bold;
-}
-
-.successfully-edited {
-  box-shadow: 0 0 10px green;
-  border-radius: 0.8rem;
-  position: relative;
-}
-
-.edit-question-grid div {
-  transition: box-shadow 0.2s linear;
-} */
 </style>

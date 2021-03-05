@@ -120,6 +120,10 @@ h2 {
     opacity: 0.4;
 }
 
+.font-bigger {
+    font-size: 1.3rem;
+    font-weight: 500 !important;
+}
 
 .passed {
     color: $green;
@@ -133,17 +137,24 @@ h2 {
     //font-size: 1.2rem;
 }
 
-.navbar-item {
-    transition: all .5s linear;
+.navbar-item.transform-item {
+    transition: transform .5s linear;
+    will-change: transform;
 }
 
-.nav-item:hover {
+.nav-item.transform-item:hover {
     transform: perspective(200px) translateZ(5px);
 }
 
 
 .navbar-user {
     color: white;
+}
+
+@media only screen and (min-device-width: 300px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) {
+    .navbar-username {
+        display: none;
+    }
 }
 
 .user-link {
@@ -261,15 +272,17 @@ button[disabled] {
     border-radius: 1rem;
     padding: 1rem !important;
     box-shadow: 0 0 4px rgba(71, 71, 71, 0.55); //!
-    transition: all .1s linear;
+    transition: transform .3s;
     width: 100%;
     margin-bottom: 1rem;
+    will-change: transform;
 }
 
 .dashboard-btn:hover {
     transform: perspective(200px) translateZ(1.5px);
     background-color: $darker;
     box-shadow: 0 0 8px rgba(71, 71, 71, 0.75); //!
+    transition: transform .1s;
 }
 
 

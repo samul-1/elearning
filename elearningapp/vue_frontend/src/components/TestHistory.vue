@@ -1,5 +1,10 @@
 <template>
   <div>
+    <b-spinner
+      style="position: fixed; top: 50%; left: 50%; color: black"
+      v-if="loading"
+      label="Loading..."
+    ></b-spinner>
     <div style="margin-top: 3rem" v-if="!tests.length">
       <b-card bg-variant="light" text-variant="black">
         <b-card-text class="grid-card">
@@ -14,7 +19,7 @@
       </b-card>
     </div>
 
-    <div class="grid-test-history">
+    <div class="grid-test-history" v-infinite-scroll="loadMoreTests">
       <TakenTest
         v-for="(item, index) in tests"
         :key="index"
@@ -37,6 +42,8 @@
 
 <script>
 import TakenTest from "./TakenTest.vue";
+import axios from "axios";
+import infiniteScroll from "vue-infinite-scroll";
 
 // Fontawesome
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -49,15 +56,25 @@ export default {
   components: {
     TakenTest,
   },
+  directives: {
+    infiniteScroll,
+  },
   props: {
     tests: Array,
     maxScore: Number,
     sendReportApiUrl: String,
+    getTakenTestsApiUrl: String,
   },
-  mounted() {},
+  mounted() {
+    this.testsData = this.tests;
+    axios.defaults.xsrfCookieName = "csrftoken";
+    axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+  },
   data: () => {
     return {
       expanded: -1,
+      testsData: [],
+      loading: false,
     };
   },
   methods: {
@@ -70,6 +87,28 @@ export default {
           this.$refs[i][0].collapse();
         }
       }
+    },
+    loadMoreTests() {
+      this.loading = true;
+      axios
+        .get(this.getTakenTestsApiUrl + this.minTestId)
+        .then((response) => {
+          this.loading = false;
+          console.log(response.data);
+          this.testsData.push(...response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
+  computed: {
+    // returns the lowest test id present: used to poll the server for subsequent tests
+    minTestId() {
+      if (!this.testsData.length) {
+        return 0;
+      }
+      return Math.min(...this.testsData.map((t) => parseInt(t.id)));
     },
   },
 };

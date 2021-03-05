@@ -5,14 +5,14 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, UniqueConstraint
 
 from .exceptions import OutOfQuestionsException
 from .utils import tex_to_svg
 
 
 class Course(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     number_of_questions_per_test = models.IntegerField(default=10)
     # True if the course has a category distribution, i.e. tests choose a fixed amount of questions from each category
     uses_category_distribution = models.BooleanField(default=False)
@@ -146,7 +146,11 @@ class CoursePermission(models.Model):
     can_add_questions = models.BooleanField(default=True)
     can_edit_questions = models.BooleanField(default=True)
     can_manage_contributors = models.BooleanField(default=False)
-    # can_edit_contributors = models.BooleanField(default=False)
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=["user"], name="unique_user_course_permission")
+        ]
 
     def serialize(self):
         return {
@@ -167,6 +171,9 @@ class Category(models.Model):
 
     class Meta:
         verbose_name_plural = "categories"
+        constraints = [
+            UniqueConstraint(fields=["course", "name"], name="unique_category_course")
+        ]
 
     def __str__(self):
         return self.name
@@ -289,6 +296,14 @@ class Answer(models.Model):
     def __str__(self):
         return self.text
 
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=["question", "answer_index"], name="unique_answer_index_question"
+            ),
+            UniqueConstraint(fields=["question", "text"], name="unique_answer_text"),
+        ]
+
     # when model is saved, process the answer text to render TeX as svg
     # and update the percentage of times the corresponding question was answered correctly
     def save(self, re_render_text=True, re_compute_perc=False, *args, **kwargs):
@@ -357,6 +372,7 @@ class TakenTest(models.Model):
     # returns a json representation of self that the client can consume
     def serialize(self):
         json_self = {
+            "id": self.pk,
             "score": self.score,
             "timestamp": str(self.timestamp),
             "correctlyAnsweredQuestions": [],
@@ -420,6 +436,11 @@ class ActiveTest(models.Model):
     questions = models.ManyToManyField(Question)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    # class Meta:
+    #     constraints = [
+    #         UniqueConstraint(fields=["user, course"], name="unique_active_test")
+    #     ]
 
     # chooses random questions that the requesting user hasn't seen yet according to the course distribution (if any)
     # and adds them to the ManyToMany relationship with Question

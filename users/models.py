@@ -1,7 +1,8 @@
-from django.db import models
-from elearningapp.models import TakenTest, SeenQuestion, CoursePermission
-from django.contrib.auth.models import User
 from django.conf import settings
+from django.contrib.auth.models import User
+from django.db import models
+from django.db.models import Q, UniqueConstraint
+from elearningapp.models import CoursePermission, SeenQuestion, TakenTest
 
 """
 Profiles
@@ -9,7 +10,9 @@ Profiles
 
 
 class GlobalProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True
+    )
     is_teacher = models.BooleanField(default=False)
     # contributes_to = models.ManyToManyField("elearningapp.Course", blank=True)
     admin_of = models.ManyToManyField(
@@ -29,6 +32,13 @@ class CourseSpecificProfile(models.Model):
     lowest_score = models.IntegerField(default=0)
     # average_score = models.IntegerField(default=0)
 
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=["course", "user"], name="unique_course_specific_profile"
+            )
+        ]
+
     def __str__(self):
         return str(self.user) + " " + str(self.course)
 
@@ -37,10 +47,18 @@ class CourseSpecificProfile(models.Model):
             user=self.user, question__course__exact=self.course
         )
 
-    def get_taken_tests(self):
-        return TakenTest.objects.filter(
+    def get_taken_tests(self, amount=6, pk_less_than=None):
+        tests = TakenTest.objects.filter(
             user=self.user, course__exact=self.course
         ).order_by("-timestamp")
+
+        if pk_less_than is not None:
+            # to get less recent tests, take smaller id's as the id field increments
+            # with each new test
+            # TODO try with filtering by date instead
+            tests = tests.filter(pk__lt=pk_less_than)
+
+        return tests[:amount]
 
     def get_last_scores(self, n=10):
         return list(

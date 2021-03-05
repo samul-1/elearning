@@ -47,7 +47,7 @@
         </div>
       </div>
       <p
-        class="test-outcome"
+        class="test-outcome font-bigger"
         :class="{ passed: this.passing, failed: !this.passing }"
       >
         {{ outcome }}

@@ -114,12 +114,13 @@ WSGI_APPLICATION = "elearning.wsgi.application"
 # ! KEEP THIS FOR DEV
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "elearning",
-        "USER": "samuele",
+        # "ENGINE": "django.db.backends.mysql",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "el4",
+        "USER": "postgres",
         "PASSWORD": "4JHycb79",
         "HOST": "localhost",
-        "PORT": "3306",
+        # "PORT": "3306",
     }
 }
 

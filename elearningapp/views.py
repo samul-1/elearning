@@ -13,7 +13,7 @@ from django.http import (
     HttpResponseNotFound,
     JsonResponse,
 )
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template import loader
 from users.models import CourseSpecificProfile, GlobalProfile
 
@@ -31,6 +31,11 @@ from .models import (
     SeenQuestion,
     TakenTest,
 )
+
+
+@login_required
+def redirect_to_login_or_profile(request):
+    return redirect("profile")
 
 
 @login_required
@@ -292,6 +297,26 @@ def get_seen_questions(request, course_id, amount, starting_from_pk, category=No
     return JsonResponse(questions, safe=False)
 
 
+# accessed via GET by the client for infinite scrolling in the TestHistory vue component
+@login_required
+def get_taken_tests(request, course_id, amount, until_pk, category=None):
+    course = get_object_or_404(Course, pk__exact=course_id)
+    user_profile = get_object_or_404(
+        CourseSpecificProfile, user__exact=request.user, course__pk__exact=course_id
+    )
+    # questions = course.get_seen_questions(
+    #     request.user,
+    #     int(amount),
+    #     pk_greater_than=int(starting_from_pk),
+    #     category=category,
+    # )
+    taken_tests = map(
+        lambda t: t.serialize(),
+        list(user_profile.get_taken_tests(int(amount), pk_less_than=int(until_pk))),
+    )
+    return JsonResponse(list(taken_tests), safe=False)
+
+
 # renders template containing CreateQuestion vue component when accessed via GET,
 # handles question creation using Question ModelForm when accessed via POST
 @login_required
@@ -492,11 +517,14 @@ def test_history(request, course_id):
         CourseSpecificProfile, user__exact=request.user, course__pk__exact=course_id
     )
 
-    taken_tests = map(lambda t: t.serialize(), list(user_profile.get_taken_tests()))
+    taken_tests = map(
+        lambda t: t.serialize(), list(user_profile.get_taken_tests(amount=3))
+    )
     return render(
         request,
         "elearningapp/test_history.html",
         {
+            "course_id": course_id,
             "tests": list(taken_tests),
             "maxScore": Course.objects.get(pk=course_id).maximum_score(),
         },
@@ -566,6 +594,16 @@ def view_course(request, course_id):
         "last_score": course_profile.last_score,
         "average_score": round(course_profile.get_average_score(), 1),
         "last_scores": course_profile.get_last_scores(5),
+        "access_to_cp": (
+            course in request.user.globalprofile.admin_of.all()
+            or (
+                request.user.coursespecificprofile_set.filter(course=course).count() > 0
+                or hasattr(
+                    request.user.coursespecificprofile_set.get(course=course),
+                    "coursepermission",
+                )
+            )
+        ),
     }
 
     return render(

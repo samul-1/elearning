@@ -3,6 +3,7 @@ from django.urls import include, path, re_path
 from . import views
 
 urlpatterns = [
+    path("", views.redirect_to_login_or_profile),
     re_path(r"^test/(?P<course_id>\d+)/$", views.render_test, name="render_test"),
     re_path(r"^course/(?P<course_id>\d+)/$", views.view_course, name="view_course"),
     re_path(
@@ -78,6 +79,16 @@ urlpatterns = [
         r"^get_questions/(?P<course_id>\d+)/(?P<amount>\d+)/(?P<starting_from_pk>\d+)/(?P<category>\d+)/$",
         views.get_questions,
         name="get_questions",
+    ),
+    re_path(
+        r"^get_taken_test/(?P<course_id>\d+)/(?P<amount>\d+)/(?P<until_pk>\d+)/$",
+        views.get_taken_tests,
+        name="get_taken_tests",
+    ),
+    re_path(
+        r"^get_taken_test/(?P<course_id>\d+)/(?P<amount>\d+)/$",
+        views.get_taken_tests,
+        name="get_taken_tests",
     ),
     # re_path(
     #     r"^eval_progsol/(?P<prog_id>\d+)/$", views.eval_progsol, name="eval_progsol"

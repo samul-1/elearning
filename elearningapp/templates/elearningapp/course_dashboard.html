@@ -7,6 +7,13 @@
         }
     </style>
 {% endblock head_css_page %}
+{% block navbarlinks %}
+    {% if course_specific_user_data.access_to_cp %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'course_cp' course_id=course_data.id%}">Pannello di controllo</a>
+        </li>
+    {% endif %}
+{% endblock navbarlinks %}
     {% block usernavbar %}
         <!-- <a class="nav-link user-link" href="/profile/{{ global_user_data.id}}">{{ global_user_data.name }}</a> -->
     {% endblock usernavbar %}

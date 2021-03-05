@@ -1,5 +1,10 @@
 {% extends 'elearningapp/base.html' %}
 {% block title %}Cronologia dei test{% endblock title %}
+{% block navbarlinks %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'view_course' course_id=course_id%}">Torna al corso</a>
+    </li>
+{% endblock navbarlinks %}
 {% block content %}
     {% load render_bundle from webpack_loader %}
     <h2>Cronologia dei test</h2>
@@ -9,6 +14,7 @@
         :tests="{{ tests }}"
         :max-score="{{ maxScore }}"
         :send-report-api-url="'{% url 'report_question' %}'"
+        :get-taken-tests-api-url="'{% url 'get_taken_tests' course_id=course_id amount=3%}'"
         ></test-history>
     </div>
     {% render_bundle 'chunk-vendors' %}
