@@ -1,7 +1,12 @@
 <template>
   <div>
+    <b-spinner
+      style="position: fixed; top: 50%; left: 50%; color: black"
+      v-if="loading"
+      label="Loading..."
+    ></b-spinner>
     <transition name="overlay-text">
-      <div class="overlay-card" v-if="loading">
+      <div class="overlay-card" v-if="saving">
         <b-card bg-variant="light" text-variant="black">
           <b-card-text class="grid-card">
             <b-spinner class="ml-3"></b-spinner>
@@ -159,14 +164,10 @@ export default {
     // send server request to update question according to changes made by the user
     saveQuestionToDatabase(postData) {
       console.log(postData);
-      this.loading = true;
+      this.saving = true;
 
       axios
-        .put(
-          // "http://127.0.0.1:8000/edit_question/" + this.courseId + "/",
-          this.editQuestionApiUrl,
-          postData
-        )
+        .put(this.editQuestionApiUrl, postData)
         .then((response) => {
           console.log(response);
           // update QuestionPreview for updated question
@@ -179,7 +180,7 @@ export default {
             ] = updatedQuestion;
             this.showConfirmationAndCloseEditor();
           }
-          this.loading = false;
+          this.saving = false;
         })
         .catch((error) => {
           alert(error);
@@ -228,7 +229,7 @@ export default {
             });
           })
           .catch((error) => {
-            alert(error);
+            // alert(error);
             console.log(error);
           });
       }

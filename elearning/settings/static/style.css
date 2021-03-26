@@ -335,7 +335,7 @@ button[disabled] {
           box-shadow: 0 0 15px gray;
   border: none !important;
   border-radius: 0.3rem !important;
-  width: 30%;
+  width: 35%;
 }
 
 @media only screen and (min-device-width: 300px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) {
