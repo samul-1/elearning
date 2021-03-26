@@ -1,0 +1,31 @@
+{% extends 'elearningapp/base.html' %}
+{% block title %}{{ err_title }}{% endblock title %}
+{% block head_css_page %}
+    <style>
+        #course_title {
+            text-align: center;
+        }
+    </style>
+{% endblock head_css_page %}
+{% block navbarlinks %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'view_course' course_id=course_id%}">Torna al corso</a>
+        </li>
+    {% block hamburger-menu %}
+    {% if course_specific_user_data.access_to_cp %}
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    {% endif %}
+    {% endblock hamburger-menu %}
+
+{% endblock navbarlinks %}
+    {% block usernavbar %}
+        <!-- <a class="nav-link user-link" href="/profile/{{ global_user_data.id}}">{{ global_user_data.name }}</a> -->
+    {% endblock usernavbar %}
+{% block content %}
+
+    <h1 class="mb-5">{{ err_title }}</h1>
+    <p>{{ err_description }}</p>
+
+{% endblock content %}

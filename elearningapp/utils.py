@@ -1,3 +1,4 @@
+import os
 import re
 import subprocess
 
@@ -42,7 +43,9 @@ def tex_to_svg(formula):
                     "node",
                     "-r",
                     "esm",
-                    "elearningapp/tex-render/component/tex2svg",
+                    os.environ.get(
+                        "NODE_TEX2SVG_URL", "elearningapp/tex-render/component/tex2svg"
+                    ),
                     stripped_token,
                 ],
             )

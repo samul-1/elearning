@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h1 id="course_title">Pannello di controllo di {{ courseName }}</h1>
+    <h1 id="course_title">
+      Pannello di controllo di {{ courseName }}
+    </h1>
     <br />
     <div class="grid two-col-grid dashboard-grid">
       <div>
@@ -37,7 +39,9 @@
             <p class="data">{{ numberOfSubscribers }}</p>
           </div>
           <div class="course-stat">
-            <p style="letter-spacing: -1px" class="heading">Test svolti</p>
+            <p style="letter-spacing: -1px" class="heading">
+              Test svolti
+            </p>
             <p class="data">{{ numberOfTestsTaken }}</p>
           </div>
           <div class="course-stat">
@@ -47,9 +51,7 @@
           <div class="stats" style="grid-column: 1 / span 3">
             <i class="fas fa-link mr-1"></i>
             Link al corso per gli studenti:
-            <a :href="'/course/' + courseId">
-              {{ "http://127.0.0.1/course/" + courseId }}</a
-            >
+            <a :href="courseUrl"> {{ absoluteCourseUrl }}</a>
           </div>
         </div>
       </div>
@@ -62,13 +64,20 @@
             }}</span>
             {{ action.user }} ha
             {{ action.action == "E" ? "modificato" : "creato" }}
-            <a :href="'/edit_question/' + courseId + '/' + action.questionId"
+            <a
+              :href="
+                '/edit_question/' + courseId + '/' + action.questionId
+              "
               >una domanda</a
             >
           </li>
         </ul>
       </div>
-      <div style="align-self: start" v-if="reports.length" class="stats">
+      <div
+        style="align-self: start"
+        v-if="reports.length"
+        class="stats"
+      >
         <p class="stat-title">Segnalazioni</p>
         <ul class="report-list">
           <li
@@ -92,7 +101,9 @@
       </div>
       <div style="align-self: start" class="stats">
         <p class="stat-title">
-          {{ "Le " + hardestQuestions.length + " domande più sbagliate" }}
+          {{
+            "Le " + hardestQuestions.length + " domande più sbagliate"
+          }}
         </p>
         <CollapsableQuestionList
           :index="1"
@@ -135,7 +146,9 @@
             failed: !shownReport.resolved,
             passed: shownReport.resolved,
           }"
-          >{{ shownReport.resolved ? "risolta" : "non risolta" }}</span
+          >{{
+            shownReport.resolved ? "risolta" : "non risolta"
+          }}</span
         >
         <b-button
           v-if="!shownReport.resolved"
@@ -148,9 +161,13 @@
       <p>
         <strong>Relativa alla domanda:</strong>
 
-        <a :href="editQuestionsApiUrl + shownReport.question.questionId"
+        <a
+          :href="
+            editQuestionsApiUrl + shownReport.question.questionId
+          "
           ><b-button class="ml-3 py-0" variant="outline-secondary"
-            ><i class="fas fa-edit"></i> Modifica questa domanda</b-button
+            ><i class="fas fa-edit"></i> Modifica questa
+            domanda</b-button
           ></a
         >
       </p>
@@ -159,7 +176,9 @@
           :text="shownReport.question.text"
           :answers="shownReport.question.answers"
           :solution="shownReport.question.solution"
-          :correctAnswerIndex="shownReport.question.correctAnswerIndex"
+          :correctAnswerIndex="
+            shownReport.question.correctAnswerIndex
+          "
         ></QuestionPreview>
         <div class="self-align-start">
           <p><strong>Testo della segnalazione</strong></p>
@@ -243,6 +262,7 @@ export default {
     addQuestionsApiUrl: String,
     editQuestionsApiUrl: String,
     updateReportApiUrl: String,
+    courseUrl: String,
   },
   mounted() {
     axios.defaults.xsrfCookieName = "csrftoken";
@@ -272,9 +292,11 @@ export default {
     formattedTimestamp(timestamp) {
       //  spaces in timestamp are being replaced with T's to maintain compatibility with iOS
       //  https://www.elliotjreed.com/post/javascript/2019-03-20_Invalid_date_format_in_Javascript_on_iOS_devices
-      const date = new Date(timestamp?.replace(" ", "T"))
+      const date = new Date(timestamp?.replace(" ", "T"));
       return (
-        (date.getDate() < 10 ? "0" + date.getDate() : date.getDate() + 1) +
+        (date.getDate() < 10
+          ? "0" + date.getDate()
+          : date.getDate() + 1) +
         "/" +
         (date.getMonth() + 1 < 10
           ? "0" + (date.getMonth() + 1)
@@ -282,9 +304,13 @@ export default {
         "/" +
         date.getFullYear() +
         ", " +
-        (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) +
+        (date.getHours() < 10
+          ? "0" + date.getHours()
+          : date.getHours()) +
         ":" +
-        (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes())
+        (date.getMinutes() < 10
+          ? "0" + date.getMinutes()
+          : date.getMinutes())
       );
     },
     showReport(report) {
@@ -322,6 +348,14 @@ export default {
       setTimeout(() => {
         this.success = false;
       }, 2000);
+    },
+  },
+  computed: {
+    absoluteCourseUrl() {
+      return (
+        window.location.href.split(/^(https?:\/\/[^/]*)\/(.*)/g)[1] +
+        this.courseUrl
+      );
     },
   },
 };

@@ -22,7 +22,7 @@
             <test 
             :questions="{{ questions }}"
             :send-report-api-url="'{% url 'report_question' %}'"
-            :send-answers-api-url="'{% url 'send_answers' %}'"
+            :send-answers-api-url="'{% url 'send_answers' course_id=course_id %}'"
             :course-dashboard-url="'{% url 'view_course' course_id=course_id %}'"
             ></test>
         </div>

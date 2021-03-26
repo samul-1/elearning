@@ -39,7 +39,9 @@ urlpatterns = [
         views.test_history,
         name="test_history",
     ),
-    path("send_answers", views.check_answers, name="send_answers"),
+    re_path(
+        r"send_answers/(?P<course_id>\d+)/$", views.check_answers, name="send_answers"
+    ),
     path("createcourse", views.create_course, name="create_course"),
     re_path(r"^course_cp/(?P<course_id>\d+)/$", views.course_cp, name="course_cp"),
     re_path(

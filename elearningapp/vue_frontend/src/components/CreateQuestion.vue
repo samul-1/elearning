@@ -1,10 +1,5 @@
 <template>
   <div class="">
-    <b-spinner
-      style="position: fixed; top: 50%; left: 50%; color: black"
-      v-if="loading"
-      label="Loading..."
-    ></b-spinner>
     <question-editor
       :course-id="courseId"
       :categories="categories"
@@ -12,9 +7,15 @@
       ref="editor"
     ></question-editor>
     <transition name="overlay-text">
-      <div class="overlay-card" v-if="success">
+      <div class="overlay-card" v-if="success || loading">
         <b-card bg-variant="light" text-variant="black">
-          <b-card-text class="grid-card">
+          <b-card-text class="grid-card" v-if="loading">
+            <b-spinner class="ml-3"></b-spinner>
+            Salvataggio in corso. Se la domanda contiene parecchie
+            formule LaTeX, il salvataggio potrebbe richiedere un po'
+            di tempo.
+          </b-card-text>
+          <b-card-text class="grid-card" v-if="success">
             <font-awesome-icon
               class="correct"
               icon="check-circle"
@@ -71,7 +72,7 @@ export default {
           this.loading = false;
         })
         .catch((error) => {
-          // alert(error);
+          alert(error);
           console.log(error);
         });
     },

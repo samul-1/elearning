@@ -1,10 +1,17 @@
 <template>
   <div>
-    <b-spinner
-      style="position: fixed; top: 50%; left: 50%; color: black"
-      v-if="loading"
-      label="Loading..."
-    ></b-spinner>
+    <transition name="overlay-text">
+      <div class="overlay-card" v-if="loading">
+        <b-card bg-variant="light" text-variant="black">
+          <b-card-text class="grid-card">
+            <b-spinner class="ml-3"></b-spinner>
+            Salvataggio in corso. Se la domanda contiene parecchie
+            formule LaTeX, il salvataggio potrebbe richiedere un po'
+            di tempo.
+          </b-card-text>
+        </b-card>
+      </div>
+    </transition>
     <div>
       <!--class="grid question-filter-grid"-->
       <p class="mt-4">
@@ -40,7 +47,8 @@
         :key="question.questionId"
         :class="{
           'column-span-2': editingId == question.questionId,
-          'successfully-edited': successfullyEditedId == question.questionId,
+          'successfully-edited':
+            successfullyEditedId == question.questionId,
         }"
         :id="'q-' + question.questionId"
       >
@@ -174,6 +182,7 @@ export default {
           this.loading = false;
         })
         .catch((error) => {
+          alert(error);
           console.log(error);
         });
     },
@@ -195,13 +204,17 @@ export default {
     // if the question isn't already in questionsData, download it first
     openInitialEditor() {
       if (
-        this.questionsData.findIndex((q) => q.questionId == this.openEditor) ==
-        -1
+        this.questionsData.findIndex(
+          (q) => q.questionId == this.openEditor
+        ) == -1
       ) {
         axios
           .get(
             //"http://127.0.0.1:8000/get_questions/" +
-            this.getQuestionsApiUrl + "1/" + (this.openEditor - 1) + "/"
+            this.getQuestionsApiUrl +
+              "1/" +
+              (this.openEditor - 1) +
+              "/"
           )
           // TODO pass this url as a prop
           .then((response) => {
@@ -209,10 +222,13 @@ export default {
             console.log(response.data);
             // the extra attribute means this id shouldn't be counted towards the
             // maxQuestionId property
-            this.questionsData.unshift({ ...response.data[0], extra: true });
+            this.questionsData.unshift({
+              ...response.data[0],
+              extra: true,
+            });
           })
           .catch((error) => {
-            // alert(error);
+            alert(error);
             console.log(error);
           });
       }
@@ -238,7 +254,9 @@ export default {
             "/" +
             this.maxQuestionId +
             "/" +
-            (this.filterByCategory.length ? this.filterByCategory + "/" : "")
+            (this.filterByCategory.length
+              ? this.filterByCategory + "/"
+              : "")
         )
         // TODO pass this url as a prop
         .then((response) => {

@@ -26,6 +26,7 @@
         :add-questions-api-url="'{% url 'add_question' course_id=course.id %}'"
         :edit-questions-api-url="'{% url 'edit_question' course_id=course.id %}'"
         :update-report-api-url="'{% url 'report_question' %}'"
+        :course-url="'{% url 'view_course' course_id=course.id %}'"
         ></course-cp>
     </div>
     

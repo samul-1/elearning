@@ -226,13 +226,13 @@ class Question(models.Model):
         output["answers"] = [a.rendered_text for a in list(answers)]
 
         # output["answers"] = {}  # index:text dictionary containing self's answer
-        i = 0
-        for answer in output["answers"]:
-            # output["answers"][i] = answer.text
-            # ! REMOVE THIS AFTER DEBUG!!!
-            if self.correct_answer_index == i + 1:
-                output["answers"][i] += " !"
-            i += 1
+        # i = 0
+        # for answer in output["answers"]:
+        #     # output["answers"][i] = answer.text
+        #     # ! REMOVE THIS AFTER DEBUG!!!
+        #     if self.correct_answer_index == i + 1:
+        #         output["answers"][i] += " !"
+        #     i += 1
         return output
 
     # returns a dict containing all the information about the question;

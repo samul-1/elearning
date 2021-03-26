@@ -450,7 +450,15 @@ def render_test(request, course_id):
             # delete the test that was attempted to be initialized if exception occurs
             current_test.delete()
             # TODO show an actual page
-            return HttpResponse("finito le domande!")
+            return render(
+                request,
+                "elearningapp/generic_error.html",
+                {
+                    "course_id": course.pk,
+                    "err_title": "Hai già visto tutte le domande disponibili",
+                    "err_description": "Puoi cancellare la cronologia delle domande già viste dalla home del corso.",
+                },
+            )
 
     # get user's global data
     global_profile = GlobalProfile.objects.get(user=request.user)
@@ -534,20 +542,21 @@ def test_history(request, course_id):
 # calls a method to evaluate the answers given, save the question and test outcome to user's history;
 # returns details about the outcome of the test
 @login_required
-def check_answers(request):
+def check_answers(request, course_id):
     if request.method != "POST":
         return HttpResponseNotAllowed()
+
+    course = get_object_or_404(Course, pk=course_id)
 
     answers = json.loads(request.body.decode("utf-8"))
     print(answers)
     # TODO check validity of sent json object
     requesting_user = request.user
 
-    # ! TODO check course in addition to requesting user
-    current_test = ActiveTest.objects.get(user=requesting_user)
+    current_test = ActiveTest.objects.get(user=requesting_user, course=course)
 
     outcome = current_test.evaluate_answers(answers)
-    # current_test.delete()
+    current_test.delete()
 
     return JsonResponse(outcome.serialize())
 

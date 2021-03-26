@@ -1,7 +1,10 @@
+import os
+
+from django.contrib.auth import views as auth_views
 from django.urls import include, path, re_path, reverse
+
 from . import views
 from .forms import LoginFormWithPlaceholders
-from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path(
@@ -16,7 +19,11 @@ urlpatterns = [
     path("profile/", views.profile, name="profile"),
     path("", include("django.contrib.auth.urls")),
     path("register/", views.register, name="signup"),
-    path("register/teacher/", views.teacher_register, name="teacher_signup"),
+    path(
+        os.environ.get("TEACHER_SIGNUP_URL", "register/teacher"),
+        views.teacher_register,
+        name="teacher_signup",
+    ),
     re_path(
         r"^course_signup/(?P<course_id>\d+)/$",
         views.course_signup,

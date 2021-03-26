@@ -18,7 +18,11 @@
         />
       </div>
       <div id="send-answers-btn">
-        <button class="btn btn-dark" ref="sendAnswers" @click="sendAnswers()">
+        <button
+          class="btn btn-dark"
+          ref="sendAnswers"
+          @click="sendAnswers()"
+        >
           <font-awesome-icon class="mr-1" icon="check" />
           Invia risposte
         </button>
@@ -84,9 +88,8 @@
               <b-card>
                 <div class="card-text">
                   <SeenQuestion
-                    v-for="(
-                      item, index
-                    ) in outcomeObj.correctlyAnsweredQuestions"
+                    v-for="(item,
+                    index) in outcomeObj.correctlyAnsweredQuestions"
                     :key="index"
                     :text="item.text"
                     :answers="item.answers"
@@ -116,9 +119,8 @@
               <b-card>
                 <div class="card-text">
                   <SeenQuestion
-                    v-for="(
-                      item, index
-                    ) in outcomeObj.incorrectlyAnsweredQuestions"
+                    v-for="(item,
+                    index) in outcomeObj.incorrectlyAnsweredQuestions"
                     :key="index"
                     :text="item.text"
                     :answers="item.answers"
@@ -148,7 +150,8 @@
               <b-card>
                 <div class="card-text text-justify-center">
                   <SeenQuestion
-                    v-for="(item, index) in outcomeObj.unansweredQuestions"
+                    v-for="(item,
+                    index) in outcomeObj.unansweredQuestions"
                     :key="index"
                     :text="item.text"
                     :answers="item.answers"
@@ -240,7 +243,11 @@ export default {
         .post(this.sendAnswersApiUrl, postData)
         .then((response) => {
           this.outcomeObj = response.data;
-          this.$root.$emit("bv::show::modal", "outcome-modal", "#sendAnswers");
+          this.$root.$emit(
+            "bv::show::modal",
+            "outcome-modal",
+            "#sendAnswers"
+          );
 
           console.log(response);
           this.loading = false;
