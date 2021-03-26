@@ -146,6 +146,7 @@ export default {
     return {
       questionsData: [],
       loading: false,
+      saving: false,
       editingId: null,
       successfullyEditedId: null,
       scrollToConfig: {
