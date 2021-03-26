@@ -104,16 +104,6 @@
         }
     },
     {
-        "model": "elearningapp.coursepermission",
-        "pk": 26,
-        "fields": {
-            "user": 309,
-            "can_add_questions": true,
-            "can_edit_questions": true,
-            "can_manage_contributors": true
-        }
-    },
-    {
         "model": "elearningapp.category",
         "pk": 1,
         "fields": {
