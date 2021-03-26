@@ -1,5 +1,7 @@
 <template>
-  <div class="grid question-editor-grid one-col-mobile one-col-tablet">
+  <div
+    class="grid question-editor-grid one-col-mobile one-col-tablet"
+  >
     <div class="grid-col">
       <div>
         <h3>Testo della domanda</h3>
@@ -184,7 +186,8 @@ export default {
   methods: {
     // resets the editor to initial state
     cleanup() {
-      this.questionTextData = this.solutionData = this.categoryData = "";
+      this.questionTextData = this.solutionData = this.categoryData =
+        "";
       this.answersData = ["", ""];
       this.correctAnswerIndexData = 0;
     },
@@ -195,7 +198,9 @@ export default {
       return this.questionTextData.replaceAll(/<[/]?p>/gi, "");
     },
     answerTextsWithoutParagraphTag() {
-      return this.answersData.map((a) => a.replaceAll(/<[/]?p>/gi, ""));
+      return this.answersData.map((a) =>
+        a.replaceAll(/<[/]?p>/gi, "")
+      );
     },
     solutionTextWithoutParagraphTag() {
       return this.solutionData.replaceAll(/<[/]?p>/gi, "");
@@ -204,8 +209,8 @@ export default {
     serializedQuestionData() {
       const obj = {
         text: this.questionTextWithoutParagraphTag,
-        solution_text: this.solutionTextWithoutParagraphTag
-          ? this.solutionData.length
+        solution_text: this.solutionTextWithoutParagraphTag.length
+          ? this.solutionData
           : "(soluzione non ancora inserita)", // TODO handle this on serverside
         category: this.categoryData,
         answers: this.answerTextsWithoutParagraphTag,
