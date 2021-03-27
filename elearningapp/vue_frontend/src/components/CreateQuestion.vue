@@ -3,6 +3,7 @@
     <question-editor
       :course-id="courseId"
       :categories="categories"
+      :disable-save="loading"
       @save="saveQuestionToDatabase"
       ref="editor"
     ></question-editor>

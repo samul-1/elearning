@@ -103,7 +103,7 @@
           class="w-100 mt-4"
           variant="outline-success"
           @click="$emit('save', serializedQuestionData)"
-          :disabled="invalidForm"
+          :disabled="invalidForm || disableSave"
         >
           <font-awesome-icon class="mr-1" icon="check-circle" />
 
@@ -130,6 +130,10 @@ export default {
   },
   props: {
     courseId: Number,
+    disableSave: {
+      type: Boolean,
+      default: false,
+    },
     questionId: {
       type: Number,
       default: -1,
