@@ -439,6 +439,7 @@ def question_history(request, course_id):
 
 # TODO allow this view to be accessed via DELETE only, instead of GET
 # empties the list of seen question for given user and course
+@require_http_methods(["DELETE"])
 @login_required
 def delete_question_history(request, course_id):
     user_profile = get_object_or_404(

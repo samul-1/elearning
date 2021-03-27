@@ -20,7 +20,7 @@
                     <div>
                         <span class="list-item-title">{{ course.course_name }}</span>
                         <a href="{% url 'view_course' course_id=course.course_id%}">
-                            <button class="btn-sm btn-rounded btn-primary">Vai al corso</button>
+                            <button class="btn-sm mb-1 btn-rounded btn-primary">Vai al corso</button>
                         </a>
                         {% if course.access_to_cp %}
                         <a href="{% url 'course_cp' course_id=course.course_id%}">

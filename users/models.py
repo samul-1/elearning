@@ -74,7 +74,7 @@ class CourseSpecificProfile(models.Model):
         if self.number_of_tests_taken == 0:
             return 0
         sum = 0
-        for taken_test in self.user.takentest_set.all():
+        for taken_test in self.user.takentest_set.filter(course=self.course):
             sum += taken_test.score
         return sum / self.number_of_tests_taken
 

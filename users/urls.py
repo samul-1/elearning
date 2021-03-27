@@ -20,7 +20,7 @@ urlpatterns = [
     path("", include("django.contrib.auth.urls")),
     path("register/", views.register, name="signup"),
     path(
-        os.environ.get("TEACHER_SIGNUP_URL", "register/teacher"),
+        os.environ.get("TEACHER_SIGNUP_URL", "register/teacher/"),
         views.teacher_register,
         name="teacher_signup",
     ),

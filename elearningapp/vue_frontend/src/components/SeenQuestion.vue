@@ -1,5 +1,5 @@
 <template>
-  <div class="seen-question-box col-12 col-md-10">
+  <div class="seen-question-box col-md-10" :class="{'col-12': !questionOnly, 'col-10 mx-auto': questionOnly }">
     <p class="question-text">
       <span v-html="text"></span>
     </p>

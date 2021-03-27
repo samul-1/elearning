@@ -127,8 +127,7 @@ export default {
       this.questionsData = [];
       this.$root.$emit("bv::hide::modal", "confirmation-modal");
       axios
-        .post(
-          // "http://127.0.0.1:8000/delete_question_history/" + this.courseId + "/"
+        .delete(
           this.deleteQuestionHistoryApiUrl
         )
         .then((response) => {
@@ -146,15 +145,11 @@ export default {
       this.loading = true;
       axios
         .get(
-          //"http://127.0.0.1:8000/get_seen_questions/" +
-          //this.courseId +
-          //"/5/" +
           this.getSeenQuestionsApiUrl +
             this.maxQuestionId +
             "/" +
             (this.filterByCategory.length ? this.filterByCategory + "/" : "")
         )
-        // TODO pass this url as a prop
         .then((response) => {
           this.loading = false;
           console.log(response.data);

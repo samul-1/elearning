@@ -17,7 +17,7 @@
         </b-card>
       </div>
     </transition>
-    <div>
+    <div v-if="categories.length">
       <!--class="grid question-filter-grid"-->
       <p class="mt-4">
         <span class="mr-2">

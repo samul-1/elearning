@@ -22,6 +22,7 @@
           class="btn btn-dark"
           ref="sendAnswers"
           @click="sendAnswers()"
+          :disabled="loading"
         >
           <font-awesome-icon class="mr-1" icon="check" />
           Invia risposte

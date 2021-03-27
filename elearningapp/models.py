@@ -84,7 +84,9 @@ class Course(models.Model):
 
     # ? move this to CourseSpecificProfile
     def get_seen_questions(self, user, amount, pk_greater_than=0, category=None):
-        questions = user.seenquestion_set.filter(pk__gt=pk_greater_than)
+        questions = user.seenquestion_set.filter(
+            pk__gt=pk_greater_than, question__course=self
+        )
         if category is not None:
             cat = Category.objects.get(pk=category)
             questions = questions.filter(category=cat)
@@ -245,7 +247,8 @@ class Question(models.Model):
         info["solutionSource"] = self.solution_text
         info["correctAnswerIndex"] = self.correct_answer_index
         info["questionId"] = self.pk
-        info["category"] = self.category.pk
+        if self.course.categories.count() > 0:
+            info["category"] = self.category.pk
         info["wrongAnswersPercentage"] = 100 - self.percentage_of_correct_answers
 
         # get the source text for all the answers
