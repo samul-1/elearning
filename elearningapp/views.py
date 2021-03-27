@@ -9,12 +9,12 @@ from django.http import (
     HttpResponse,
     HttpResponseBadRequest,
     HttpResponseForbidden,
-    HttpResponseNotAllowed,
     HttpResponseNotFound,
     JsonResponse,
 )
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template import loader
+from django.views.decorators.http import require_http_methods
 from users.models import CourseSpecificProfile, GlobalProfile
 
 from .exceptions import OutOfQuestionsException
@@ -186,10 +186,8 @@ def edit_question(request, course_id, question_id=None):
 # if accessed via POST, creates a new report for the specified question
 # if accessed via PUT, updates the status of the specified report
 @login_required
+@require_http_methods(["PUT", "POST"])
 def report_question(request):
-    if request.method not in ["POST", "PUT"]:
-        return HttpResponseNotAllowed()
-
     form_data = json.loads(request.body.decode("utf-8"))
 
     if request.method == "POST":
@@ -224,9 +222,8 @@ def report_question(request):
 
 # if accessed via PUT, updates or creates the permissions of a user for a course,
 # if accessed via DELETE, deletes the permission object for the specified user and course
+@require_http_methods(["PUT", "DELETE"])
 def update_course_permissions(request, course_id):
-    if request.method == "GET":
-        return HttpResponseNotAllowed()
     course = get_object_or_404(Course, pk__exact=course_id)
 
     # reject with 403 if user isn't authorized to add assistants for this course
@@ -364,71 +361,6 @@ def add_question(request, course_id):
     )
 
 
-# @login_required
-# def program_exercise(request, prog_id):
-#     exercise = get_object_or_404(ProgramExercise, pk__exact=prog_id)
-
-#     return render(
-#         request,
-#         "elearningapp/program.html",
-#         {
-#             "exercise": exercise,
-#             "public_test_cases": list(exercise.get_public_test_cases()),
-#         },
-#     )
-
-
-# def test_tex(request):
-#     questions = Question.objects.filter(pk__gt=53)
-#     for q in questions:
-#         q.save()
-#         for answer in Answer.objects.filter(question=q):
-#             answer.save()
-#     return HttpResponse(":)")
-
-
-# @login_required
-# def eval_progsol(request, prog_id):
-#     exercise = get_object_or_404(ProgramExercise, pk__exact=prog_id)
-#     count = 0  # number of passed test cases
-
-#     program = json.loads(
-#         request.body.decode("utf-8")
-#     )  # user's submission is in request body
-
-#     for testcase in exercise.get_test_cases():
-#         inputcase = testcase.input_case
-
-#         # call node to evaluate user's submission passing the test case input parameters
-#         res = subprocess.check_output(
-#             [
-#                 "node",
-#                 "elearningapp/node_scripts/evalUserFunction.js",
-#                 program,
-#                 inputcase,
-#             ]
-#         )
-#         res = str(res)[2:-3]  # trim b' and \n' from the string converted from byte type
-
-#         # successful test case
-#         if res == testcase.expected_output:
-#             count += 1
-#     if (
-#         count / TestCase.objects.filter(exercise=exercise).count()
-#     ) * 100 >= exercise.minimum_passing_testcase_perc:
-#         passing = 1
-#     else:
-#         passing = 0
-
-#     outcome = {
-#         "passing": passing,
-#         "positiveCases": count,
-#         "totalCases": exercise.get_test_cases().count(),
-#     }
-
-#     return JsonResponse(outcome)
-
-
 # renders a test for the user
 @login_required
 def render_test(request, course_id):
@@ -505,6 +437,7 @@ def question_history(request, course_id):
     )
 
 
+# TODO allow this view to be accessed via DELETE only, instead of GET
 # empties the list of seen question for given user and course
 @login_required
 def delete_question_history(request, course_id):
@@ -542,10 +475,8 @@ def test_history(request, course_id):
 # calls a method to evaluate the answers given, save the question and test outcome to user's history;
 # returns details about the outcome of the test
 @login_required
+@require_http_methods(["POST"])
 def check_answers(request, course_id):
-    if request.method != "POST":
-        return HttpResponseNotAllowed()
-
     course = get_object_or_404(Course, pk=course_id)
 
     answers = json.loads(request.body.decode("utf-8"))
