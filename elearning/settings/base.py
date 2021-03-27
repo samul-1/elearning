@@ -29,7 +29,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 SECRET_KEY = os.environ.get("SECRET_KEY", None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", ["*"])  # ["127.0.0.1", "apps.bsamu.it"]
 
@@ -74,6 +74,36 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "elearning.urls"
+
+# ------
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "handlers": {
+#         "console": {"class": "logging.StreamHandler"},
+#         "mail_admins": {
+#             "level": "ERROR",
+#             "class": "django.utils.log.AdminEmailHandler",
+#             "include_html": True,
+#         },
+#     },
+#     "loggers": {
+#         "django": {
+#             "handlers": ["console"],
+#             "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+#         }
+#     },
+# }
+
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = os.environ.get("GMAIL_APP_ADDRESS", "bsamuele00@gmail.com")
+EMAIL_HOST_PASSWORD = os.environ.get("GMAIL_APP_PWD", "kcowwwteitnyavcf")
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+# ------
 
 TEMPLATES = [
     {
