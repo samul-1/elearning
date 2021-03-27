@@ -63,6 +63,7 @@
           v-if="editingId == question.questionId"
           class="distinct p-5 mb-5 mt-5"
           :course-id="courseId"
+          :disable-save="saving"
           :questionText="question.textSource"
           :answers="question.answersSources"
           :correct-answer-index="question.correctAnswerIndex"

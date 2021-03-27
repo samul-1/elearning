@@ -228,10 +228,13 @@ export default {
     },
     // used to disable the save button when invalid information is supplied
     invalidForm() {
+      const findDuplicates = arr => arr.filter((item, index) => arr.indexOf(item) != index)
+
       return (
         !this.questionTextData.length || // question is empty
         this.correctAnswerIndexData == 0 || // no correct answer is selected
         this.answersData.some((a) => !a.length) || // there are empty answers
+        findDuplicates(this.answersData).length > 0 || // no duplicate answers
         (this.categories.length && !this.categoryData.length) // course has categories and no category is selected
       );
     },
