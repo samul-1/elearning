@@ -29,7 +29,14 @@ ALLOWED_HOSTS = [
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "handlers": {
+        "console": {"class": "logging.StreamHandler"},
+        "mail_admins": {
+            "level": "ERROR",
+            "class": "django.utils.log.AdminEmailHandler",
+            "include_html": True,
+        },
+    },
     "loggers": {
         "django": {
             "handlers": ["console"],
@@ -37,6 +44,14 @@ LOGGING = {
         }
     },
 }
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = os.environ.get("GMAIL_APP_ADDRESS", None)
+EMAIL_HOST_PASSWORD = os.environ.get("GMAIL_APP_PWD", None)
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 
 
 # BASE_DIR = os.path.dirname(os.path.dirname((os.path.abspath(__file__))))
