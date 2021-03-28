@@ -199,15 +199,15 @@ export default {
   computed: {
     // remove the automatically-generated (by vue-editor) <p> tags from the fields
     questionTextWithoutParagraphTag() {
-      return this.questionTextData.replaceAll(/<[/]?p>/gi, "");
+      return this.questionTextData.replace(/<[/]?p>/g, "");
     },
     answerTextsWithoutParagraphTag() {
       return this.answersData.map((a) =>
-        a.replaceAll(/<[/]?p>/gi, "")
+        a.replace(/<[/]?p>/g, "")
       );
     },
     solutionTextWithoutParagraphTag() {
-      return this.solutionData.replaceAll(/<[/]?p>/gi, "");
+      return this.solutionData.replace(/<[/]?p>/g, "");
     },
     // returns an object containing the question data for the parent to consume
     serializedQuestionData() {

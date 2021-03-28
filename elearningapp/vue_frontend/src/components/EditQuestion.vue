@@ -85,6 +85,7 @@
         ></CollapsableQuestionPreview>
       </div>
     </div>
+    <p class="text-center mt-4 link" @click="loadMoreQuestions()">Carica più domande</p>
   </div>
 </template>
 

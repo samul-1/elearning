@@ -36,7 +36,9 @@
         :class="{ 'expanded-grid-column': index == expanded }"
         :sendReportApiUrl="sendReportApiUrl"
       />
+
     </div>
+    <p class="text-center mt-4 link" @click="loadMoreTests()">Carica più compiti</p>
   </div>
 </template>
 

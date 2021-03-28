@@ -52,6 +52,7 @@
           :sendReportApiUrl="sendReportApiUrl"
         />
       </div>
+      <p class="text-center mt-2 link" @click="loadMoreQuestions()">Carica più domande</p>
     </div>
     <b-modal size="lg" id="confirmation-modal">
       <template #modal-header="{}">
