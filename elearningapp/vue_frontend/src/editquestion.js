@@ -11,7 +11,7 @@ Vue.use(BootstrapVueIcons)
 Vue.use(VueScrollTo);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
-
+Vue.config.devtools = false
 Vue.config.productionTip = false
 
  new Vue({

@@ -5,7 +5,7 @@ import { BootstrapVue } from 'bootstrap-vue'
 // Install BootstrapVue
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
-
+Vue.config.devtools = false
 new Vue({
   el: "#app",
   components: {'program-exercise': ProgramExercise}

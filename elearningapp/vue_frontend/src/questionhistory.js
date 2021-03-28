@@ -10,7 +10,7 @@ Vue.use(BootstrapVueIcons)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false
-
+Vue.config.devtools = false
 // new Vue({
 //   render: h => h(QuestionHistory),
 // }).$mount('#app')

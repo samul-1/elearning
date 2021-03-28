@@ -296,6 +296,10 @@ button[disabled] {
 /* ------------------
 5. component styles
 ------------------ */
+.navbar-toggler {
+  padding: 0 !important;
+}
+
 .form-error {
   border: 1.5px solid #be0000 !important;
   background-color: rgba(190, 79, 79, 0.35) !important;

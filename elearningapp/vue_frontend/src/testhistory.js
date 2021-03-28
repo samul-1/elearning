@@ -9,7 +9,7 @@ Vue.use(BootstrapVueIcons)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false
-
+Vue.config.devtools = false
  new Vue({
   el: "#app",
   components: {'test-history': TestHistory}

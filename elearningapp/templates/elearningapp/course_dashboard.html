@@ -15,9 +15,11 @@
     {% else %}
     {% block hamburger-menu %}
     {% if course_specific_user_data.access_to_cp %}
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+    <span style="vertical-align: middle">
+        <button style="border: none; margin-bottom: 4.5px" class="navbar-toggler ml-2" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""><i class="fas fa-bars text-white"></i></span>
         </button>
+    </span>
     {% endif %}
     {% endblock hamburger-menu %}
 

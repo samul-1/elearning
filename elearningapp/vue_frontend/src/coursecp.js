@@ -8,6 +8,7 @@ Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.config.devtools = false
 Vue.config.productionTip = false
 
  new Vue({

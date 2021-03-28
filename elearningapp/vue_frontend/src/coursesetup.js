@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 // Install BootstrapVue
 Vue.use(BootstrapVue)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
-
+Vue.config.devtools = false
 Vue.config.productionTip = false
 
 new Vue({
